@@ -7,6 +7,7 @@ Docker에 대해서 알고싶으신가요?
 샌드박스 환경을 통해 단계별 학습을 해봅시다.   
 시각화는 덤입니다.   
 
+[피그마](https://www.figma.com/board/8ywEMvSfSiTmH9LZ5gYgHV/%EA%B7%B8%EB%A3%B9%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-34-%ED%8C%80%EB%B9%8C%EB%94%A9?node-id=0-1&node-type=canvas&t=FCVQuNLYcwXDnUs8-0)
 
 ## 팀원 소개
 
