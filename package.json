@@ -1,0 +1,26 @@
+{
+  "name": "web34-learndocker",
+  "version": "1.0.0",
+  "description": "## 프로젝트 개요 > 고래🐳와 함께 자신만의 Docker 환경에서 학습해볼까요?",
+  "main": "index.js",
+  "scripts": {
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint .",
+    "prettier": "prettier --write ."
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@types/eslint__js": "^8.42.3",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "eslint": "^9.14.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.13.0"
+  }
+}
