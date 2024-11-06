@@ -8,17 +8,17 @@ import { FlatCompat } from '@eslint/eslintrc';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = path.dirname(_filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
+    baseDirectory: _dirname,
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all,
 });
 
 export default [
     {
-        ignores: ['node_modules/**/*', 'dist/**/*', '**/*.js', '**/*.mjs'],
+        ignores: ['**/node_modules/**/*', '**/dist/**/*', '**/*.js', '**/*.mjs'],
     },
     ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'),
     {
@@ -100,5 +100,18 @@ export default [
     },
     {
         files: ['backend/**/*.ts'],
+        languageOptions: {
+            parserOptions: {
+                project: 'tsconfig.json',
+                tsconfigRootDir: path.join(import.meta.dirname, 'backend'),
+                sourceType: 'module',
+            },
+        },
+        rules: {
+            '@typescript-eslint/interface-name-prefix': 'off',
+            '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/explicit-module-boundary-types': 'off',
+            '@typescript-eslint/no-explicit-any': 'off',
+        },
     },
 ];
