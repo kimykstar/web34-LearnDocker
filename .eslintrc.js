@@ -1,3 +1,5 @@
+const path = require('path');
+
 /* eslint-env node */
 module.exports = {
     ignorePatterns: ['node_modules/**', 'dist/**', '**/*.js'],
@@ -55,6 +57,20 @@ module.exports = {
         },
         {
             files: ['backend/**/*.ts'],
+            rules: {
+              '@typescript-eslint/interface-name-prefix': 'off',
+              '@typescript-eslint/explicit-function-return-type': 'off',
+              '@typescript-eslint/explicit-module-boundary-types': 'off',
+              '@typescript-eslint/no-explicit-any': 'off',
+            },
+            env: {
+              jest: true
+            },
+            parserOptions: {
+              project: 'tsconfig.json',
+              tsconfigRootDir: path.join(__dirname, 'backend'),
+              sourceType: 'module',
+            },
         },
     ],
 };
