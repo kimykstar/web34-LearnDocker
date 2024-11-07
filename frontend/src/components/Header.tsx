@@ -6,7 +6,7 @@ const Header = () => {
             <a href='/'>
                 <button className='ml-4 gap-2 flex items-center'>
                     <img src={mainLogo} alt='main logo' className='h-12 w-12' />
-                    <h1 className='font-pretendard text-white text-2xl'>Learn Docker</h1>
+                    <h1 className='font-pretendard font-bold text-white text-2xl'>Learn Docker</h1>
                 </button>
             </a>
         </header>
