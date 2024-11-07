@@ -20,6 +20,7 @@ import { join } from 'path';
         UsersModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'public'),
+            renderPath: '/',
         }),
     ],
     controllers: [AppController],
