@@ -1,40 +1,21 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import react from 'eslint-plugin-react';
+import prettier from 'eslint-config-prettier';
 
-const _filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
-const compat = new FlatCompat({
-    baseDirectory: _dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
+const ignoreList = ['**/node_modules/**/*', '**/dist/**/*', '**/*.js', '**/*.mjs'];
 
-export default [
+export default tseslint.config(
     {
-        ignores: ['**/node_modules/**/*', '**/dist/**/*', '**/*.js', '**/*.mjs'],
-    },
-    ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'),
-    {
-        plugins: {
-            '@typescript-eslint': typescriptEslint,
-        },
-
+        extends: [eslint.configs.recommended, ...tseslint.configs.recommended, prettier],
+        ignores: ignoreList,
         languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.node,
-            },
-
-            parser: tsParser,
+            globals: globals.node,
         },
-
         rules: {
             '@typescript-eslint/naming-convention': [
                 'error',
@@ -77,11 +58,15 @@ export default [
     },
     {
         files: ['frontend/**/*.{ts,tsx}'],
-        ignores: ['dist'],
+        ignores: ignoreList,
         languageOptions: {
             ecmaVersion: 2020,
             globals: globals.browser,
         },
+        settings: {
+            react: { version: 'detect' },
+        },
+        extends: [react.configs.flat.recommended, react.configs.flat['jsx-runtime']],
         plugins: {
             'react-hooks': reactHooks,
             'react-refresh': reactRefresh,
@@ -96,10 +81,13 @@ export default [
                     format: ['PascalCase', 'camelCase'],
                 },
             ],
+            'react/no-array-index-key': 'error',
+            'react/function-component-definition': ['error', { namedComponents: 'arrow-function' }],
         },
     },
     {
         files: ['backend/**/*.ts'],
+        ignores: ignoreList,
         languageOptions: {
             parserOptions: {
                 project: 'tsconfig.json',
@@ -113,5 +101,5 @@ export default [
             '@typescript-eslint/explicit-module-boundary-types': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
         },
-    },
-];
+    }
+);
