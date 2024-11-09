@@ -7,10 +7,6 @@
     "lint": "eslint . ",
     "prettier": "prettier --write ."
   },
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
