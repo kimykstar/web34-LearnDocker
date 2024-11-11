@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { DockerapiModule } from './dockerapi/dockerapi.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { join } from 'path';
         }),
         UsersModule,
         QuizModule,
+        DockerapiModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
             renderPath: '/',
