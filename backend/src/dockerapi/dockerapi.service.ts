@@ -10,7 +10,7 @@ export class DockerapiService {
             `http://127.0.0.1:${userPort}/containers/json`
         );
         const imagesResponse = await this.httpService.axiosRef.get(
-            `http://127.0.0.1:${userPort}/containers/json`
+            `http://127.0.0.1:${userPort}/images/json`
         );
         return { containers: [...containerResponse.data], images: [...imagesResponse.data] };
     }
