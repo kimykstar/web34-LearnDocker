@@ -9,6 +9,7 @@ import { join } from 'path';
 import { DockerapiModule } from './dockerapi/dockerapi.module';
 import { DockerapiController } from './dockerapi/dockerapi.controller';
 import { DockerapiService } from './dockerapi/dockerapi.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { DockerapiService } from './dockerapi/dockerapi.service';
             rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
             renderPath: '/',
         }),
+        HttpModule,
     ],
     controllers: [AppController, DockerapiController],
     providers: [AppService, DockerapiService],
