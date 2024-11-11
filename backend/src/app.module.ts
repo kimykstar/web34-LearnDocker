@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { APP_FILTER } from '@nestjs/core';
+import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exception/filters';
 
 @Module({
     imports: [
@@ -24,6 +26,16 @@ import { join } from 'path';
         }),
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_FILTER,
+            useClass: LastExceptionFilter,
+        },
+        {
+            provide: APP_FILTER,
+            useClass: BusinessExceptionsFilter,
+        },
+    ],
 })
 export class AppModule {}
