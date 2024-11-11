@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import dropDownImage from '../asset/dropDown.svg';
+import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 
 const links = [
