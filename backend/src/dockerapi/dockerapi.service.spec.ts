@@ -14,7 +14,6 @@ describe('DockerapiService', () => {
 
     it('ExecID is responded', async () => {
         const response = await service.getUserContainerImages('2378');
-        console.log(response);
         expect(response).toBeDefined();
     });
 });
