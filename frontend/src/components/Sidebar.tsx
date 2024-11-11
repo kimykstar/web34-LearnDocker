@@ -10,9 +10,8 @@ const links = [
 const dockerImageLinks = [
     { title: 'Docker image란?', path: '/what-is-docker-image' },
     { title: 'image 가져오기', path: '/image/quiz/1' },
-    { title: 'Docker image란?', path: '/image/quiz/2' },
-    { title: 'image 목록 확인하기', path: '/image/quiz/3' },
-    { title: 'image 삭제하기', path: '/image/quiz/4' },
+    { title: 'image 목록 확인하기', path: '/image/quiz/2' },
+    { title: 'image 삭제하기', path: '/image/quiz/3' },
 ];
 
 const dockerContainerLinks = [

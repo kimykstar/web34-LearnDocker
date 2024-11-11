@@ -1,11 +1,15 @@
 import Header from './components/Header';
 import LandingPage from './components/LandingPage';
+import Sidebar from './components/Sidebar';
 
 const App = () => {
     return (
         <>
             <Header />
-            <LandingPage />
+            <div className='flex'>
+                <Sidebar />
+                <LandingPage />
+            </div>
         </>
     );
 };
