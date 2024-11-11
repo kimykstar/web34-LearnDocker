@@ -1,6 +1,8 @@
 import Header from './components/Header';
-import LandingPage from './components/LandingPage';
 import Sidebar from './components/Sidebar';
+import LandingPage from './components/LandingPage';
+import ImagePullPage from './components/ImagePullPage';
+import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
     return (
@@ -8,7 +10,10 @@ const App = () => {
             <Header />
             <div className='flex'>
                 <Sidebar />
-                <LandingPage />
+                <Routes>
+                    <Route path='/' element={<LandingPage />} />
+                    <Route path='/image/quiz/1' element={<ImagePullPage />} />
+                </Routes>
             </div>
         </>
     );

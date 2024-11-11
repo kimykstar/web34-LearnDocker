@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
+import { Link } from 'react-router-dom';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -56,7 +57,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
                 <ul>
                     {links.map((link) => (
                         <li className='m-4 hover:text-Moby-Blue' key={link.path}>
-                            <a href={link.path}>{link.title}</a>
+                            <Link to={link.path}>{link.title}</Link>
                         </li>
                     ))}
                 </ul>
@@ -74,7 +75,7 @@ const Sidebar = () => {
                         className='m-4 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue'
                         key={link.path}
                     >
-                        <a href={link.path}>{link.title}</a>
+                        <Link to={link.path}>{link.title}</Link>
                     </p>
                 ))}
                 <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
