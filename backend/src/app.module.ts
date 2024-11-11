@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -36,6 +36,7 @@ import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exceptio
             provide: APP_FILTER,
             useClass: BusinessExceptionsFilter,
         },
+        Logger
     ],
 })
 export class AppModule {}
