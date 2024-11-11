@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { QuizModule } from './quiz/quiz.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
     imports: [
@@ -18,6 +20,10 @@ import { QuizModule } from './quiz/quiz.module';
         }),
         UsersModule,
         QuizModule,
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
+            renderPath: '/',
+        }),
     ],
     controllers: [AppController],
     providers: [AppService],

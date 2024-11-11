@@ -1,9 +1,13 @@
-function App() {
+import Header from './components/Header';
+import LandingPage from './components/LandingPage';
+
+const App = () => {
     return (
         <>
-            <div className='text-3xl font-bold underline'>tailwind test</div>
+            <Header />
+            <LandingPage />
         </>
     );
-}
+};
 
 export default App;
