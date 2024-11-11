@@ -7,6 +7,8 @@ import { QuizModule } from './quiz/quiz.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { DockerapiModule } from './dockerapi/dockerapi.module';
+import { DockerapiController } from './dockerapi/dockerapi.controller';
+import { DockerapiService } from './dockerapi/dockerapi.service';
 
 @Module({
     imports: [
@@ -27,7 +29,7 @@ import { DockerapiModule } from './dockerapi/dockerapi.module';
             renderPath: '/',
         }),
     ],
-    controllers: [AppController],
-    providers: [AppService],
+    controllers: [AppController, DockerapiController],
+    providers: [AppService, DockerapiService],
 })
 export class AppModule {}
