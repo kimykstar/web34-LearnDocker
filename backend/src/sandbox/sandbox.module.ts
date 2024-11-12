@@ -8,4 +8,4 @@ import { HttpModule } from '@nestjs/axios';
     providers: [SandboxService],
     controllers: [SandboxController],
 })
-export class DockerapiModule {}
+export class SandboxModule {}

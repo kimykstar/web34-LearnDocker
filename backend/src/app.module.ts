@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { DockerapiModule } from './sandbox/sandbox.module';
+import { SandboxModule } from './sandbox/sandbox.module';
 import { SandboxController } from './sandbox/sandbox.controller';
 import { SandboxService } from './sandbox/sandbox.service';
 import { HttpModule } from '@nestjs/axios';
@@ -24,7 +24,7 @@ import { HttpModule } from '@nestjs/axios';
         }),
         UsersModule,
         QuizModule,
-        DockerapiModule,
+        SandboxModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
             renderPath: '/',
