@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import dropDownImage from '../asset/dropDown.svg';
+import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
+import { Link } from 'react-router-dom';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -10,9 +11,8 @@ const links = [
 const dockerImageLinks = [
     { title: 'Docker image란?', path: '/what-is-docker-image' },
     { title: 'image 가져오기', path: '/image/quiz/1' },
-    { title: 'Docker image란?', path: '/image/quiz/2' },
-    { title: 'image 목록 확인하기', path: '/image/quiz/3' },
-    { title: 'image 삭제하기', path: '/image/quiz/4' },
+    { title: 'image 목록 확인하기', path: '/image/quiz/2' },
+    { title: 'image 삭제하기', path: '/image/quiz/3' },
 ];
 
 const dockerContainerLinks = [
@@ -57,7 +57,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
                 <ul>
                     {links.map((link) => (
                         <li className='m-4 hover:text-Moby-Blue' key={link.path}>
-                            <a href={link.path}>{link.title}</a>
+                            <Link to={link.path}>{link.title}</Link>
                         </li>
                     ))}
                 </ul>
@@ -68,14 +68,14 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 
 const Sidebar = () => {
     return (
-        <nav className='flex flex-col text-Off-Black h-[calc(100vh-4rem)] font-pretendard bg-gray-100'>
+        <nav className='flex flex-col text-Off-Black h-[calc(100vh-4rem)] w-[17rem] font-pretendard bg-gray-100'>
             <div className='flex-grow'>
                 {links.map((link) => (
                     <p
                         className='m-4 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue'
                         key={link.path}
                     >
-                        <a href={link.path}>{link.title}</a>
+                        <Link to={link.path}>{link.title}</Link>
                     </p>
                 ))}
                 <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
