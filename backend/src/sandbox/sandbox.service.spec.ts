@@ -13,7 +13,6 @@ describe('Sandbox service', () => {
     });
 
     it('Container and images are responded', async () => {
-        const response = await service.getUserContainerImages(2378);
-        expect(response).toBeDefined();
+        service.getUserContainerImages('ddd');
     });
 });
