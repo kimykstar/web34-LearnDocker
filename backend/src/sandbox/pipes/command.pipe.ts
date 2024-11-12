@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 
-const VALID_REGEX = /^docker\s(?!exec)\w+(?:(?![;&|<>$`]|.*\b(sh|bash|exec)\b).)*$/;
+const VALID_REGEX = /^docker\s\w+(?:(?![;&|<>$`]|\b(sh|bash|exec)\b).)*$/;
 
 @Injectable()
 export class CommandValidationPipe implements PipeTransform {
