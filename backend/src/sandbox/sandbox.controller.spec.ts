@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DockerapiController } from './dockerapi.controller';
+import { SandboxController } from './sandbox.controller';
 
 describe('DockerapiController', () => {
-    let controller: DockerapiController;
+    let controller: SandboxController;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [DockerapiController],
+            controllers: [SandboxController],
         }).compile();
 
-        controller = module.get<DockerapiController>(DockerapiController);
+        controller = module.get<SandboxController>(SandboxController);
     });
 
     it('should be defined', () => {

@@ -6,9 +6,9 @@ import { UsersModule } from './users/users.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { DockerapiModule } from './dockerapi/dockerapi.module';
-import { DockerapiController } from './dockerapi/dockerapi.controller';
-import { DockerapiService } from './dockerapi/dockerapi.service';
+import { DockerapiModule } from './sandbox/sandbox.module';
+import { SandboxController } from './sandbox/sandbox.controller';
+import { SandboxService } from './sandbox/sandbox.service';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
@@ -31,7 +31,7 @@ import { HttpModule } from '@nestjs/axios';
         }),
         HttpModule,
     ],
-    controllers: [AppController, DockerapiController],
-    providers: [AppService, DockerapiService],
+    controllers: [AppController, SandboxController],
+    providers: [AppService, SandboxService],
 })
 export class AppModule {}

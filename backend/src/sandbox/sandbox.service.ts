@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class DockerapiService {
+export class SandboxService {
     constructor(private readonly httpService: HttpService) {}
 
     async getUserContainerImages(userPort: number) {
