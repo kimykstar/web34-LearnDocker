@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SandboxController } from './sandbox.controller';
 
-describe('DockerapiController', () => {
+describe('SandboxController', () => {
     let controller: SandboxController;
 
     beforeEach(async () => {

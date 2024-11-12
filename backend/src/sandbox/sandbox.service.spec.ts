@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SandboxService } from './sandbox.service';
 
-describe('DockerapiService', () => {
+describe('Sandbox service', () => {
     let service: SandboxService;
 
     beforeEach(async () => {
@@ -12,7 +12,7 @@ describe('DockerapiService', () => {
         service = module.get<SandboxService>(SandboxService);
     });
 
-    it('ExecID is responded', async () => {
+    it('Container and images are responded', async () => {
         const response = await service.getUserContainerImages(2378);
         expect(response).toBeDefined();
     });
