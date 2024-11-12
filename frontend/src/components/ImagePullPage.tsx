@@ -1,43 +1,17 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate, NavigateFunction } from 'react-router-dom';
-
-interface Quiz {
-    id: number;
-    title: string;
-    content: string;
-}
-
-const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
-    if (axios.isAxiosError(error)) {
-        if (error.response) {
-            navigate(`/error/${error.response.status}`);
-        } else if (error.request) {
-            console.error('요청이 전송되었지만, 응답이 수신되지 않았습니다: ', error.request);
-        } else {
-            console.error(
-                '오류가 발생한 요청을 설정하는 동안 문제가 발생했습니다: ',
-                error.message
-            );
-        }
-    } else {
-        console.error('unknown error');
-    }
-};
+import { useNavigate } from 'react-router-dom';
+import { Quiz, Visualization } from '../types/quiz';
+import { requestQuizData, requestVisualizationData } from '../api/quiz';
 
 const ImagePullPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
+    const [visualizationData, setVisualizationData] = useState<Visualization | null>(null);
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3000/quiz/1')
-            .then((response) => {
-                setQuizData(response.data);
-            })
-            .catch((error) => {
-                handleErrorResponse(error, navigate);
-            });
+        requestQuizData(setQuizData, navigate);
+        requestVisualizationData(setVisualizationData, navigate);
+        console.log(visualizationData); // lint error를 해결하기 위한 임시 코드
     }, []);
 
     return (
