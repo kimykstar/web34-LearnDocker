@@ -12,6 +12,6 @@ export class SandboxService {
         const imagesResponse = await this.httpService.axiosRef.get(
             `http://127.0.0.1:${userPort}/images/json`
         );
-        return { containers: [...containerResponse.data], images: [...imagesResponse.data] };
+        return { containers: containerResponse.data, images: imagesResponse.data };
     }
 }
