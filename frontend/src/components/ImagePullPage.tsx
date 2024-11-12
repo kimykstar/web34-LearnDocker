@@ -7,12 +7,31 @@ const ImagePullPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [visualizationData, setVisualizationData] = useState<Visualization | null>(null);
+    const [terminalInput, setTerminalInput] = useState<string>('~$ ');
 
     useEffect(() => {
         requestQuizData(setQuizData, navigate);
         requestVisualizationData(setVisualizationData, navigate);
         console.log(visualizationData); // lint error를 해결하기 위한 임시 코드
     }, []);
+
+    const handleTerminalInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = event.target.value;
+        const prefix = '~$ ';
+
+        if (value.startsWith(prefix)) {
+            setTerminalInput(value);
+        } else {
+            const userInput = value.slice(prefix.length);
+            setTerminalInput(prefix + userInput);
+        }
+    };
+
+    const handleTerminalEnter = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter') {
+            console.log('Enter key pressed');
+        }
+    };
 
     return (
         <div className='font-pretendard w-[calc(100vw-17rem)] p-4'>
@@ -27,7 +46,12 @@ const ImagePullPage = () => {
                 <div className='w-[50%] border rounded-lg border-gray-300 my-4 ml-1'></div>
             </section>
             <section className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
-                명령어 입력창
+                <textarea
+                    value={terminalInput}
+                    onChange={handleTerminalInput}
+                    onKeyDown={handleTerminalEnter}
+                    className='w-full h-full text-gray-700 rounded-lg bg-inherit resize-none focus:outline-none p-2'
+                ></textarea>
             </section>
             <section className='w-[85%] flex justify-end'>
                 <button className='text-lg text-white rounded-lg bg-gray-400 hover:bg-gray-500 py-2 px-4 my-4 mx-1'>
