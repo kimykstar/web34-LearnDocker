@@ -2,7 +2,8 @@ import { Controller, Get, Post, Body, Delete, Req, Res } from '@nestjs/common';
 import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
 import { Request, Response } from 'express';
-import { SESSION_DURATION } from 'src/common/constant';
+import { SESSION_DURATION } from '../common/constant';
+import { HideInProduction } from '../common/decorator/hide-in-prod.decorator';
 
 @Controller('sandbox')
 export class SandboxController {
@@ -31,6 +32,7 @@ export class SandboxController {
 
     // 개발용 API입니다. 배포 시 노출되면 안됩니다.
     @Delete('clear')
+    @HideInProduction()
     async clearContainers() {
         await this.sandboxService.clearContainers();
     }

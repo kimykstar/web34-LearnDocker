@@ -33,7 +33,11 @@ export class LastExceptionFilter implements ExceptionFilter {
         };
 
         if (this.constructor.name === 'LastExceptionFilter') {
-          this.logger.error(exception);
+            if (exception instanceof HttpException) {
+                this.logger.log(exception);
+            } else {
+                this.logger.error(exception);
+            }
         }
 
         httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
