@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Quiz, Visualization } from '../types/quiz';
-import { requestQuizData, requestVisualizationData } from '../api/quiz';
+import { requestQuizData, requestVisualizationData, reqeustSubmitResult } from '../api/quiz';
 import DockerVisualization from './DockerVisualization';
 import { Image, Container } from '../types/types';
 
@@ -29,17 +29,18 @@ const ImagePullPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [visualizationData, setVisualizationData] = useState<Visualization | null>(null);
-    const [terminalInput, setTerminalInput] = useState<string>('~$ ');
+    const [terminalInput, setTerminalInput] = useState('~$ ');
     const [images, setImages] = useState<Image[]>([]);
-    
+    const [submitResult, setSubmitResult] = useState('default');
+
     useEffect(() => {
         requestQuizData(setQuizData, navigate);
         requestVisualizationData(setVisualizationData, navigate);
         // TODO: visualizationData를 사용하는 코드 작성
         // 아래는 lint error를 해결하기 위한 임시 코드
-        console.log(visualizationData);
+        console.log('임시코드입니다', visualizationData);
     }, []);
-    
+
     const handleTerminalInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
         const prefix = '~$ ';
@@ -77,6 +78,15 @@ const ImagePullPage = () => {
         setImages(updatedImages);
     };
 
+    const handleSubmitButtonClick = async () => {
+        await reqeustSubmitResult(setSubmitResult, navigate);
+
+        // TODO: submitResult의 상태에 따라 모달창을 띄워줘야 한다.
+        // 아래 console.log는 테스트 용도, 나중에 삭제해야 함
+        // 여기서 해줄 작업은 없고, 아래 jsx를 return해줄 때 모달창 띄우는 코드를 추가해야 할 듯 합니다.
+        console.log(submitResult);
+    };
+
     return (
         <div className='font-pretendard w-[calc(100vw-17rem)] p-4'>
             <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>image 가져오기</h1>
@@ -112,7 +122,10 @@ const ImagePullPage = () => {
                 <button className='text-lg text-white rounded-lg bg-gray-400 hover:bg-gray-500 py-2 px-4 m-4'>
                     다음
                 </button>
-                <button className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'>
+                <button
+                    onClick={handleSubmitButtonClick}
+                    className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'
+                >
                     채점하기
                 </button>
             </section>
