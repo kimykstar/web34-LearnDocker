@@ -2,6 +2,7 @@ import { useState } from 'react';
 import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
+import { SidebarSectionProps } from '../types/types';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -25,14 +26,6 @@ const dockerContainerLinks = [
     { title: 'Container 중지하기', path: '/container/quiz/5' },
     { title: 'Container 삭제하기', path: '/container/quiz/6' },
 ];
-
-type SidebarSectionProps = {
-    title: string;
-    links: Array<{
-        title: string;
-        path: string;
-    }>;
-};
 
 const SidebarSection = ({ title, links }: SidebarSectionProps) => {
     const [isOpen, setIsOpen] = useState(true);
