@@ -19,9 +19,7 @@ const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
         };
     });
 
-    const isUpdated = updatedImages.length !== prevImages.length;
-
-    return { updatedImages, isUpdated };
+    return updatedImages;
 };
 
 const ImagePullPage = () => {
@@ -37,11 +35,12 @@ const ImagePullPage = () => {
             await axios({ method: 'get', url: 'http://localhost:8080/visualization/images' })
         ).data;
 
-        const { updatedImages, isUpdated } = updateImageColors(newImages, images);
-
-        if (isUpdated) {
-            setImages(updatedImages);
+        if (images.length === newImages.length) {
+            return;
         }
+        const updatedImages = updateImageColors(newImages, images);
+
+        setImages(updatedImages);
     };
 
     return (
