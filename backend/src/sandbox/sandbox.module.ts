@@ -5,7 +5,12 @@ import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '../common/cache/cache.module';
 
 @Module({
-    imports: [HttpModule, CacheModule],
+    imports: [
+        HttpModule.register({
+            timeout: 3000,
+        }),
+        CacheModule,
+    ],
     providers: [SandboxService],
     controllers: [SandboxController],
 })
