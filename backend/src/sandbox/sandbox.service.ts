@@ -77,4 +77,27 @@ export class SandboxService {
         const sortedImages = sortElementsByCreatedAt(imageList);
         return filterImageInfo(sortedImages);
     }
+
+    async processUserCommand(command: string, containerId: string) {
+        const exec = await this.httpService.axiosRef.post(
+            `http://127.0.0.1:2375/containers/${containerId}/exec`,
+            {
+                AttachStdin: false,
+                AttachStdout: true,
+                AttachStderr: true,
+                Tty: false,
+                Cmd: command.split(' '),
+            }
+        );
+        const response = await this.httpService.axiosRef.post(
+            `http://127.0.0.1:2375/exec/${exec.data.Id}/start`,
+            {
+                Detach: false,
+                Tty: true,
+                ConsoleSize: [80, 64],
+            }
+        );
+
+        return response.data;
+    }
 }
