@@ -1,4 +1,49 @@
+import { useState } from 'react';
+import axios from 'axios';
+import DockerVisualization from './DockerVisualization';
+import { Image, Container } from '../types/types';
+
+const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
+    const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
+
+    const updatedImages = newImages.map((newImage, index) => {
+        const prevImage = prevImages.find((img) => img.id === newImage.id);
+        if (prevImage) {
+            return prevImage;
+        }
+
+        return {
+            ...newImage,
+            // 이미지가 항상 순서대로 들어온다는 가정
+            color: colors[index % colors.length],
+        };
+    });
+
+    const isUpdated = updatedImages.length !== prevImages.length;
+
+    return { updatedImages, isUpdated };
+};
+
 const ImagePullPage = () => {
+    const [images, setImages] = useState<Image[]>([]);
+    // TODO: container 관련 상태 시각화 아직 못함
+    const [containers, setContainers] = useState<Container[]>([]);
+
+    // TODO: handleClick은 테스트 용도
+    // 1. 나중에 명령창에서 엔터를 눌렀을때로 변경해야함
+    // 2. url 변경 및 axios 반환 값(백엔드 api 명세서 보고) 수정 필요
+    const handleClick = async () => {
+        const newImages: Image[] = (
+            await axios({ method: 'get', url: 'http://localhost:8080/visualization/images' })
+        ).data;
+
+        const { updatedImages, isUpdated } = updateImageColors(newImages, images);
+
+        if (isUpdated) {
+            setImages(updatedImages);
+        }
+    };
+
     return (
         <div className='font-pretendard w-[calc(100vw-17rem)] p-4'>
             <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>image 가져오기</h1>
@@ -12,10 +57,17 @@ const ImagePullPage = () => {
                         nginx <br />
                     </p>
                 </div>
-                <div className='w-[50%] border rounded-lg border-gray-300 my-4 ml-1'></div>
+                <DockerVisualization images={images} containers={containers} />
             </section>
             <section className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
                 명령어 입력창
+                {/* TODO: 테스트 용도 onClick */}
+                <button
+                    onClick={handleClick}
+                    className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'
+                >
+                    test 용도
+                </button>
             </section>
             <section className='w-[85%] flex justify-end'>
                 <button className='text-lg text-white rounded-lg bg-gray-400 hover:bg-gray-500 py-2 px-4 my-4 mx-1'>
