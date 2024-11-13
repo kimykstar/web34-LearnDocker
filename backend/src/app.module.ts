@@ -3,8 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { QuizModule } from './quiz/quiz.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { SandboxModule } from './sandbox/sandbox.module';
+import { SandboxController } from './sandbox/sandbox.controller';
+import { SandboxService } from './sandbox/sandbox.service';
+import { HttpModule } from '@nestjs/axios';
 import { APP_FILTER } from '@nestjs/core';
 import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exception/filters';
 
@@ -20,12 +25,15 @@ import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exceptio
             synchronize: true,
         }),
         UsersModule,
+        QuizModule,
+        SandboxModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
             renderPath: '/',
         }),
+        HttpModule,
     ],
-    controllers: [AppController],
+    controllers: [AppController, SandboxController],
     providers: [
         AppService,
         {
@@ -36,7 +44,8 @@ import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exceptio
             provide: APP_FILTER,
             useClass: BusinessExceptionsFilter,
         },
-        Logger
+        Logger,
+        SandboxService
     ],
 })
 export class AppModule {}

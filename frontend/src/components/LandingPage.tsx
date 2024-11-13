@@ -1,6 +1,6 @@
 const LandingPage = () => {
     return (
-        <div className='p-4 font-pretendard'>
+        <div className='p-4 font-pretendard w-[calc(100vw-17rem)]'>
             <section className='flex flex-col'>
                 <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>
                     LearnDocker에 온 것을 환영합니다!
