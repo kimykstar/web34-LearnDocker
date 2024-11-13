@@ -5,13 +5,26 @@ import { Injectable } from '@nestjs/common';
 export class SandboxService {
     constructor(private readonly httpService: HttpService) {}
 
-    async getUserContainerImages(userPort: number) {
-        const containerResponse = await this.httpService.axiosRef.get(
-            `http://127.0.0.1:${userPort}/containers/json`
+    async getUserContainerImages(containerId: string) {
+        const exec = await this.httpService.axiosRef.post(
+            `http://127.0.0.1:2375/containers/${containerId}/exec`,
+            {
+                AttachStdin: false,
+                AttachStdout: true,
+                AttachStderr: true,
+                DetachKeys: 'ctrl-p,ctrl-q',
+                Tty: false,
+                Cmd: ['sh', '-c', 'docker images --format json; docker ps --format json'],
+            }
         );
-        const imagesResponse = await this.httpService.axiosRef.get(
-            `http://127.0.0.1:${userPort}/images/json`
+        const imagesResponse = await this.httpService.axiosRef.post(
+            `http://127.0.0.1:2375/exec/${exec.data.Id}/start`,
+            {
+                Detach: false,
+                Tty: true,
+                ConsoleSize: [80, 64],
+            }
         );
-        return { containers: [...containerResponse.data], images: [...imagesResponse.data] };
+        return imagesResponse.data;
     }
 }
