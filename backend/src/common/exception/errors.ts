@@ -10,3 +10,9 @@ export class PreviousProblemUnsolvedExeption extends BusinessException {
         super('모든 이전 문제를 풀지 않으면 이번 문제를 풀 수 없음');
     }
 }
+
+export class SessionAlreadyAssignedException extends BusinessException {
+    constructor() {
+        super('이미 세션에 컨테이너가 할당되어 있음');
+    }
+}

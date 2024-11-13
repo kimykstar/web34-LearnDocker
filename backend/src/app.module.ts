@@ -9,6 +9,7 @@ import { join } from 'path';
 import { SandboxModule } from './sandbox/sandbox.module';
 import { APP_FILTER } from '@nestjs/core';
 import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exception/filters';
+import { AuthModule } from './common/auth/auth.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exceptio
             rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
             renderPath: '/',
         }),
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [

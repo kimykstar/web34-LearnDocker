@@ -8,7 +8,7 @@ import {
     Logger,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { BusinessException, PreviousProblemUnsolvedExeption } from './errors';
+import { BusinessException, SessionAlreadyAssignedException } from './errors';
 
 @Catch()
 export class LastExceptionFilter implements ExceptionFilter {
@@ -45,8 +45,7 @@ export class BusinessExceptionsFilter extends LastExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost) {
         this.logger.log(exception);
 
-        // 이해를 돕기 위한 샘플로 만들었음. 필요없으면 삭제 가능
-        if (exception instanceof PreviousProblemUnsolvedExeption) {
+        if (exception instanceof SessionAlreadyAssignedException) {
             super.catch(new ForbiddenException(exception), host);
             return;
         }

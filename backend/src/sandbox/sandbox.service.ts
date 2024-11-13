@@ -1,13 +1,18 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
+import { AuthService } from '../common/auth/auth.service';
+import { SessionAlreadyAssignedException } from '../common/exception/errors';
 
 @Injectable()
 export class SandboxService {
+    private readonly logger = new Logger(SandboxService.name);
+
     constructor(
         private readonly httpService: HttpService,
-        private readonly cacheService: CacheService
+        private readonly cacheService: CacheService,
+        @Inject(AuthService) private readonly authService: AuthService
     ) {}
 
     async getUserContainerImages(containerId: string) {
@@ -53,13 +58,27 @@ export class SandboxService {
         );
     }
 
-    async assignContainer() {
-        const containerId = await this.createContainer();
-        await this.startContainer(containerId);
+    async assignContainer(sessionId?: string) {
+        const isValidSession = this.authService.validateSession(sessionId);
+        if (isValidSession) {
+            throw new SessionAlreadyAssignedException();
+        }
 
-        const sessionId = randomUUID();
-        this.cacheService.set(sessionId, { containerId, renew: false, startTime: new Date() });
-        return sessionId
+        const containerId = await this.createContainer();
+        try {
+            await this.startContainer(containerId);
+        } catch (startError) {
+            try {
+                await this.deleteContainer(containerId);
+            } catch (deleteError) {
+                this.logger.error(deleteError);
+            }
+            throw startError;
+        }
+
+        const newSessionId = randomUUID();
+        this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
+        return newSessionId
     }
 
     async deleteContainer(containerId: string) {

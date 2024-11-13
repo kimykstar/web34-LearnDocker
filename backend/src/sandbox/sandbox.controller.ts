@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Req, Res } from '@nestjs/common';
 import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
+import { Request, Response } from 'express';
+import { SESSION_DURATION } from 'src/common/constant';
 
 @Controller('sandbox')
 export class SandboxController {
@@ -21,9 +23,10 @@ export class SandboxController {
     }
 
     @Post('start')
-    async assignContainer() {
-        const containerId = await this.sandboxService.createContainer();
-        await this.sandboxService.startContainer(containerId);
+    async assignContainer(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+        const sessionId = req.cookies['sid'];
+        const newSessionId = await this.sandboxService.assignContainer(sessionId);
+        res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
     }
 
     // 개발용 API입니다. 배포 시 노출되면 안됩니다.
