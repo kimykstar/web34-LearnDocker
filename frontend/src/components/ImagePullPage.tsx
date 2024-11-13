@@ -35,7 +35,9 @@ const ImagePullPage = () => {
     useEffect(() => {
         requestQuizData(setQuizData, navigate);
         requestVisualizationData(setVisualizationData, navigate);
-        console.log(visualizationData); // lint error를 해결하기 위한 임시 코드
+        // TODO: visualizationData를 사용하는 코드 작성
+        // 아래는 lint error를 해결하기 위한 임시 코드
+        console.log(visualizationData);
     }, []);
     
     const handleTerminalInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -54,6 +56,7 @@ const ImagePullPage = () => {
         if (event.key === 'Enter') {
             console.log('Enter key pressed');
         }
+    };
 
     // TODO: container 관련 상태 시각화 아직 못함
     const [containers, setContainers] = useState<Container[]>([]);

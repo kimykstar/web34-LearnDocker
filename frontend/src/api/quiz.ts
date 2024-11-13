@@ -24,7 +24,7 @@ export const requestQuizData = (
     navigate: NavigateFunction
 ) => {
     axios
-        .get('http://localhost:3000/quiz/1')
+        .get('http://localhost:3000/api/quiz/1')
         .then((response) => {
             setQuizData(response.data);
         })
@@ -38,9 +38,23 @@ export const requestVisualizationData = (
     navigate: NavigateFunction
 ) => {
     axios
-        .get('http://localhost:3000/sandbox/elements')
+        .get('http://localhost:3000/api/sandbox/elements')
         .then((response) => {
             setVisualizationData(response.data);
+        })
+        .catch((error) => {
+            handleErrorResponse(error, navigate);
+        });
+};
+
+export const createHostContainer = async (
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    navigate: NavigateFunction
+) => {
+    axios
+        .post('http://localhost:3000/api/sandbox/start')
+        .then(() => {
+            setLoading(false);
         })
         .catch((error) => {
             handleErrorResponse(error, navigate);
