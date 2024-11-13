@@ -1,3 +1,5 @@
+import { Image, Container } from './types/elements';
+
 export function parseStringToJson(datas: string) {
     return datas.split('\n').reduce<Array<any>>((jsonDatas, line) => {
         if (line !== '') jsonDatas.push(JSON.parse(line));
@@ -6,7 +8,7 @@ export function parseStringToJson(datas: string) {
 }
 
 export function filterContainerInfo(containers: Array<any>) {
-    return containers.reduce((containerReducer, container) => {
+    return containers.reduce<Array<Container>>((containerReducer, container) => {
         containerReducer.push({
             id: container.ID,
             name: container.Names,
@@ -18,7 +20,7 @@ export function filterContainerInfo(containers: Array<any>) {
 }
 
 export function filterImageInfo(images: Array<any>) {
-    return images.reduce((imageReducer, image) => {
+    return images.reduce<Array<Image>>((imageReducer, image) => {
         imageReducer.push({
             id: image.ID,
             name: image.Repository,
