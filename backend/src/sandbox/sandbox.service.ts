@@ -46,7 +46,7 @@ export class SandboxService {
             },
         };
         const { data } = await this.httpService.axiosRef.post(
-            'http://223.130.135.14:2375/containers/create',
+            `${process.env.SANDBOX_HOST}/containers/create`,
             requestBody
         );
         return data.Id;
@@ -54,7 +54,7 @@ export class SandboxService {
 
     async startContainer(containerId: string) {
         await this.httpService.axiosRef.post(
-            `http://223.130.135.14:2375/containers/${containerId}/start`
+            `${process.env.SANDBOX_HOST}/containers/${containerId}/start`
         );
     }
 
@@ -83,12 +83,12 @@ export class SandboxService {
 
     async deleteContainer(containerId: string) {
         await this.httpService.axiosRef.delete(
-            `http://223.130.135.14:2375/containers/${containerId}?force=true`
+            `${process.env.SANDBOX_HOST}/containers/${containerId}?force=true`
         );
     }
 
     async getContainers() {
-        const { data } = await this.httpService.axiosRef.get('http://223.130.135.14:2375/containers/json?all=true');
+        const { data } = await this.httpService.axiosRef.get(`${process.env.SANDBOX_HOST}/containers/json?all=true`);
         return data;
     }
 
