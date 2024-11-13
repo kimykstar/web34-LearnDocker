@@ -1,13 +1,13 @@
-import { Image, Container } from './types/elements';
+import { Image, Container, ImageData, ContainerData } from './types/elements';
 
 export function parseStringToJson(datas: string) {
-    return datas.split('\n').reduce<Array<any>>((jsonDatas, line) => {
+    return datas.split('\n').reduce<Array<ImageData | ContainerData>>((jsonDatas, line) => {
         if (line !== '') jsonDatas.push(JSON.parse(line));
         return jsonDatas;
     }, []);
 }
 
-export function filterContainerInfo(containers: Array<any>) {
+export function filterContainerInfo(containers: Array<ContainerData>) {
     return containers.reduce<Array<Container>>((containerReducer, container) => {
         containerReducer.push({
             id: container.ID,
@@ -19,7 +19,7 @@ export function filterContainerInfo(containers: Array<any>) {
     }, []);
 }
 
-export function filterImageInfo(images: Array<any>) {
+export function filterImageInfo(images: Array<ImageData>) {
     return images.reduce<Array<Image>>((imageReducer, image) => {
         imageReducer.push({
             id: image.ID,

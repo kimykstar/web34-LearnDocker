@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { parseStringToJson, filterContainerInfo, filterImageInfo } from './dataparse.utils';
 import { requestDockerCommand } from './exec.api';
+import { ContainerData, ImageData } from './types/elements';
 
 @Injectable()
 export class SandboxService {
@@ -26,13 +27,13 @@ export class SandboxService {
 
     parseContainers(containers: string | object) {
         if (typeof containers === 'object') containers = JSON.stringify(containers);
-        const containerList = parseStringToJson(containers);
+        const containerList = parseStringToJson(containers) as ContainerData[];
         return filterContainerInfo(containerList);
     }
 
     parseImages(images: string | object) {
         if (typeof images === 'object') images = JSON.stringify(images);
-        const imageList = parseStringToJson(images);
+        const imageList = parseStringToJson(images) as ImageData[];
         return filterImageInfo(imageList);
     }
 
