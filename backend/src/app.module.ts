@@ -12,6 +12,7 @@ import { SandboxService } from './sandbox/sandbox.service';
 import { HttpModule } from '@nestjs/axios';
 import { APP_FILTER } from '@nestjs/core';
 import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exception/filters';
+import { CacheModule } from './common/cache/cache.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exceptio
             renderPath: '/',
         }),
         HttpModule,
+        CacheModule
     ],
     controllers: [AppController, SandboxController],
     providers: [
