@@ -5,14 +5,6 @@ export function parseStringToJson(datas: string) {
     }, []);
 }
 
-export function sortElementsByCreatedAt(elements: Array<any>) {
-    elements.map((element) => {
-        const createdAt = element['CreatedAt'].slice(0, 18);
-        return (element.CreatedAt = new Date(createdAt));
-    });
-    return elements.sort((a, b) => b.CreatedAt - a.CreatedAt);
-}
-
 export function filterContainerInfo(containers: Array<any>) {
     return containers.reduce((containerReducer, container) => {
         containerReducer.push({

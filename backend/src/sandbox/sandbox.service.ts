@@ -1,11 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import {
-    parseStringToJson,
-    sortElementsByCreatedAt,
-    filterContainerInfo,
-    filterImageInfo,
-} from './dataparse.utils';
+import { parseStringToJson, filterContainerInfo, filterImageInfo } from './dataparse.utils';
 
 @Injectable()
 export class SandboxService {
@@ -36,15 +31,14 @@ export class SandboxService {
                 ConsoleSize: [80, 64],
             }
         );
-        let containerDatas = containers.data;
-        if (typeof containerDatas === 'object') containerDatas = JSON.stringify(containerDatas);
+        const containerDatas = containers.data;
         return containerDatas === '""' ? [] : this.parseContainers(containerDatas);
     }
 
-    parseContainers(containers: string) {
+    parseContainers(containers: string | object) {
+        if (typeof containers === 'object') containers = JSON.stringify(containers);
         const containerList = parseStringToJson(containers);
-        const sortedContainerList = sortElementsByCreatedAt(containerList);
-        return filterContainerInfo(sortedContainerList);
+        return filterContainerInfo(containerList);
     }
 
     async getImageList(containerId: string) {
@@ -67,15 +61,14 @@ export class SandboxService {
                 ConsoleSize: [80, 64],
             }
         );
-        let imageDatas = images.data;
-        if (typeof imageDatas === 'object') imageDatas = JSON.stringify(imageDatas);
+        const imageDatas = images.data;
         return imageDatas.length === 0 ? [] : this.parseImages(imageDatas);
     }
 
-    parseImages(images: string) {
+    parseImages(images: string | object) {
+        if (typeof images === 'object') images = JSON.stringify(images);
         const imageList = parseStringToJson(images);
-        const sortedImages = sortElementsByCreatedAt(imageList);
-        return filterImageInfo(sortedImages);
+        return filterImageInfo(imageList);
     }
 
     async processUserCommand(command: string, containerId: string) {
