@@ -1,20 +1,43 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Quiz, Visualization } from '../types/quiz';
 import { requestQuizData, requestVisualizationData } from '../api/quiz';
+import DockerVisualization from './DockerVisualization';
+import { Image, Container } from '../types/types';
+
+const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
+    const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
+
+    const updatedImages = newImages.map((newImage, index) => {
+        const prevImage = prevImages.find((img) => img.id === newImage.id);
+        if (prevImage) {
+            return prevImage;
+        }
+
+        return {
+            ...newImage,
+            // 이미지가 항상 순서대로 들어온다는 가정
+            color: colors[index % colors.length],
+        };
+    });
+
+    return updatedImages;
+};
 
 const ImagePullPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [visualizationData, setVisualizationData] = useState<Visualization | null>(null);
     const [terminalInput, setTerminalInput] = useState<string>('~$ ');
-
+    const [images, setImages] = useState<Image[]>([]);
+    
     useEffect(() => {
         requestQuizData(setQuizData, navigate);
         requestVisualizationData(setVisualizationData, navigate);
         console.log(visualizationData); // lint error를 해결하기 위한 임시 코드
     }, []);
-
+    
     const handleTerminalInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
         const prefix = '~$ ';
@@ -31,6 +54,24 @@ const ImagePullPage = () => {
         if (event.key === 'Enter') {
             console.log('Enter key pressed');
         }
+
+    // TODO: container 관련 상태 시각화 아직 못함
+    const [containers, setContainers] = useState<Container[]>([]);
+
+    // TODO: handleClick은 테스트 용도
+    // 1. 나중에 명령창에서 엔터를 눌렀을때로 변경해야함
+    // 2. url 변경 및 axios 반환 값(백엔드 api 명세서 보고) 수정 필요
+    const handleClick = async () => {
+        const newImages: Image[] = (
+            await axios({ method: 'get', url: 'http://localhost:8080/visualization/images' })
+        ).data;
+
+        if (images.length === newImages.length) {
+            return;
+        }
+        const updatedImages = updateImageColors(newImages, images);
+
+        setImages(updatedImages);
     };
 
     return (
@@ -43,9 +84,17 @@ const ImagePullPage = () => {
                         {quizData?.content}
                     </p>
                 </div>
-                <div className='w-[50%] border rounded-lg border-gray-300 my-4 ml-1'></div>
+                <DockerVisualization images={images} containers={containers} />
             </section>
             <section className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
+                명령어 입력창
+                {/* TODO: 테스트 용도 onClick */}
+                <button
+                    onClick={handleClick}
+                    className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'
+                >
+                    test 용도
+                </button>
                 <textarea
                     value={terminalInput}
                     onChange={handleTerminalInput}
