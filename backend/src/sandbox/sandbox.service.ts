@@ -1,5 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
+import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
+import { requestDockerCommand } from './exec.api';
+import { ContainerData, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
 import { AuthService } from '../common/auth/auth.service';
@@ -16,26 +19,36 @@ export class SandboxService {
     ) {}
 
     async getUserContainerImages(containerId: string) {
-        const exec = await this.httpService.axiosRef.post(
-            `http://127.0.0.1:2375/containers/${containerId}/exec`,
-            {
-                AttachStdin: false,
-                AttachStdout: true,
-                AttachStderr: true,
-                DetachKeys: 'ctrl-p,ctrl-q',
-                Tty: false,
-                Cmd: ['sh', '-c', 'docker images --format json; docker ps --format json'],
-            }
-        );
-        const imagesResponse = await this.httpService.axiosRef.post(
-            `http://127.0.0.1:2375/exec/${exec.data.Id}/start`,
-            {
-                Detach: false,
-                Tty: true,
-                ConsoleSize: [80, 64],
-            }
-        );
-        return imagesResponse.data;
+        const containers = await requestDockerCommand(this.httpService, containerId, [
+            'docker',
+            'ps',
+            '-a',
+            '--format',
+            'json',
+        ]);
+        const images = await requestDockerCommand(this.httpService, containerId, [
+            'docker',
+            'images',
+            '--format',
+            'json',
+        ]);
+        return { containers: this.parseContainers(containers), images: this.parseImages(images) };
+    }
+
+    parseContainers(containers: string | object) {
+        if (typeof containers === 'object') containers = JSON.stringify(containers);
+        const containerList = parseStringToJson(containers) as ContainerData[];
+        return filterContainerInfo(containerList);
+    }
+
+    parseImages(images: string | object) {
+        if (typeof images === 'object') images = JSON.stringify(images);
+        const imageList = parseStringToJson(images) as ImageData[];
+        return filterImageInfo(imageList);
+    }
+
+    async processUserCommand(command: string, containerId: string) {
+        return requestDockerCommand(this.httpService, containerId, command.split(' '));
     }
 
     async createContainer() {
@@ -78,7 +91,7 @@ export class SandboxService {
 
         const newSessionId = randomUUID();
         this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
-        return newSessionId
+        return newSessionId;
     }
 
     async deleteContainer(containerId: string) {
@@ -88,12 +101,16 @@ export class SandboxService {
     }
 
     async getContainers() {
-        const { data } = await this.httpService.axiosRef.get(`${process.env.SANDBOX_HOST}/containers/json?all=true`);
+        const { data } = await this.httpService.axiosRef.get(
+            `${process.env.SANDBOX_HOST}/containers/json?all=true`
+        );
         return data;
     }
 
     async clearContainers() {
         const containers = await this.getContainers();
-        await Promise.all(containers.map((container: { Id: string }) => this.deleteContainer(container.Id)))
+        await Promise.all(
+            containers.map((container: { Id: string }) => this.deleteContainer(container.Id))
+        );
     }
 }
