@@ -34,13 +34,13 @@ export const requestQuizData = (
 };
 
 export const requestVisualizationData = (
-    setVisualizationData: React.Dispatch<React.SetStateAction<Visualization | null>>,
+    callback: (data: Visualization) => void,
     navigate: NavigateFunction
 ) => {
     axios
         .get('http://211.188.54.30:3000/api/sandbox/elements')
         .then((response) => {
-            setVisualizationData(response.data);
+            callback(response.data);
         })
         .catch((error) => {
             handleErrorResponse(error, navigate);
@@ -84,5 +84,25 @@ export const reqeustSubmitResult = (
         })
         .catch((error) => {
             handleErrorResponse(error, navigate);
+        });
+};
+
+export const requestCommandResult = (
+    command: string,
+    callback: (data: string) => void,
+    navigate: NavigateFunction,
+    customErrorCallback?: (error: unknown) => void
+) => {
+    axios
+        .post('http://211.188.54.30:3000/api/sandbox/command', { command })
+        .then((response) => {
+            callback(response.data);
+        })
+        .catch((error) => {
+            if (customErrorCallback !== undefined) {
+                customErrorCallback(error);
+            } else {
+                handleErrorResponse(error, navigate);
+            }
         });
 };

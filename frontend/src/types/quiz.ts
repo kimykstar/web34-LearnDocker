@@ -1,7 +1,7 @@
 export type Quiz = {
     id: number;
     title: string;
-    content: string;
+    content: string | undefined;
 };
 
 export type Visualization = {
@@ -19,4 +19,8 @@ export type Container = {
 export type Image = {
     id: string;
     name: string;
+};
+
+export type QuizTextAreaProps = {
+    updateVisualizationData: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
