@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Quiz, Visualization } from '../types/quiz';
 import { requestQuizData, requestVisualizationData, reqeustSubmitResult } from '../api/quiz';
-import DockerVisualization from './DockerVisualization';
-import { Image, Container } from '../types/types';
+import DockerVisualization from './visualization/DockerVisualization';
+import { Image, DOCKER_OPERATIONS, AnimationState, DockerOperation } from '../types/visualization';
 
 const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
     const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
@@ -30,7 +30,6 @@ const ImagePullPage = () => {
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [visualizationData, setVisualizationData] = useState<Visualization | null>(null);
     const [terminalInput, setTerminalInput] = useState('~$ ');
-    const [images, setImages] = useState<Image[]>([]);
     const [submitResult, setSubmitResult] = useState('default');
 
     useEffect(() => {
@@ -59,8 +58,13 @@ const ImagePullPage = () => {
         }
     };
 
-    // TODO: container 관련 상태 시각화 아직 못함
-    const [containers, setContainers] = useState<Container[]>([]);
+    const [images, setImages] = useState<Image[]>([]);
+    const [pendingImages, setPendingImages] = useState<Image[]>([]);
+    const [animation, setAnimation] = useState<AnimationState>({
+        isVisible: false,
+        key: 0,
+    });
+    const [dockerOperation, setDockerOperation] = useState<DockerOperation>();
 
     // TODO: handleClick은 테스트 용도
     // 1. 나중에 명령창에서 엔터를 눌렀을때로 변경해야함
@@ -71,11 +75,34 @@ const ImagePullPage = () => {
         ).data;
 
         if (images.length === newImages.length) {
+            setAnimation((prev) => ({
+                isVisible: false,
+                key: prev.key,
+            }));
             return;
         }
-        const updatedImages = updateImageColors(newImages, images);
 
-        setImages(updatedImages);
+        const operation =
+            images.length < newImages.length
+                ? DOCKER_OPERATIONS.IMAGE_PULL
+                : DOCKER_OPERATIONS.IMAGE_DELETE;
+
+        const updatedImages = updateImageColors(newImages, images);
+        setPendingImages(updatedImages);
+        setAnimation((prev) => ({
+            isVisible: true,
+            key: prev.key + 1,
+        }));
+
+        setDockerOperation(operation);
+    };
+
+    const handleAnimationComplete = () => {
+        setImages(pendingImages);
+        setAnimation((prev) => ({
+            isVisible: false,
+            key: prev.key,
+        }));
     };
 
     const handleSubmitButtonClick = () => {
@@ -97,7 +124,13 @@ const ImagePullPage = () => {
                         {quizData?.content}
                     </p>
                 </div>
-                <DockerVisualization images={images} containers={containers} />
+                <DockerVisualization
+                    animationState={animation}
+                    dockerOperation={dockerOperation}
+                    images={images}
+                    containers={undefined}
+                    onAnimationComplete={handleAnimationComplete}
+                />
             </section>
             <section className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
                 명령어 입력창

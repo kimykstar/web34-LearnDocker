@@ -6,9 +6,10 @@ import {
     HttpStatus,
     ForbiddenException,
     Logger,
+    NotFoundException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { BusinessException, PreviousProblemUnsolvedExeption } from './errors';
+import { BusinessException, EntityNotExistException, SessionAlreadyAssignedException } from './errors';
 
 @Catch()
 export class LastExceptionFilter implements ExceptionFilter {
@@ -33,7 +34,11 @@ export class LastExceptionFilter implements ExceptionFilter {
         };
 
         if (this.constructor.name === 'LastExceptionFilter') {
-          this.logger.error(exception);
+            if (exception instanceof HttpException) {
+                this.logger.log(exception);
+            } else {
+                this.logger.error(exception);
+            }
         }
 
         httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
@@ -45,9 +50,13 @@ export class BusinessExceptionsFilter extends LastExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost) {
         this.logger.log(exception);
 
-        // 이해를 돕기 위한 샘플로 만들었음. 필요없으면 삭제 가능
-        if (exception instanceof PreviousProblemUnsolvedExeption) {
+        if (exception instanceof SessionAlreadyAssignedException) {
             super.catch(new ForbiddenException(exception), host);
+            return;
+        }
+
+        if (exception instanceof EntityNotExistException) {
+            super.catch(new NotFoundException(exception), host);
             return;
         }
         super.catch(exception, host);

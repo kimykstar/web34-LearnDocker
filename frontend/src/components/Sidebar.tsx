@@ -2,7 +2,7 @@ import { useState } from 'react';
 import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
-import { SidebarSectionProps } from '../types/types';
+import { SidebarSectionProps } from '../types/sidebar';
 
 const links = [
     { title: 'Home', path: '/' },
