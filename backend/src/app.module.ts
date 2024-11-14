@@ -28,7 +28,8 @@ import { AuthModule } from './common/auth/auth.module';
         SandboxModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', '..', 'frontend', 'dist'),
-            renderPath: '/',
+            exclude: ['/api*'],
+            renderPath:'/*',
         }),
         AuthModule,
     ],
