@@ -22,3 +22,9 @@ export class EntityNotExistException extends BusinessException {
         super(`${entityName}(이)가 DB에 존재하지 않음`);
     }
 }
+
+export class InvalidSessionException extends BusinessException {
+    constructor() {
+        super('유효하지 않은 세션입니다');
+    }
+}

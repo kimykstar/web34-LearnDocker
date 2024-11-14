@@ -9,7 +9,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { BusinessException, EntityNotExistException, SessionAlreadyAssignedException } from './errors';
+import { BusinessException, EntityNotExistException, InvalidSessionException, SessionAlreadyAssignedException } from './errors';
 
 @Catch()
 export class LastExceptionFilter implements ExceptionFilter {
@@ -57,6 +57,11 @@ export class BusinessExceptionsFilter extends LastExceptionFilter {
 
         if (exception instanceof EntityNotExistException) {
             super.catch(new NotFoundException(exception), host);
+            return;
+        }
+
+        if (exception instanceof InvalidSessionException) {
+            super.catch(new ForbiddenException(exception), host);
             return;
         }
         super.catch(exception, host);

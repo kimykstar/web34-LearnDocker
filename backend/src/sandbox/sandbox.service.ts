@@ -3,10 +3,10 @@ import { Injectable, Inject, Logger } from '@nestjs/common';
 import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
 import { requestDockerCommand } from './exec.api';
 import { ContainerData, ImageData } from './types/elements';
-import { CacheService } from '../common/cache/cache.service';
+import { CacheService, ContainerSession } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
 import { AuthService } from '../common/auth/auth.service';
-import { SessionAlreadyAssignedException } from '../common/exception/errors';
+import { InvalidSessionException, SessionAlreadyAssignedException } from '../common/exception/errors';
 
 @Injectable()
 export class SandboxService {
@@ -18,7 +18,14 @@ export class SandboxService {
         @Inject(AuthService) private readonly authService: AuthService
     ) {}
 
-    async getUserContainerImages(containerId: string) {
+    async getUserContainerImages(sessionId: string) {
+        const isValidSession = this.authService.validateSession(sessionId);
+        if (!isValidSession) {
+            throw new InvalidSessionException();
+        }
+
+        const { containerId } = this.cacheService.get(sessionId) as ContainerSession;
+
         const containers = await requestDockerCommand(this.httpService, containerId, [
             'docker',
             'ps',
