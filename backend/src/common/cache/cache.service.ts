@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-interface ContainerSession {
+export interface ContainerSession {
     containerId: string;
     startTime: Date;
     renew: boolean;
