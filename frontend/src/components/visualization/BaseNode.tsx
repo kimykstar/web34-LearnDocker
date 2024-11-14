@@ -1,4 +1,4 @@
-import { NodeProps } from '../types/types';
+import { NodeProps } from '../../types/visualization';
 
 export const BaseNode = ({ label, icon: Icon, gridRow, gridColumn }: NodeProps) => {
     return (
