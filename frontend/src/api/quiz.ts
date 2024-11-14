@@ -47,7 +47,7 @@ export const requestVisualizationData = (
         });
 };
 
-export const createHostContainer = async (
+export const createHostContainer = (
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     navigate: NavigateFunction
 ) => {
@@ -61,7 +61,7 @@ export const createHostContainer = async (
         });
 };
 
-export const reqeustSubmitResult = async (
+export const reqeustSubmitResult = (
     setSubmitResult: React.Dispatch<React.SetStateAction<string>>,
     navigate: NavigateFunction
 ) => {

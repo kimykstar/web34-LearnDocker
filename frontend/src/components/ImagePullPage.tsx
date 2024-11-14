@@ -78,8 +78,8 @@ const ImagePullPage = () => {
         setImages(updatedImages);
     };
 
-    const handleSubmitButtonClick = async () => {
-        await reqeustSubmitResult(setSubmitResult, navigate);
+    const handleSubmitButtonClick = () => {
+        reqeustSubmitResult(setSubmitResult, navigate);
 
         // TODO: submitResult의 상태에 따라 모달창을 띄워줘야 한다.
         // 아래 console.log는 테스트 용도, 나중에 삭제해야 함
