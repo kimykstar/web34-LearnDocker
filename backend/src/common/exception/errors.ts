@@ -16,3 +16,9 @@ export class SessionAlreadyAssignedException extends BusinessException {
         super('이미 세션에 컨테이너가 할당되어 있음');
     }
 }
+
+export class EntityNotExistException extends BusinessException {
+    constructor(entityName: string) {
+        super(`${entityName}(이)가 DB에 존재하지 않음`);
+    }
+}

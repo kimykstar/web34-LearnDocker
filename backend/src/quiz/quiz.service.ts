@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quiz } from './quiz.entity';
+import { EntityNotExistException } from '../common/exception/errors';
 
 @Injectable()
 export class QuizService {
@@ -10,7 +11,11 @@ export class QuizService {
         private quizRepository: Repository<Quiz>
     ) {}
 
-    getQuizById(id: number) {
-        return this.quizRepository.findOneByOrFail({ id });
+    async getQuizById(id: number) {
+        const quiz = await this.quizRepository.findOneBy({ id });
+        if (quiz == null) {
+            throw new EntityNotExistException('Quiz');
+        }
+        return quiz;
     }
 }
