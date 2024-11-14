@@ -7,7 +7,7 @@ export async function requestDockerCommand(
     command: Array<string>
 ) {
     const exec = await httpService.axiosRef.post(
-        `http://127.0.0.1:2375/containers/${containerId}/exec`,
+        `${process.env.SANDBOX_URL}/containers/${containerId}/exec`,
         {
             AttachStdin: false,
             AttachStdout: true,
@@ -17,7 +17,7 @@ export async function requestDockerCommand(
         }
     );
     const response = await httpService.axiosRef.post(
-        `http://127.0.0.1:2375/exec/${exec.data.Id}/start`,
+        `${process.env.SANDBOX_URL}/exec/${exec.data.Id}/start`,
         {
             Detach: false,
             Tty: true,
