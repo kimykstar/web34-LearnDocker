@@ -71,7 +71,7 @@ const ImagePullPage = () => {
     // 2. url 변경 및 axios 반환 값(백엔드 api 명세서 보고) 수정 필요
     const handleClick = async () => {
         const newImages: Image[] = (
-            await axios({ method: 'get', url: 'http://localhost:8080/visualization/images' })
+            await axios({ method: 'get', url: 'http://211.188.54.30:3000/visualization/images' })
         ).data;
 
         if (images.length === newImages.length) {

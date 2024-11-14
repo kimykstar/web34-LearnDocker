@@ -24,7 +24,7 @@ export const requestQuizData = (
     navigate: NavigateFunction
 ) => {
     axios
-        .get('http://localhost:3000/api/quiz/1')
+        .get('http://211.188.54.30:3000/api/quiz/1')
         .then((response) => {
             setQuizData(response.data);
         })
@@ -38,7 +38,7 @@ export const requestVisualizationData = (
     navigate: NavigateFunction
 ) => {
     axios
-        .get('http://localhost:3000/api/sandbox/elements')
+        .get('http://211.188.54.30:3000/api/sandbox/elements')
         .then((response) => {
             setVisualizationData(response.data);
         })
@@ -52,7 +52,7 @@ export const createHostContainer = (
     navigate: NavigateFunction
 ) => {
     axios
-        .post('http://localhost:3000/api/sandbox/start')
+        .post('http://211.188.54.30:3000/api/sandbox/start')
         .then(() => {
             setLoading(false);
         })
@@ -66,7 +66,7 @@ export const reqeustSubmitResult = (
     navigate: NavigateFunction
 ) => {
     axios
-        .post('http://localhost:3000/api/quiz/1/submit')
+        .post('http://211.188.54.30:3000/api/quiz/1/submit')
         .then((response) => {
             // TODO: 백엔드와 협의하여 응답 데이터 구조를 정의해야 한다.
             // 현재는 { quizResult: 'SUCCESS' | 'FAIL' | 'ERROR' }로 가정
