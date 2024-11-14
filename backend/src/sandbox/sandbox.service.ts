@@ -1,12 +1,22 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Injectable, Logger } from '@nestjs/common';
 import { parseStringToJson, filterContainerInfo, filterImageInfo } from './dataparse.utils';
 import { requestDockerCommand } from './exec.api';
 import { ContainerData, ImageData } from './types/elements';
+import { CacheService } from '../common/cache/cache.service';
+import { randomUUID } from 'crypto';
+import { AuthService } from '../common/auth/auth.service';
+import { SessionAlreadyAssignedException } from '../common/exception/errors';
 
 @Injectable()
 export class SandboxService {
-    constructor(private readonly httpService: HttpService) {}
+    private readonly logger = new Logger(SandboxService.name);
+
+    constructor(
+        private readonly httpService: HttpService,
+        private readonly cacheService: CacheService,
+        @Inject(AuthService) private readonly authService: AuthService
+    ) {}
 
     async getUserContainerImages(containerId: string) {
         const containers = await requestDockerCommand(this.httpService, containerId, [
@@ -39,5 +49,64 @@ export class SandboxService {
 
     async processUserCommand(command: string, containerId: string) {
         return requestDockerCommand(this.httpService, containerId, command.split(' '));
+    }
+
+    async createContainer() {
+        const requestBody = {
+            Image: 'docker:dind',
+            HostConfig: {
+                Privileged: true,
+            },
+        };
+        const { data } = await this.httpService.axiosRef.post(
+            `${process.env.SANDBOX_HOST}/containers/create`,
+            requestBody
+        );
+        return data.Id;
+    }
+
+    async startContainer(containerId: string) {
+        await this.httpService.axiosRef.post(
+            `${process.env.SANDBOX_HOST}/containers/${containerId}/start`
+        );
+    }
+
+    async assignContainer(sessionId?: string) {
+        const isValidSession = this.authService.validateSession(sessionId);
+        if (isValidSession) {
+            throw new SessionAlreadyAssignedException();
+        }
+
+        const containerId = await this.createContainer();
+        try {
+            await this.startContainer(containerId);
+        } catch (startError) {
+            try {
+                await this.deleteContainer(containerId);
+            } catch (deleteError) {
+                this.logger.error(deleteError);
+            }
+            throw startError;
+        }
+
+        const newSessionId = randomUUID();
+        this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
+        return newSessionId
+    }
+
+    async deleteContainer(containerId: string) {
+        await this.httpService.axiosRef.delete(
+            `${process.env.SANDBOX_HOST}/containers/${containerId}?force=true`
+        );
+    }
+
+    async getContainers() {
+        const { data } = await this.httpService.axiosRef.get(`${process.env.SANDBOX_HOST}/containers/json?all=true`);
+        return data;
+    }
+
+    async clearContainers() {
+        const containers = await this.getContainers();
+        await Promise.all(containers.map((container: { Id: string }) => this.deleteContainer(container.Id)))
     }
 }

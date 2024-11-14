@@ -24,7 +24,7 @@ export const requestQuizData = (
     navigate: NavigateFunction
 ) => {
     axios
-        .get('http://localhost:3000/quiz/1')
+        .get('http://localhost:3000/api/quiz/1')
         .then((response) => {
             setQuizData(response.data);
         })
@@ -38,9 +38,49 @@ export const requestVisualizationData = (
     navigate: NavigateFunction
 ) => {
     axios
-        .get('http://localhost:3000/sandbox/elements')
+        .get('http://localhost:3000/api/sandbox/elements')
         .then((response) => {
             setVisualizationData(response.data);
+        })
+        .catch((error) => {
+            handleErrorResponse(error, navigate);
+        });
+};
+
+export const createHostContainer = (
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    navigate: NavigateFunction
+) => {
+    axios
+        .post('http://localhost:3000/api/sandbox/start')
+        .then(() => {
+            setLoading(false);
+        })
+        .catch((error) => {
+            handleErrorResponse(error, navigate);
+        });
+};
+
+export const reqeustSubmitResult = (
+    setSubmitResult: React.Dispatch<React.SetStateAction<string>>,
+    navigate: NavigateFunction
+) => {
+    axios
+        .post('http://localhost:3000/api/quiz/1/submit')
+        .then((response) => {
+            // TODO: 백엔드와 협의하여 응답 데이터 구조를 정의해야 한다.
+            // 현재는 { quizResult: 'SUCCESS' | 'FAIL' | 'ERROR' }로 가정
+            // console.log는 테스트 용도, 나중에 삭제해야 함
+            const result = response.data;
+            console.log(result);
+
+            if (result?.quizResult === 'SUCCESS') {
+                setSubmitResult('SUCCESS');
+            } else if (result?.quizResult === 'FAIL') {
+                setSubmitResult('FAIL');
+            } else {
+                setSubmitResult('ERROR');
+            }
         })
         .catch((error) => {
             handleErrorResponse(error, navigate);

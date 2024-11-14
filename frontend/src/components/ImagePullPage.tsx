@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Quiz, Visualization } from '../types/quiz';
-import { requestQuizData, requestVisualizationData } from '../api/quiz';
-import DockerVisualization from './DockerVisualization';
-import { Image, Container } from '../types/types';
+import { requestQuizData, requestVisualizationData, reqeustSubmitResult } from '../api/quiz';
+import DockerVisualization from './visualization/DockerVisualization';
+import { Image, DOCKER_OPERATIONS, AnimationState, DockerOperation } from '../types/visualization';
 
 const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
     const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
@@ -29,15 +29,17 @@ const ImagePullPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [visualizationData, setVisualizationData] = useState<Visualization | null>(null);
-    const [terminalInput, setTerminalInput] = useState<string>('~$ ');
-    const [images, setImages] = useState<Image[]>([]);
-    
+    const [terminalInput, setTerminalInput] = useState('~$ ');
+    const [submitResult, setSubmitResult] = useState('default');
+
     useEffect(() => {
         requestQuizData(setQuizData, navigate);
         requestVisualizationData(setVisualizationData, navigate);
-        console.log(visualizationData); // lint error를 해결하기 위한 임시 코드
+        // TODO: visualizationData를 사용하는 코드 작성
+        // 아래는 lint error를 해결하기 위한 임시 코드
+        console.log('임시코드입니다', visualizationData);
     }, []);
-    
+
     const handleTerminalInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
         const prefix = '~$ ';
@@ -54,9 +56,15 @@ const ImagePullPage = () => {
         if (event.key === 'Enter') {
             console.log('Enter key pressed');
         }
+    };
 
-    // TODO: container 관련 상태 시각화 아직 못함
-    const [containers, setContainers] = useState<Container[]>([]);
+    const [images, setImages] = useState<Image[]>([]);
+    const [pendingImages, setPendingImages] = useState<Image[]>([]);
+    const [animation, setAnimation] = useState<AnimationState>({
+        isVisible: false,
+        key: 0,
+    });
+    const [dockerOperation, setDockerOperation] = useState<DockerOperation>();
 
     // TODO: handleClick은 테스트 용도
     // 1. 나중에 명령창에서 엔터를 눌렀을때로 변경해야함
@@ -67,11 +75,43 @@ const ImagePullPage = () => {
         ).data;
 
         if (images.length === newImages.length) {
+            setAnimation((prev) => ({
+                isVisible: false,
+                key: prev.key,
+            }));
             return;
         }
-        const updatedImages = updateImageColors(newImages, images);
 
-        setImages(updatedImages);
+        const operation =
+            images.length < newImages.length
+                ? DOCKER_OPERATIONS.IMAGE_PULL
+                : DOCKER_OPERATIONS.IMAGE_DELETE;
+
+        const updatedImages = updateImageColors(newImages, images);
+        setPendingImages(updatedImages);
+        setAnimation((prev) => ({
+            isVisible: true,
+            key: prev.key + 1,
+        }));
+
+        setDockerOperation(operation);
+    };
+
+    const handleAnimationComplete = () => {
+        setImages(pendingImages);
+        setAnimation((prev) => ({
+            isVisible: false,
+            key: prev.key,
+        }));
+    };
+
+    const handleSubmitButtonClick = () => {
+        reqeustSubmitResult(setSubmitResult, navigate);
+
+        // TODO: submitResult의 상태에 따라 모달창을 띄워줘야 한다.
+        // 아래 console.log는 테스트 용도, 나중에 삭제해야 함
+        // 여기서 해줄 작업은 없고, 아래 jsx를 return해줄 때 모달창 띄우는 코드를 추가해야 할 듯 합니다.
+        console.log(submitResult);
     };
 
     return (
@@ -84,7 +124,13 @@ const ImagePullPage = () => {
                         {quizData?.content}
                     </p>
                 </div>
-                <DockerVisualization images={images} containers={containers} />
+                <DockerVisualization
+                    animationState={animation}
+                    dockerOperation={dockerOperation}
+                    images={images}
+                    containers={undefined}
+                    onAnimationComplete={handleAnimationComplete}
+                />
             </section>
             <section className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
                 명령어 입력창
@@ -109,7 +155,10 @@ const ImagePullPage = () => {
                 <button className='text-lg text-white rounded-lg bg-gray-400 hover:bg-gray-500 py-2 px-4 m-4'>
                     다음
                 </button>
-                <button className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'>
+                <button
+                    onClick={handleSubmitButtonClick}
+                    className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'
+                >
                     채점하기
                 </button>
             </section>
