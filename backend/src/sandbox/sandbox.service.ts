@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Injectable, Logger } from '@nestjs/common';
-import { parseStringToJson, filterContainerInfo, filterImageInfo } from './dataparse.utils';
+import { Injectable, Inject, Logger } from '@nestjs/common';
+import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
 import { requestDockerCommand } from './exec.api';
 import { ContainerData, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
@@ -91,7 +91,7 @@ export class SandboxService {
 
         const newSessionId = randomUUID();
         this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
-        return newSessionId
+        return newSessionId;
     }
 
     async deleteContainer(containerId: string) {
@@ -101,12 +101,16 @@ export class SandboxService {
     }
 
     async getContainers() {
-        const { data } = await this.httpService.axiosRef.get(`${process.env.SANDBOX_HOST}/containers/json?all=true`);
+        const { data } = await this.httpService.axiosRef.get(
+            `${process.env.SANDBOX_HOST}/containers/json?all=true`
+        );
         return data;
     }
 
     async clearContainers() {
         const containers = await this.getContainers();
-        await Promise.all(containers.map((container: { Id: string }) => this.deleteContainer(container.Id)))
+        await Promise.all(
+            containers.map((container: { Id: string }) => this.deleteContainer(container.Id))
+        );
     }
 }
