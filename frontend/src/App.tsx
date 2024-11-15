@@ -9,7 +9,7 @@ const App = () => {
     return (
         <>
             <Header />
-            <div className='flex'>
+            <div className='flex font-pretendard'>
                 <Sidebar />
                 <Routes>
                     <Route path='/' element={<LandingPage />} />

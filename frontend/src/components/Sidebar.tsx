@@ -61,7 +61,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 
 const Sidebar = () => {
     return (
-        <nav className='flex flex-col text-Off-Black h-[calc(100vh-4rem)] w-[17rem] font-pretendard bg-gray-100'>
+        <nav className='flex flex-col text-Off-Black h-[calc(100vh-4rem)] w-[17rem] bg-gray-100'>
             <div className='flex-grow'>
                 {links.map((link) => (
                     <p
