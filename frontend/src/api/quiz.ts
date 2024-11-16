@@ -1,4 +1,5 @@
-import { Quiz, Visualization } from '../types/quiz';
+import { Quiz, QuizResult } from '../types/quiz';
+import { Visualization } from '../types/visualization';
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 
@@ -20,92 +21,66 @@ const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
     } else {
         console.error('unknown error');
     }
+    return null;
 };
 
-export const requestQuizData = (
-    setQuizData: React.Dispatch<React.SetStateAction<Quiz | null>>,
-    navigate: NavigateFunction
-) => {
-    axios
-        .get(`http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/1`)
-        .then((response) => {
-            setQuizData(response.data);
-        })
-        .catch((error) => {
-            handleErrorResponse(error, navigate);
-        });
+export const requestQuizData = async (navigate: NavigateFunction) => {
+    try {
+        const response = await axios.get<Quiz>(`http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/1`);
+        return response.data;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
 };
 
-export const requestVisualizationData = (
-    callback: (data: Visualization) => void,
-    navigate: NavigateFunction
-) => {
-    axios
-        .get(`http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/elements`)
-        .then((response) => {
-            callback(response.data);
-        })
-        .catch((error) => {
-            handleErrorResponse(error, navigate);
-        });
+export const requestVisualizationData = async (navigate: NavigateFunction) => {
+    try {
+        const response = await axios.get<Visualization>(
+            `http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/elements`
+        );
+        return response.data;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
 };
 
-export const createHostContainer = (
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-    navigate: NavigateFunction
-) => {
-    axios
-        .post(`http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/start`)
-        .then(() => {
-            setLoading(false);
-        })
-        .catch((error) => {
-            handleErrorResponse(error, navigate);
-        });
+export const createHostContainer = async (navigate: NavigateFunction) => {
+    try {
+        await axios.post(`http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/start`);
+        return true;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
 };
 
-export const reqeustSubmitResult = (
-    setSubmitResult: React.Dispatch<React.SetStateAction<string>>,
-    navigate: NavigateFunction
-) => {
-    axios
-        .post(`http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/1/submit`)
-        .then((response) => {
-            // TODO: 백엔드와 협의하여 응답 데이터 구조를 정의해야 한다.
-            // 현재는 { quizResult: 'SUCCESS' | 'FAIL' | 'ERROR' }로 가정
-            // console.log는 테스트 용도, 나중에 삭제해야 함
-            const result = response.data;
-            console.log(result);
-
-            if (result?.quizResult === 'SUCCESS') {
-                setSubmitResult('SUCCESS');
-            } else if (result?.quizResult === 'FAIL') {
-                setSubmitResult('FAIL');
-            } else {
-                setSubmitResult('ERROR');
-            }
-        })
-        .catch((error) => {
-            handleErrorResponse(error, navigate);
-        });
+export const requestSubmitResult = async (navigate: NavigateFunction) => {
+    try {
+        const response = await axios.post<QuizResult>(
+            `http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/1/submit`
+        );
+        return response.data;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
 };
 
-export const requestCommandResult = (
+export const requestCommandResult = async (
     command: string,
-    callback: (data: string) => void,
     navigate: NavigateFunction,
     customErrorCallback?: (error: unknown) => void
 ) => {
-    axios
-        .post(`http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/command`, { command })
-        .then((response) => {
-            callback(response.data);
-        })
-        .catch((error) => {
-            if (customErrorCallback !== undefined) {
-                customErrorCallback(error);
-            } else {
-                handleErrorResponse(error, navigate);
-            }
-        });
+    try {
+        const response = await axios.post<string>(
+            `http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/command`,
+            { command }
+        );
+        return response.data;
+    } catch (error) {
+        if (customErrorCallback !== undefined) {
+            customErrorCallback(error);
+        } else {
+            handleErrorResponse(error, navigate);
+        }
+        return null;
+    }
 };

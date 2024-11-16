@@ -4,21 +4,8 @@ export type Quiz = {
     content: string | undefined;
 };
 
-export type Visualization = {
-    containers: Container[];
-    images: Image[];
-};
-
-export type Container = {
-    id: string;
-    imageId: string;
-    status: string;
-    name: string;
-};
-
-export type Image = {
-    id: string;
-    name: string;
+export type QuizResult = {
+    quizResult: 'SUCCESS' | 'FAIL';
 };
 
 export type QuizTextAreaProps = {
