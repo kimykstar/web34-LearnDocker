@@ -32,7 +32,7 @@ export const useTerminalInput = (): UseTerminalInput => {
         alert('허용되지 않은 명령어 입니다.');
     };
 
-    const handleTerminalEnter = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const handleTerminalEnter = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault();
 
@@ -40,9 +40,21 @@ export const useTerminalInput = (): UseTerminalInput => {
             const lastLine = lines[lines.length - 1];
             const command = lastLine?.slice(prefix.length).trim();
 
-            if (command) {
-                requestCommandResult(command, handleCommandSuccess, navigate, handleCommandError);
+            if (!command) {
+                return;
             }
+
+            const commandResponse = await requestCommandResult(
+                command,
+                navigate,
+                handleCommandError
+            );
+
+            if (!commandResponse) {
+                return;
+            }
+
+            handleCommandSuccess(commandResponse);
         }
     };
 

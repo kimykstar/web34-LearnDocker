@@ -15,7 +15,17 @@ const ImagePullPage = () => {
         useDockerVisualization();
 
     useEffect(() => {
-        requestQuizData(setQuizData, navigate);
+        const fetchQuizData = async () => {
+            const data = await requestQuizData(navigate);
+
+            if (!data) {
+                return;
+            }
+
+            setQuizData(data);
+        };
+
+        fetchQuizData();
     }, [navigate]);
 
     return (

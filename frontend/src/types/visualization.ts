@@ -1,5 +1,10 @@
 import { LucideIcon } from 'lucide-react';
 
+export type Visualization = {
+    containers: Container[];
+    images: Image[];
+};
+
 export type Image = {
     id: string;
     name: string;

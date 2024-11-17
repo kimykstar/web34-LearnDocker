@@ -9,7 +9,10 @@ const StartButton = () => {
 
     const handleButtonClick = async () => {
         setLoading(true);
-        await createHostContainer(setLoading, navigate);
+        const success =  await createHostContainer(navigate);
+        if (success) {
+            setLoading(false);
+        }
     };
 
     return (

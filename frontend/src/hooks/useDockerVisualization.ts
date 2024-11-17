@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { requestVisualizationData } from '../api/quiz';
 import { Image, DOCKER_OPERATIONS, AnimationState, DockerOperation } from '../types/visualization';
 import { useNavigate } from 'react-router-dom';
-import { Visualization } from '../types/quiz';
+import { Visualization } from '../types/visualization';
 
 const useDockerVisualization = () => {
     const navigate = useNavigate();
@@ -59,9 +59,15 @@ const useDockerVisualization = () => {
         setDockerOperation(operation);
     };
 
-    const updateVisualizationData = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const updateVisualizationData = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter') {
-            requestVisualizationData(handleTerminalEnterCallback, navigate);
+            const data = await requestVisualizationData(navigate);
+
+            if (!data) {
+                return;
+            }
+
+            handleTerminalEnterCallback(data);
         }
     };
 
