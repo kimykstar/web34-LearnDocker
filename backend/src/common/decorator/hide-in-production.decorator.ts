@@ -5,7 +5,7 @@ import { Injectable, CanActivate } from '@nestjs/common';
 class HideInProductionGuard implements CanActivate {
 
   canActivate(): boolean {
-    if (process.env.NODE_ENV === 'prod') {
+    if (process.env.NODE_ENV === 'production') {
         throw new ForbiddenException('This API is only available in development mode.');
     }
     return true;
