@@ -8,7 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SandboxModule } from './sandbox/sandbox.module';
 import { APP_FILTER } from '@nestjs/core';
-import { BusinessExceptionsFilter, LastExceptionFilter } from './common/exception/filters';
+import { BusinessExceptionsFilter, HttpExceptionsFilter, LastExceptionFilter } from './common/exception/filters';
 import { AuthModule } from './common/auth/auth.module';
 
 @Module({
@@ -39,6 +39,10 @@ import { AuthModule } from './common/auth/auth.module';
         {
             provide: APP_FILTER,
             useClass: LastExceptionFilter,
+        },
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionsFilter,
         },
         {
             provide: APP_FILTER,
