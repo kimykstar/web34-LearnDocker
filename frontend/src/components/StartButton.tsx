@@ -16,7 +16,7 @@ const StartButton = (props: StartButtonProps) => {
     const handleButtonClick = async () => {
         setLoading(true);
         const success = await createHostContainer(navigate);
-        console.log(success);
+
         if (success) {
             setLoading(false);
             setMaxAge(new Date().getTime() + MAX_TIME);

@@ -21,6 +21,7 @@ const QuizButtons = () => {
         // TODO: submitResult의 상태에 따라 모달창을 띄워줘야 한다.
         // 아래 console.log는 테스트 용도, 나중에 삭제해야 함
         // 여기서 해줄 작업은 없고, 아래 jsx를 return해줄 때 모달창 띄우는 코드를 추가해야 할 듯 합니다.
+        console.log(submitResult);
     };
 
     // TODO: 이전. 다음버튼에 이벤트 추가가 필요합니다.
