@@ -31,5 +31,11 @@ export const Timer = (props: TimerProps) => {
         };
     }, [leftTime]);
 
-    return <>{parseTime(leftTime)}</>;
+    return (
+        <>
+            <span className='flex justify-center align-middle font-bold text-Moby-Blue text-3xl content-center mb-5'>
+                {parseTime(leftTime)}
+            </span>
+        </>
+    );
 };
