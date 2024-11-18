@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { SidebarSectionProps } from '../types/sidebar';
 import { Timer } from './Timer';
 import { requestExpriationTime } from '../api/timer';
+import { ExpirationTime } from '../types/timer';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -67,7 +68,8 @@ const Sidebar = () => {
         const fetchTime = async () => {
             const data = await requestExpriationTime();
             if (Object.keys(data).includes('maxAge')) {
-                const maxAge = new Date(data.maxAge).getTime();
+                const expirationData = data as ExpirationTime;
+                const maxAge = new Date(expirationData.maxAge).getTime();
                 setMaxAge(maxAge);
             }
         };
@@ -87,8 +89,7 @@ const Sidebar = () => {
                 <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
             </div>
-            {maxAge && <Timer expirationTime={maxAge} />}
-            {!maxAge && <StartButton />}
+            {maxAge ? <Timer expirationTime={maxAge} /> : <StartButton setMaxAge={setMaxAge} />}
         </nav>
     );
 };

@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-
-const SECOND = 1000;
-const MINUTE = 60 * SECOND;
-const HOUR = 60 * MINUTE;
-const MAX_TIME = 4 * HOUR;
+import { HOUR, MINUTE, SECOND, MAX_TIME } from '../types/timer';
 
 const parseTime = (time: number) => {
     const hour = Math.floor(time / HOUR);
