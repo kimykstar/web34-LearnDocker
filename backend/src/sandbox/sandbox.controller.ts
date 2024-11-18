@@ -5,12 +5,8 @@ import { Request, Response } from 'express';
 import { SESSION_DURATION } from '../common/constant';
 import { HideInProduction } from '../common/decorator/hide-in-production.decorator';
 import { AuthGuard } from '../common/auth/auth.guard';
-import { ContainerSession } from '../common/cache/cache.service';
 import { AuthService } from '../common/auth/auth.service';
-
-interface RequestWithSession extends Request {
-    session: ContainerSession;
-}
+import { RequestWithSession } from '../common/types/request';
 
 @Controller('sandbox')
 export class SandboxController {
@@ -37,7 +33,7 @@ export class SandboxController {
     async assignContainer(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
         this.authService.throwIfSessionIsValid(sessionId);
-        
+
         const newSessionId = await this.sandboxService.assignContainer();
         res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
     }
