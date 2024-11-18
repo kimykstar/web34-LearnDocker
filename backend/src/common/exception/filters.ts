@@ -34,22 +34,23 @@ export class LastExceptionFilter implements ExceptionFilter {
         };
 
         if (this.constructor.name === 'LastExceptionFilter') {
-            if (exception instanceof HttpException) {
-                this.logger.log(exception);
-            } else {
-                this.logger.error(exception);
-            }
+            this.logger.error(exception);
         }
 
         httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
     }
 }
 
+@Catch(HttpException)
+export class HttpExceptionsFilter extends LastExceptionFilter {
+    catch(exception: HttpException, host: ArgumentsHost) {
+        super.catch(exception, host);
+    }
+}
+
 @Catch(BusinessException)
 export class BusinessExceptionsFilter extends LastExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost) {
-        this.logger.log(exception);
-
         if (exception instanceof SessionAlreadyAssignedException) {
             super.catch(new ForbiddenException(exception), host);
             return;

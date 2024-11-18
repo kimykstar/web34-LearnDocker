@@ -98,6 +98,9 @@ export class SandboxService {
 
         const newSessionId = randomUUID();
         this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
+
+        this.logger.log(`Container Assigned: ${containerId}\t Session: ${newSessionId}`);
+
         return newSessionId;
     }
 

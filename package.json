@@ -4,6 +4,7 @@
   "description": "## 프로젝트 개요 > 고래🐳와 함께 자신만의 Docker 환경에서 학습해볼까요?",
   "main": "index.js",
   "scripts": {
+    "start": "pnpm -F frontend build && pnpm -F backend start",
     "lint": "eslint . ",
     "prettier": "prettier --write ."
   },
@@ -22,8 +23,5 @@
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.13.0"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5"
   }
 }

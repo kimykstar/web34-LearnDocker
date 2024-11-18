@@ -3,7 +3,7 @@ import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
 import { Request, Response } from 'express';
 import { SESSION_DURATION } from '../common/constant';
-import { HideInProduction } from '../common/decorator/hide-in-prod.decorator';
+import { HideInProduction } from '../common/decorator/hide-in-production.decorator';
 
 @Controller('sandbox')
 export class SandboxController {
