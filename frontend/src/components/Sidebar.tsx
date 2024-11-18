@@ -3,6 +3,7 @@ import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
 import { SidebarSectionProps } from '../types/sidebar';
+import { Timer } from './Timer';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -75,6 +76,7 @@ const Sidebar = () => {
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
             </div>
             <StartButton />
+            <Timer />
         </nav>
     );
 };
