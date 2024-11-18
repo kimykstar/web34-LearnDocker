@@ -13,5 +13,6 @@ import { CacheModule } from '../common/cache/cache.module';
     ],
     providers: [SandboxService],
     controllers: [SandboxController],
+    exports: [SandboxService],
 })
 export class SandboxModule {}
