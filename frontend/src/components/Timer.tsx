@@ -15,9 +15,13 @@ const parseTime = (time: number) => {
     return `${String(hour).padStart(2, '0')} : ${String(minute).padStart(2, '0')} : ${String(second).padStart(2, '0')}`;
 };
 
-export const Timer = () => {
-    const [leftTime, setLeftTime] = useState(MAX_TIME);
+type TimerProps = {
+    expirationTime: number;
+};
 
+export const Timer = (props: TimerProps) => {
+    const expriationTime = props.expirationTime || new Date().getTime() + MAX_TIME;
+    const [leftTime, setLeftTime] = useState(expriationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
         if (leftTime < 0) clearInterval(timer);
