@@ -1,4 +1,4 @@
-import { Injectable, MethodNotAllowedException } from '@nestjs/common';
+import { Injectable, MethodNotAllowedException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quiz } from './quiz.entity';
@@ -7,6 +7,7 @@ import { SandboxService } from 'src/sandbox/sandbox.service';
 
 @Injectable()
 export class QuizService {
+    private readonly logger = new Logger(QuizService.name);
     constructor(
         @InjectRepository(Quiz)
         private readonly quizRepository: Repository<Quiz>,
@@ -26,10 +27,17 @@ export class QuizService {
             case 1: {
                 const command = 'docker inspect hello-world';
                 const output = await this.sandboxService.processUserCommand(command, containerId);
-                if (typeof output === 'object') {
-                    return { quizResult: 'SUCESS' };
+                if (Array.isArray(output)) {
+                    if (output.length > 0) {
+                        return { quizResult: 'SUCCESS' };
+                    }
+                    return { quizResult: 'FAIL' };
                 }
-                return { quizResult: 'FAIL' };
+                this.logger.error({
+                    message: 'docker inspect output is not array',
+                    details: output,
+                });
+                throw new Error('docker inspect의 출력값으로 배열이 나오지 않았습니다.');
             }
             default:
                 throw new MethodNotAllowedException(`${quizId}번 퀴즈는 아직 채점할 수 없습니다.`);
