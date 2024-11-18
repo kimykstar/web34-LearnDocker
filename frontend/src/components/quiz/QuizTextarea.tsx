@@ -4,10 +4,10 @@ import { QuizTextAreaProps } from '../../types/quiz';
 const QuizTextArea = ({ updateVisualizationData }: QuizTextAreaProps) => {
     const { terminalInput, handleTerminalInput, handleTerminalEnter } = useTerminalInput();
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         //TODO: handleTerminalEnter가 실패하면 updateVisualizationData를 실행 할 필요가 없어 보입니다
-        handleTerminalEnter(event);
-        updateVisualizationData(event);
+        await handleTerminalEnter(event);
+        await updateVisualizationData(event);
     };
 
     return (
