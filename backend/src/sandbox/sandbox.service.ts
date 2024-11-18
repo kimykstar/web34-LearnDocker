@@ -1,12 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
 import { requestDockerCommand } from './exec.api';
 import { ContainerData, ImageData } from './types/elements';
-import { CacheService, ContainerSession } from '../common/cache/cache.service';
+import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
-import { AuthService } from '../common/auth/auth.service';
-import { InvalidSessionException, SessionAlreadyAssignedException } from '../common/exception/errors';
 
 @Injectable()
 export class SandboxService {
@@ -15,17 +13,9 @@ export class SandboxService {
     constructor(
         private readonly httpService: HttpService,
         private readonly cacheService: CacheService,
-        @Inject(AuthService) private readonly authService: AuthService
     ) {}
 
-    async getUserContainerImages(sessionId: string) {
-        const isValidSession = this.authService.validateSession(sessionId);
-        if (!isValidSession) {
-            throw new InvalidSessionException();
-        }
-
-        const { containerId } = this.cacheService.get(sessionId) as ContainerSession;
-
+    async getUserContainerImages(containerId: string) {
         const containers = await requestDockerCommand(this.httpService, containerId, [
             'docker',
             'ps',
@@ -54,12 +44,7 @@ export class SandboxService {
         return filterImageInfo(imageList);
     }
 
-    async processUserCommand(command: string, sessionId: string) {
-        const isValidSession = this.authService.validateSession(sessionId);
-        if (!isValidSession) {
-            throw new InvalidSessionException();
-        }
-        const { containerId } = this.cacheService.get(sessionId) as ContainerSession;
+    async processUserCommand(command: string, containerId: string) {
         return requestDockerCommand(this.httpService, containerId, command.split(' '));
     }
 
@@ -83,12 +68,7 @@ export class SandboxService {
         );
     }
 
-    async assignContainer(sessionId?: string) {
-        const isValidSession = this.authService.validateSession(sessionId);
-        if (isValidSession) {
-            throw new SessionAlreadyAssignedException();
-        }
-
+    async assignContainer() {
         const containerId = await this.createContainer();
         try {
             await this.startContainer(containerId);

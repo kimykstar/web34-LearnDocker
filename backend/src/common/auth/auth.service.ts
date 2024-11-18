@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CacheService } from '../cache/cache.service';
 import { SESSION_DURATION } from '../constant';
+import { InvalidSessionException, SessionAlreadyAssignedException } from '../exception/errors';
 
 @Injectable()
 export class AuthService {
@@ -8,15 +9,26 @@ export class AuthService {
 
     validateSession(sessionId?: string) {
         if (sessionId == null) {
-            return false;
+            throw new InvalidSessionException();
         }
         const session =  this.cacheService.get(sessionId);
         if (session == null) {
-            return false;
+            throw new InvalidSessionException();
         }
         if (new Date().getTime() - session.startTime.getTime() > SESSION_DURATION) {
-            return false;
+            throw new InvalidSessionException();
         }
-        return true
+        return session;
+    }
+
+    throwIfSessionIsValid(sessionId?: string) {
+        try {
+            this.validateSession(sessionId)
+            throw new SessionAlreadyAssignedException();
+        } catch (error) {
+            if (!(error instanceof InvalidSessionException)) {
+                throw error;
+            }
+        }
     }
 }
