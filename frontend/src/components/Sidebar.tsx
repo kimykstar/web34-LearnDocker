@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
 import { SidebarSectionProps } from '../types/sidebar';
 import { Timer } from './Timer';
+import { requestExpriationTime } from '../api/timer';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -61,6 +62,17 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 };
 
 const Sidebar = () => {
+    const [maxAge, setMaxAge] = useState<number>(0);
+    useEffect(() => {
+        const fetchTime = async () => {
+            const data = await requestExpriationTime();
+            if (Object.keys(data).includes('maxAge')) {
+                const maxAge = new Date(data.maxAge).getTime();
+                setMaxAge(maxAge);
+            }
+        };
+        fetchTime();
+    }, []);
     return (
         <nav className='flex flex-col text-Off-Black h-[calc(100vh-4rem)] w-[17rem] bg-gray-100'>
             <div className='flex-grow'>
@@ -75,8 +87,8 @@ const Sidebar = () => {
                 <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
             </div>
-            <StartButton />
-            <Timer />
+            {maxAge && <Timer expirationTime={maxAge} />}
+            {!maxAge && <StartButton />}
         </nav>
     );
 };
