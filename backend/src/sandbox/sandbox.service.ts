@@ -54,7 +54,12 @@ export class SandboxService {
         return filterImageInfo(imageList);
     }
 
-    async processUserCommand(command: string, containerId: string) {
+    async processUserCommand(command: string, sessionId: string) {
+        const isValidSession = this.authService.validateSession(sessionId);
+        if (!isValidSession) {
+            throw new InvalidSessionException();
+        }
+        const { containerId } = this.cacheService.get(sessionId) as ContainerSession;
         return requestDockerCommand(this.httpService, containerId, command.split(' '));
     }
 

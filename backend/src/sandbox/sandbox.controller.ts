@@ -16,11 +16,12 @@ export class SandboxController {
     }
 
     @Post('command')
-    processUserCommand(@Body('command', CommandValidationPipe) command: string) {
-        return this.sandboxService.processUserCommand(
-            command,
-            '13d33cb7b795a4d635f0b3bfd91d5809501876c874151a0fd4a32ad0d43a6da3'
-        );
+    processUserCommand(
+        @Req() req: Request,
+        @Body('command', CommandValidationPipe) command: string
+    ) {
+        const sessionId = req.cookies['sid'];
+        return this.sandboxService.processUserCommand(command, sessionId);
     }
 
     @Post('start')
