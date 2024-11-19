@@ -34,7 +34,11 @@ export class LastExceptionFilter implements ExceptionFilter {
         };
 
         if (this.constructor.name === 'LastExceptionFilter') {
-            this.logger.error(exception);
+            if (exception instanceof Error) {
+                this.logger.error(exception.message, exception);
+            } else {
+                this.logger.error(exception);
+            }
         }
 
         httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
@@ -44,6 +48,7 @@ export class LastExceptionFilter implements ExceptionFilter {
 @Catch(HttpException)
 export class HttpExceptionsFilter extends LastExceptionFilter {
     catch(exception: HttpException, host: ArgumentsHost) {
+        this.logger.debug(exception);
         super.catch(exception, host);
     }
 }
@@ -51,6 +56,7 @@ export class HttpExceptionsFilter extends LastExceptionFilter {
 @Catch(BusinessException)
 export class BusinessExceptionsFilter extends LastExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost) {
+        this.logger.debug(exception);
         if (exception instanceof SessionAlreadyAssignedException) {
             super.catch(new ForbiddenException(exception), host);
             return;

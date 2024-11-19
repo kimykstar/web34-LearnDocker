@@ -1,33 +1,40 @@
-import { Controller, Get, Post, Body, Delete, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Req, Res, UseGuards } from '@nestjs/common';
 import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
 import { Request, Response } from 'express';
 import { SESSION_DURATION } from '../common/constant';
 import { HideInProduction } from '../common/decorator/hide-in-production.decorator';
+import { AuthGuard } from '../common/auth/auth.guard';
+import { AuthService } from '../common/auth/auth.service';
+import { RequestWithSession } from '../common/types/request';
 
 @Controller('sandbox')
 export class SandboxController {
-    constructor(private sandboxService: SandboxService) {}
+    constructor(private readonly sandboxService: SandboxService, private readonly authService: AuthService) {}
 
     @Get('elements')
-    getUserContainersImages(@Req() req: Request) {
-        const sessionId = req.cookies['sid'];
-        return this.sandboxService.getUserContainerImages(sessionId);
+    @UseGuards(AuthGuard)
+    getUserContainersImages(@Req() req: RequestWithSession) {
+        const { containerId } = req.session;
+        return this.sandboxService.getUserContainerImages(containerId);
     }
 
     @Post('command')
+    @UseGuards(AuthGuard)
     processUserCommand(
-        @Req() req: Request,
+        @Req() req: RequestWithSession,
         @Body('command', CommandValidationPipe) command: string
     ) {
-        const sessionId = req.cookies['sid'];
-        return this.sandboxService.processUserCommand(command, sessionId);
+        const { containerId } = req.session;
+        return this.sandboxService.processUserCommand(command, containerId);
     }
 
     @Post('start')
     async assignContainer(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
-        const newSessionId = await this.sandboxService.assignContainer(sessionId);
+        this.authService.throwIfSessionIsValid(sessionId);
+
+        const newSessionId = await this.sandboxService.assignContainer();
         res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
     }
 

@@ -1,10 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
-export interface ContainerSession {
-    containerId: string;
-    startTime: Date;
-    renew: boolean;
-}
+import { ContainerSession } from '../types/session';
 
 @Injectable()
 export class CacheService {
