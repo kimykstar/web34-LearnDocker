@@ -8,10 +8,18 @@ import DockerContainerLifeCyclePage from './components/DockerContainerLifeCycleP
 import DockerContainerPage from './components/DockerContainerPage';
 import ErrorPage from './components/ErrorPage';
 import { Routes, Route } from 'react-router-dom';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { useEffect } from 'react';
 
 const App = () => {
+    useEffect(() => {
+        AOS.init({
+            duration: 300,
+        });
+    }, []);
     return (
-        <>
+        <div className='w-full overflow-x-hidden'>
             <Header />
             <div className='flex font-pretendard'>
                 <Sidebar />
@@ -30,7 +38,7 @@ const App = () => {
                     </Routes>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
