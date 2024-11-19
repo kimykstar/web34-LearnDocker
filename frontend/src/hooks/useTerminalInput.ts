@@ -12,18 +12,23 @@ export const useTerminalInput = (): UseTerminalInput => {
     const prefix = '~$';
     const navigate = useNavigate();
     const [terminalInput, setTerminalInput] = useState(prefix);
+    const [previousLines, setPreviousLines] = useState<string[]>([]);
 
     const handleTerminalInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value;
-        if (value.startsWith(prefix)) {
-            setTerminalInput(value);
-        } else {
-            setTerminalInput(prefix + value.slice(prefix.length));
+        const lines = value.split('\n');
+        let lastLine = lines[lines.length - 1];
+
+        if (!lastLine?.startsWith(prefix)) {
+            lastLine = prefix;
         }
+
+        setTerminalInput([...previousLines, lastLine].join('\n'));
     };
 
     const handleCommandSuccess = (data: string) => {
-        setTerminalInput(terminalInput + '\n' + data);
+        setPreviousLines([...previousLines, terminalInput, data]);
+        setTerminalInput(terminalInput + '\n' + data + '\n' + prefix);
     };
 
     const handleCommandError = () => {

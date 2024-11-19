@@ -6,7 +6,10 @@ import { ContainerData, ImageData } from './types/elements';
 import { CacheService, ContainerSession } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
 import { AuthService } from '../common/auth/auth.service';
-import { InvalidSessionException, SessionAlreadyAssignedException } from '../common/exception/errors';
+import {
+    InvalidSessionException,
+    SessionAlreadyAssignedException,
+} from '../common/exception/errors';
 
 @Injectable()
 export class SandboxService {
@@ -54,8 +57,17 @@ export class SandboxService {
         return filterImageInfo(imageList);
     }
 
-    async processUserCommand(command: string, containerId: string) {
-        return requestDockerCommand(this.httpService, containerId, command.split(' '));
+    async processUserCommand(command: string, sessionId: string) {
+        const containerSession = this.cacheService.get(sessionId);
+        if (containerSession === null) {
+            throw new InvalidSessionException();
+        }
+
+        return requestDockerCommand(
+            this.httpService,
+            containerSession.containerId,
+            command.trim().split(' ')
+        );
     }
 
     async createContainer() {
