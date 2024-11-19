@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HOUR, MINUTE, SECOND, MAX_TIME } from '../types/timer';
+import { HOUR, MINUTE, SECOND, MAX_TIME } from '../constant/timer';
 
 const parseTime = (time: number) => {
     const hour = Math.floor(time / HOUR);
