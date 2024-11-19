@@ -1,6 +1,6 @@
 const WhatIsDockerImagePage = () => {
     return (
-        <div className='w-full'>
+        <div className='w-full' data-aos='fade-left'>
             <div className='flex-col'>
                 <h1 className='text-3xl font-bold'>Docker Image란 무엇일까요?</h1>
                 <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>

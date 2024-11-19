@@ -2,8 +2,13 @@ import architecture from '../assets/docker-architecture.webp';
 const WhatIsDockerPage = () => {
     return (
         <>
-            <h1 className='text-3xl font-bold'>Docker란 무엇일까요?</h1>
-            <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <h1 className='text-3xl font-bold' data-aos='zoom-in'>
+                Docker란 무엇일까요?
+            </h1>
+            <div
+                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='zoom-in'
+            >
                 <p className='text-black font-bold'>
                     Docker는 애플리케이션을 개발, 제공 및 실행하기 위한 개방형 플랫폼 입니다.
                     <br />
@@ -15,24 +20,40 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
 
-            <h2 className='text-2xl font-bold mt-12'>Docker는 어떻게 사용할 수 있나요?</h2>
-            <div className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <h2 className='text-2xl font-bold mt-12' data-aos='zoom-in'>
+                Docker는 어떻게 사용할 수 있나요?
+            </h2>
+            <div
+                className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='zoom-in'
+            >
                 <h3 className='text-xl font-bold'>빠르고 일관된 애플리케이션을 제공하고 싶을때</h3>
             </div>
-            <div className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='zoom-in'
+            >
                 <h3 className='text-xl font-bold'>반응형 배포 및 확장을 하고 싶을때</h3>
             </div>
-            <div className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='zoom-in'
+            >
                 <h3 className='text-xl font-bold'>
                     동일한 하드웨어에서 더 많은 작업을 수행 및 실행하고 싶을때
                 </h3>
             </div>
 
-            <h2 className='text-2xl font-bold mt-12'>Docker의 Architecture</h2>
-            <img className='mt-4' src={architecture}></img>
+            <h2 className='text-2xl font-bold mt-12' data-aos='zoom-in'>
+                Docker의 Architecture
+            </h2>
+            <img className='mt-4' src={architecture} data-aos='fade-left'></img>
 
             <h3 className='text-2xl font-bold mt-12'>도커 데몬(Docker Daemon)</h3>
-            <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='fade-left'
+            >
                 <p>
                     도커 데몬은 Docker API요청에 대해서 listening합니다. 또한, Docker Objects에
                     해당하는 Container, Image, Network, volumn을 관리합니다.
@@ -41,7 +62,10 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
             <h3 className='text-2xl font-bold mt-12'>도커 클라이언트(Docker Client)</h3>
-            <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='fade-left'
+            >
                 <p>
                     도커 클라이언트는 많은 Docker사용자가 Docker와 상호작용 하기 위해 사용되는 주된
                     방법입니다.
@@ -52,7 +76,10 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
             <h3 className='text-2xl font-bold mt-12'>도커 데스크탑(Docker Desktop)</h3>
-            <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='fade-left'
+            >
                 <p>
                     도커 데스크탑은 Mac, Windows, Linux환경에서 쉽게 설치할 수 있는
                     애플리케이션입니다.
@@ -61,7 +88,10 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
             <h3 className='text-2xl font-bold mt-12'>도커 레지스트리(Docker Registries)</h3>
-            <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='fade-left'
+            >
                 <p>
                     도커 레지스트리는 Docker Image들을 저장하고 있습니다. 대표적으로 누구나 사용할
                     수 있는 Docker Hub가 있습니다. <br />
@@ -75,7 +105,10 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
             <h3 className='text-2xl font-bold mt-12'>도커 오브젝트(Docker Objects)</h3>
-            <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
+            <div
+                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                data-aos='fade-left'
+            >
                 <p>
                     Docker사용자는 Docker Object들을 생성 및 사용할 수 있습니다. <br />
                     Image, Container, Network, Volume, plugins 등등이 Docker Object에 포함됩니다.
