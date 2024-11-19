@@ -7,7 +7,7 @@ import { CacheModule } from '../common/cache/cache.module';
 @Module({
     imports: [
         HttpModule.register({
-            timeout: 3000,
+            timeout: 10000,
         }),
         CacheModule,
     ],

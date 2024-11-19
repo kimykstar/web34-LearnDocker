@@ -2,14 +2,25 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createHostContainer } from '../api/quiz';
 import { LoaderCircle } from 'lucide-react';
+import { MAX_TIME } from '../types/timer';
 
-const StartButton = () => {
+type StartButtonProps = {
+    setMaxAge: React.Dispatch<React.SetStateAction<number>>;
+};
+
+const StartButton = (props: StartButtonProps) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const { setMaxAge } = props;
 
     const handleButtonClick = async () => {
         setLoading(true);
-        await createHostContainer(setLoading, navigate);
+        const success = await createHostContainer(navigate);
+
+        if (success) {
+            setLoading(false);
+            setMaxAge(new Date().getTime() + MAX_TIME);
+        }
     };
 
     return (

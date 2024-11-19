@@ -1,13 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { reqeustSubmitResult } from '../../api/quiz';
+import { requestSubmitResult } from '../../api/quiz';
 
 const QuizButtons = () => {
     const [submitResult, setSubmitResult] = useState('default');
     const navigate = useNavigate();
 
-    const handleSubmitButtonClick = () => {
-        reqeustSubmitResult(setSubmitResult, navigate);
+    const handleSubmitButtonClick = async () => {
+        const submitResponse = await requestSubmitResult(navigate);
+        if (!submitResponse) {
+            return;
+        }
+
+        if (submitResponse.quizResult === 'SUCCESS') {
+            setSubmitResult('SUCCESS');
+        } else {
+            setSubmitResult('FAIL');
+        }
 
         // TODO: submitResult의 상태에 따라 모달창을 띄워줘야 한다.
         // 아래 console.log는 테스트 용도, 나중에 삭제해야 함

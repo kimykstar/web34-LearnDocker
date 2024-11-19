@@ -12,7 +12,7 @@ export class SandboxService {
 
     constructor(
         private readonly httpService: HttpService,
-        private readonly cacheService: CacheService,
+        private readonly cacheService: CacheService
     ) {}
 
     async getUserContainerImages(containerId: string) {
