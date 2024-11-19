@@ -15,18 +15,20 @@ const App = () => {
             <Header />
             <div className='flex font-pretendard'>
                 <Sidebar />
-                <Routes>
-                    <Route path='/' element={<LandingPage />} />
-                    <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
-                    <Route path='/what-is-docker-image' element={<WhatIsDockerImagePage />} />
-                    <Route path='/image/quiz/1' element={<ImagePullPage />} />
-                    <Route path='/what-is-docker-container' element={<DockerContainerPage />} />
-                    <Route
-                        path='/what-is-container-lifecycle'
-                        element={<DockerContainerLifeCyclePage />}
-                    />
-                    <Route path='/error/:id' element={<ErrorPage />} />
-                </Routes>
+                <div className='ml-[17rem] mt-16 flex-row m-10 p-10 w-full'>
+                    <Routes>
+                        <Route path='/' element={<LandingPage />} />
+                        <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
+                        <Route path='/what-is-docker-image' element={<WhatIsDockerImagePage />} />
+                        <Route path='/image/quiz/1' element={<ImagePullPage />} />
+                        <Route path='/what-is-docker-container' element={<DockerContainerPage />} />
+                        <Route
+                            path='/what-is-container-lifecycle'
+                            element={<DockerContainerLifeCyclePage />}
+                        />
+                        <Route path='/error/:id' element={<ErrorPage />} />
+                    </Routes>
+                </div>
             </div>
         </>
     );
