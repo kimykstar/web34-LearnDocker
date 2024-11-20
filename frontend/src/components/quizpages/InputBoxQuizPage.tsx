@@ -6,6 +6,7 @@ import { Quiz } from '../../types/quiz';
 import QuizDescription from '../quiz/QuizDescription';
 import QuizButtons from '../quiz/QuizButtons';
 import QuizTextArea from '../quiz/QuizTextarea';
+import QuizInputBox from '../quiz/QuizInputBox';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
 
 const InputBoxQuizPage = () => {
@@ -41,7 +42,7 @@ const InputBoxQuizPage = () => {
                 />
             </section>
             <QuizTextArea updateVisualizationData={updateVisualizationData} />
-            <input type='text' />
+            <QuizInputBox />
             <QuizButtons />
         </div>
     );
