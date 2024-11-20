@@ -1,4 +1,4 @@
-import architecture from '../assets/docker-architecture.webp';
+import architecture from '../../assets/docker-architecture.webp';
 const WhatIsDockerPage = () => {
     return (
         <>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Quiz } from '../types/quiz';
-import { requestQuizData } from '../api/quiz';
-import DockerVisualization from './visualization/DockerVisualization';
-import QuizDescription from './quiz/QuizDescription';
-import QuizTextArea from './quiz/QuizTextarea';
-import QuizButtons from './quiz/QuizButtons';
-import useDockerVisualization from '../hooks/useDockerVisualization';
+import { Quiz } from '../../types/quiz';
+import { requestQuizData } from '../../api/quiz';
+import DockerVisualization from '../visualization/DockerVisualization';
+import QuizDescription from '../quiz/QuizDescription';
+import QuizTextArea from '../quiz/QuizTextarea';
+import QuizButtons from '../quiz/QuizButtons';
+import useDockerVisualization from '../../hooks/useDockerVisualization';
 
 const ImagePullPage = () => {
     const navigate = useNavigate();

@@ -1,11 +1,11 @@
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import LandingPage from './components/LandingPage';
-import ImagePullPage from './components/ImagePullPage';
-import WhatIsDockerPage from './components/DockerPage';
-import WhatIsDockerImagePage from './components/DockerImagePage';
-import DockerContainerLifeCyclePage from './components/DockerContainerLifeCyclePage';
-import DockerContainerPage from './components/DockerContainerPage';
+import LandingPage from './components/staticpages/LandingPage';
+import ImagePullPage from './components/quizpages/ImagePullPage';
+import WhatIsDockerPage from './components/staticpages/DockerPage';
+import WhatIsDockerImagePage from './components/staticpages/DockerImagePage';
+import DockerContainerLifeCyclePage from './components/staticpages/DockerContainerLifeCyclePage';
+import DockerContainerPage from './components/staticpages/DockerContainerPage';
 import ErrorPage from './components/ErrorPage';
 import { Routes, Route } from 'react-router-dom';
 import AOS from 'aos';

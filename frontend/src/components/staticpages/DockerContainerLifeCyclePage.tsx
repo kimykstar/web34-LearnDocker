@@ -1,4 +1,4 @@
-import lifeCylceImage from '../assets/containerLifeCycle.png';
+import lifeCylceImage from '../../assets/containerLifeCycle.png';
 
 const DockerContainerLifeCyclePage = () => {
     return (
