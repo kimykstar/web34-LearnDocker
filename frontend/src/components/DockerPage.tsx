@@ -75,18 +75,7 @@ const WhatIsDockerPage = () => {
                     Docker Daemon과 통신할 수 있습니다.
                 </p>
             </div>
-            <h3 className='text-2xl font-bold mt-12'>도커 데스크탑(Docker Desktop)</h3>
-            <div
-                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='fade-left'
-            >
-                <p>
-                    도커 데스크탑은 Mac, Windows, Linux환경에서 쉽게 설치할 수 있는
-                    애플리케이션입니다.
-                    <br /> Docker Desktop은 Docker Daemon, Docker Client, Docker Compose, Docker
-                    Content Trust, Kubernetes, Credential Helper등을 포함합니다.
-                </p>
-            </div>
+
             <h3 className='text-2xl font-bold mt-12'>도커 레지스트리(Docker Registries)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
