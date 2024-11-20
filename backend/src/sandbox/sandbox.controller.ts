@@ -42,6 +42,14 @@ export class SandboxController {
         res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
     }
 
+    @Get('maxAge')
+    @UseGuards(AuthGuard)
+    getMaxAge(@Req() req: RequestWithSession) {
+        const { startTime } = req.session;
+        const endDate = new Date(startTime.getTime() + SESSION_DURATION);
+        return { maxAge: endDate };
+    }
+
     // 개발용 API입니다. 배포 시 노출되면 안됩니다.
     @Delete('clear')
     @HideInProduction()
