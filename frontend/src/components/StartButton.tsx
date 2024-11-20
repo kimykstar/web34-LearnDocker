@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createHostContainer } from '../api/quiz';
 import { LoaderCircle } from 'lucide-react';
-import { MAX_TIME } from '../types/timer';
+import { MAX_TIME } from '../constant/timer';
 
 type StartButtonProps = {
     setMaxAge: React.Dispatch<React.SetStateAction<number>>;
