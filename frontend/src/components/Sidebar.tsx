@@ -76,7 +76,7 @@ const Sidebar = () => {
         fetchTime();
     }, []);
     return (
-        <nav className='fixed text-Off-Black h-[calc(100vh-4rem)] w-[17rem] bg-gray-100 top-16'>
+        <nav className='fixed h-[calc(100vh-4rem)] w-[17rem] bg-gray-100 mt-16 flex flex-col justify-between'>
             <div className='flex-grow'>
                 {links.map((link) => (
                     <p
