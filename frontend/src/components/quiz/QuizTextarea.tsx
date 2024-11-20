@@ -11,7 +11,7 @@ const QuizTextArea = ({ updateVisualizationData }: QuizTextAreaProps) => {
     };
 
     return (
-        <section className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
+        <section className='h-[40%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
             <textarea
                 value={terminalInput}
                 onChange={handleTerminalInput}

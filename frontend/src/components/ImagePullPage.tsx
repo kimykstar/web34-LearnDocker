@@ -29,7 +29,7 @@ const ImagePullPage = () => {
     }, [navigate]);
 
     return (
-        <div className='w-[calc(100vw-17rem)] p-4'>
+        <div className='w-[calc(100vw-17rem)] p-4 h-full'>
             {/*TODO: image 가져오기 같은 헤더도 url param으로 업데이트 필요 */}
             <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>image 가져오기</h1>
             <section className='flex h-1/2'>
