@@ -10,13 +10,17 @@ import { RequestWithSession } from '../common/types/request';
 
 @Controller('sandbox')
 export class SandboxController {
-    constructor(private readonly sandboxService: SandboxService, private readonly authService: AuthService) {}
+    constructor(
+        private readonly sandboxService: SandboxService,
+        private readonly authService: AuthService
+    ) {}
 
     @Get('elements')
     @UseGuards(AuthGuard)
     getUserContainersImages(@Req() req: RequestWithSession) {
-        const { containerId } = req.session;
-        return this.sandboxService.getUserContainerImages(containerId);
+        const { containerPort } = req.session;
+        // return this.sandboxService.getUserContainerImages(containerId);
+        return this.sandboxService.getUserContainerImagesV2(containerPort);
     }
 
     @Post('command')

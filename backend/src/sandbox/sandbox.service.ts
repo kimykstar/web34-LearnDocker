@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
 import { requestDockerCommand } from './exec.api';
-import { ContainerData, ImageData } from './types/elements';
+import { Container, ContainerData, Image, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
 
@@ -42,6 +42,43 @@ export class SandboxService {
         if (typeof images === 'object') images = JSON.stringify(images);
         const imageList = parseStringToJson(images) as ImageData[];
         return filterImageInfo(imageList);
+    }
+
+    // TODO: ECONNREFUSED 에러 처리
+    async getUserContainerImagesV2(containerPort: string) {
+        const imageResponse = await this.httpService.axiosRef.get(
+            `http://${process.env.SANDBOX_HOST}:${containerPort}/images/json`
+        );
+        const images = this.parseImagesV2(imageResponse.data);
+
+        const containerResponse = await this.httpService.axiosRef.get(
+            `http://${process.env.SANDBOX_HOST}:${containerPort}/containers/json?all=true`
+        );
+        const containers = this.parseContainersV2(containerResponse.data);
+
+        return { images, containers };
+    }
+
+    parseImagesV2(imageData: Array<Record<string, any>>) {
+        return imageData.reduce<Array<Image>>((imageReducer, image) => {
+            imageReducer.push({
+                id: image.Id,
+                name: image.RepoTags[0].split(':')[0],
+            });
+            return imageReducer;
+        }, []);
+    }
+
+    parseContainersV2(containerData: Array<Record<string, any>>) {
+        return containerData.reduce<Array<Container>>((containerReducer, container) => {
+            containerReducer.push({
+                id: container.Id,
+                name: container.Names[0],
+                image: container.Image,
+                status: container.State,
+            });
+            return containerReducer;
+        }, []);
     }
 
     async processUserCommand(command: string, containerId: string) {
