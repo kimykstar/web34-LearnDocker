@@ -53,7 +53,16 @@ export class SandboxService {
             Image: 'docker:dind',
             HostConfig: {
                 Privileged: true,
+                PortBindings: {
+                    '2375/tcp': [
+                        {
+                            HostPort: '',
+                            HostIp: '0.0.0.0',
+                        },
+                    ],
+                },
             },
+            Env: ['DOCKER_TLS_CERTDIR='],
         };
         const { data } = await this.httpService.axiosRef.post(
             `${process.env.SANDBOX_URL}/containers/create`,
@@ -62,16 +71,27 @@ export class SandboxService {
         return data.Id;
     }
 
+    async getContainerPort(containerId: string) {
+        const { data } = await this.httpService.axiosRef.get(
+            `${process.env.SANDBOX_URL}/containers/${containerId}/json`
+        );
+        // TODO: 포트 정보가 없는 경우에 대한 처리
+        return data.NetworkSettings.Ports['2375/tcp'][0].HostPort;
+    }
+
     async startContainer(containerId: string) {
-        await this.httpService.axiosRef.post(
+        return this.httpService.axiosRef.post(
             `${process.env.SANDBOX_URL}/containers/${containerId}/start`
         );
     }
 
     async assignContainer() {
         const containerId = await this.createContainer();
+        let containerPort;
+
         try {
             await this.startContainer(containerId);
+            containerPort = await this.getContainerPort(containerId);
         } catch (startError) {
             try {
                 await this.deleteContainer(containerId);
@@ -82,9 +102,16 @@ export class SandboxService {
         }
 
         const newSessionId = randomUUID();
-        this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
+        this.cacheService.set(newSessionId, {
+            containerId,
+            containerPort,
+            renew: false,
+            startTime: new Date(),
+        });
 
-        this.logger.log(`Container Assigned: ${containerId}\t Session: ${newSessionId}`);
+        this.logger.log(
+            `Container Assigned: ${containerId}\t Session: ${newSessionId} \t Port: ${containerPort}`
+        );
 
         return newSessionId;
     }
