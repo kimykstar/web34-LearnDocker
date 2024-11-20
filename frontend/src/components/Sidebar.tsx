@@ -14,20 +14,20 @@ const links = [
 
 const dockerImageLinks = [
     { title: 'Docker image란?', path: '/what-is-docker-image' },
-    { title: 'image 가져오기', path: '/image/quiz/1' },
-    { title: 'image 목록 확인하기', path: '/image/quiz/2' },
-    { title: 'image 삭제하기', path: '/image/quiz/3' },
+    { title: 'image 가져오기', path: '/quiz/1' },
+    { title: 'image 목록 확인하기', path: '/quiz/2' },
+    { title: 'image 삭제하기', path: '/quiz/3' },
 ];
 
 const dockerContainerLinks = [
     { title: 'Docker Container란?', path: '/what-is-docker-container' },
     { title: 'Container의 생명주기', path: '/what-is-container-lifecycle' },
-    { title: 'Container 생성하기', path: '/container/quiz/1' },
-    { title: 'Container 실행하기', path: '/container/quiz/2' },
-    { title: 'Container 생성 및 실행하기', path: '/container/quiz/3' },
-    { title: 'Container 목록 확인하기', path: '/container/quiz/4' },
-    { title: 'Container 중지하기', path: '/container/quiz/5' },
-    { title: 'Container 삭제하기', path: '/container/quiz/6' },
+    { title: 'Container 생성하기', path: '/quiz/4' },
+    { title: 'Container 실행하기', path: '/quiz/5' },
+    { title: 'Container 생성 및 실행하기', path: '/quiz/6' },
+    { title: 'Container 목록 확인하기', path: '/quiz/7' },
+    { title: 'Container 중지하기', path: '/quiz/8' },
+    { title: 'Container 삭제하기', path: '/quiz/9' },
 ];
 
 const SidebarSection = ({ title, links }: SidebarSectionProps) => {

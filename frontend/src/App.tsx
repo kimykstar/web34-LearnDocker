@@ -1,7 +1,6 @@
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import LandingPage from './components/staticpages/LandingPage';
-import ImagePullPage from './components/quizpages/ImagePullPage';
 import WhatIsDockerPage from './components/staticpages/DockerPage';
 import WhatIsDockerImagePage from './components/staticpages/DockerImagePage';
 import DockerContainerLifeCyclePage from './components/staticpages/DockerContainerLifeCyclePage';
@@ -11,7 +10,8 @@ import { Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
-import { ImageCheckPage } from './components/quizpages/ImageCheckPage';
+import TextAreaQuizPage from './components/quizpages/TextAreaQuizPage';
+import InputBoxQuizPage from './components/quizpages/InputBoxQuizPage';
 
 const App = () => {
     useEffect(() => {
@@ -29,13 +29,20 @@ const App = () => {
                         <Route path='/' element={<LandingPage />} />
                         <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
                         <Route path='/what-is-docker-image' element={<WhatIsDockerImagePage />} />
-                        <Route path='/image/quiz/1' element={<ImagePullPage />} />
-                        <Route path='/image/quiz/2' element={<ImageCheckPage />} />
+                        <Route path='/quiz/1' element={<TextAreaQuizPage />} />
+                        <Route path='/quiz/2' element={<InputBoxQuizPage />} />
+                        <Route path='/quiz/3' element={<TextAreaQuizPage />} />
                         <Route path='/what-is-docker-container' element={<DockerContainerPage />} />
                         <Route
                             path='/what-is-container-lifecycle'
                             element={<DockerContainerLifeCyclePage />}
                         />
+                        <Route path='/quiz/4' element={<TextAreaQuizPage />} />
+                        <Route path='/quiz/5' element={<InputBoxQuizPage />} />
+                        <Route path='/quiz/6' element={<InputBoxQuizPage />} />
+                        <Route path='/quiz/7' element={<InputBoxQuizPage />} />
+                        <Route path='/quiz/8' element={<TextAreaQuizPage />} />
+                        <Route path='/quiz/9' element={<TextAreaQuizPage />} />
                         <Route path='/error/:id' element={<ErrorPage />} />
                     </Routes>
                 </div>
