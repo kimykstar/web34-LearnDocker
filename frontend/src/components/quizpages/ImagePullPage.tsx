@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Quiz } from '../../types/quiz';
 import { requestQuizData } from '../../api/quiz';
 import DockerVisualization from '../visualization/DockerVisualization';
@@ -13,10 +13,11 @@ const ImagePullPage = () => {
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const { images, animation, dockerOperation, updateVisualizationData, handleAnimationComplete } =
         useDockerVisualization();
+    const quizNum = useLocation().pathname.split('/').at(-1) as string;
 
     useEffect(() => {
         const fetchQuizData = async () => {
-            const data = await requestQuizData(navigate);
+            const data = await requestQuizData(quizNum, navigate);
 
             if (!data) {
                 return;

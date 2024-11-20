@@ -24,9 +24,11 @@ const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
     return null;
 };
 
-export const requestQuizData = async (navigate: NavigateFunction) => {
+export const requestQuizData = async (quizNumber: string, navigate: NavigateFunction) => {
     try {
-        const response = await axios.get<Quiz>(`http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/1`);
+        const response = await axios.get<Quiz>(
+            `http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/${quizNumber}`
+        );
         return response.data;
     } catch (error) {
         return handleErrorResponse(error, navigate);
