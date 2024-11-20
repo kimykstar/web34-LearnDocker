@@ -11,6 +11,7 @@ import { Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
+import { ImageCheckPage } from './components/quizpages/ImageCheckPage';
 
 const App = () => {
     useEffect(() => {
@@ -29,6 +30,7 @@ const App = () => {
                         <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
                         <Route path='/what-is-docker-image' element={<WhatIsDockerImagePage />} />
                         <Route path='/image/quiz/1' element={<ImagePullPage />} />
+                        <Route path='/image/quiz/2' element={<ImageCheckPage />} />
                         <Route path='/what-is-docker-container' element={<DockerContainerPage />} />
                         <Route
                             path='/what-is-container-lifecycle'
