@@ -10,13 +10,17 @@ import { RequestWithSession } from '../common/types/request';
 
 @Controller('sandbox')
 export class SandboxController {
-    constructor(private readonly sandboxService: SandboxService, private readonly authService: AuthService) {}
+    constructor(
+        private readonly sandboxService: SandboxService,
+        private readonly authService: AuthService
+    ) {}
 
     @Get('elements')
     @UseGuards(AuthGuard)
     getUserContainersImages(@Req() req: RequestWithSession) {
-        const { containerId } = req.session;
-        return this.sandboxService.getUserContainerImages(containerId);
+        const { containerPort } = req.session;
+        // return this.sandboxService.getUserContainerImages(containerId);
+        return this.sandboxService.getUserContainerImagesV2(containerPort);
     }
 
     @Post('command')
@@ -36,6 +40,14 @@ export class SandboxController {
 
         const newSessionId = await this.sandboxService.assignContainer();
         res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+    }
+
+    @Get('endDate')
+    @UseGuards(AuthGuard)
+    getMaxAge(@Req() req: RequestWithSession) {
+        const { startTime } = req.session;
+        const endDate = new Date(startTime.getTime() + SESSION_DURATION);
+        return { endDate };
     }
 
     // 개발용 API입니다. 배포 시 노출되면 안됩니다.

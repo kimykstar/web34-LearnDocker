@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
 import { requestDockerCommand } from './exec.api';
-import { ContainerData, ImageData } from './types/elements';
+import { Container, ContainerData, Image, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
 
@@ -44,6 +44,43 @@ export class SandboxService {
         return filterImageInfo(imageList);
     }
 
+    // TODO: ECONNREFUSED 에러 처리
+    async getUserContainerImagesV2(containerPort: string) {
+        const imageResponse = await this.httpService.axiosRef.get(
+            `http://${process.env.SANDBOX_HOST}:${containerPort}/images/json`
+        );
+        const images = this.parseImagesV2(imageResponse.data);
+
+        const containerResponse = await this.httpService.axiosRef.get(
+            `http://${process.env.SANDBOX_HOST}:${containerPort}/containers/json?all=true`
+        );
+        const containers = this.parseContainersV2(containerResponse.data);
+
+        return { images, containers };
+    }
+
+    parseImagesV2(imageData: Array<Record<string, any>>) {
+        return imageData.reduce<Array<Image>>((imageReducer, image) => {
+            imageReducer.push({
+                id: image.Id,
+                name: image.RepoTags[0].split(':')[0],
+            });
+            return imageReducer;
+        }, []);
+    }
+
+    parseContainersV2(containerData: Array<Record<string, any>>) {
+        return containerData.reduce<Array<Container>>((containerReducer, container) => {
+            containerReducer.push({
+                id: container.Id,
+                name: container.Names[0],
+                image: container.Image,
+                status: container.State,
+            });
+            return containerReducer;
+        }, []);
+    }
+
     async processUserCommand(command: string, containerId: string) {
         return requestDockerCommand(this.httpService, containerId, command.split(' '));
     }
@@ -53,7 +90,16 @@ export class SandboxService {
             Image: 'docker:dind',
             HostConfig: {
                 Privileged: true,
+                PortBindings: {
+                    '2375/tcp': [
+                        {
+                            HostPort: '',
+                            HostIp: '0.0.0.0',
+                        },
+                    ],
+                },
             },
+            Env: ['DOCKER_TLS_CERTDIR='],
         };
         const { data } = await this.httpService.axiosRef.post(
             `${process.env.SANDBOX_URL}/containers/create`,
@@ -62,16 +108,27 @@ export class SandboxService {
         return data.Id;
     }
 
+    async getContainerPort(containerId: string) {
+        const { data } = await this.httpService.axiosRef.get(
+            `${process.env.SANDBOX_URL}/containers/${containerId}/json`
+        );
+        // TODO: 포트 정보가 없는 경우에 대한 처리
+        return data.NetworkSettings.Ports['2375/tcp'][0].HostPort;
+    }
+
     async startContainer(containerId: string) {
-        await this.httpService.axiosRef.post(
+        return this.httpService.axiosRef.post(
             `${process.env.SANDBOX_URL}/containers/${containerId}/start`
         );
     }
 
     async assignContainer() {
         const containerId = await this.createContainer();
+        let containerPort;
+
         try {
             await this.startContainer(containerId);
+            containerPort = await this.getContainerPort(containerId);
         } catch (startError) {
             try {
                 await this.deleteContainer(containerId);
@@ -82,9 +139,16 @@ export class SandboxService {
         }
 
         const newSessionId = randomUUID();
-        this.cacheService.set(newSessionId, { containerId, renew: false, startTime: new Date() });
+        this.cacheService.set(newSessionId, {
+            containerId,
+            containerPort,
+            renew: false,
+            startTime: new Date(),
+        });
 
-        this.logger.log(`Container Assigned: ${containerId}\t Session: ${newSessionId}`);
+        this.logger.log(
+            `Container Assigned: ${containerId}\t Session: ${newSessionId} \t Port: ${containerPort}`
+        );
 
         return newSessionId;
     }
