@@ -20,10 +20,8 @@ const useDockerVisualization = () => {
         isVisible: false,
         key: 0,
     });
-
+    const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
     const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
-        const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
-
         return newImages.map((newImage, index) => {
             const prevImage = prevImages.find((img) => img.id === newImage.id);
             if (prevImage) {
@@ -33,6 +31,15 @@ const useDockerVisualization = () => {
             return {
                 ...newImage,
                 //TODO: 이미 동일한 색상의 이미지가 있으면 다음 색상을 부여하는 로직 필요
+                color: colors[index % colors.length],
+            };
+        });
+    };
+
+    const setImageColors = (images: Image[]) => {
+        return images.map((image, index) => {
+            return {
+                ...image,
                 color: colors[index % colors.length],
             };
         });
@@ -80,10 +87,11 @@ const useDockerVisualization = () => {
 
     const setInitVisualization = async () => {
         const data = await requestVisualizationData(navigate);
-
         if (!data) return;
 
-        setImages(data.images);
+        const initImages = setImageColors(data.images);
+        setImages(initImages);
+        // TODO: Container색상 지정 해야함
         setContainers(data.containers);
     };
 
