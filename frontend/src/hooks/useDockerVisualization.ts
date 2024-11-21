@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { requestVisualizationData } from '../api/quiz';
-import { Image, DOCKER_OPERATIONS, AnimationState, DockerOperation } from '../types/visualization';
+import {
+    Image,
+    DOCKER_OPERATIONS,
+    AnimationState,
+    DockerOperation,
+    Container,
+} from '../types/visualization';
 import { useNavigate } from 'react-router-dom';
 import { Visualization } from '../types/visualization';
 
 const useDockerVisualization = () => {
     const navigate = useNavigate();
+    const [containers, setContainers] = useState<Container[]>([]);
     const [images, setImages] = useState<Image[]>([]);
     const [pendingImages, setPendingImages] = useState<Image[]>([]);
     const [dockerOperation, setDockerOperation] = useState<DockerOperation>();
@@ -71,6 +78,15 @@ const useDockerVisualization = () => {
         }
     };
 
+    const setInitVisualization = async () => {
+        const data = await requestVisualizationData(navigate);
+
+        if (!data) return;
+
+        setImages(data.images);
+        setContainers(data.containers);
+    };
+
     const handleAnimationComplete = () => {
         setImages(pendingImages);
         setAnimation((prev) => ({
@@ -81,10 +97,12 @@ const useDockerVisualization = () => {
 
     return {
         images,
+        containers,
         animation,
         dockerOperation,
         handleAnimationComplete,
         updateVisualizationData,
+        setInitVisualization,
     };
 };
 
