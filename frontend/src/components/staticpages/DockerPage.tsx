@@ -1,4 +1,4 @@
-import architecture from '../assets/docker-architecture.webp';
+import architecture from '../../assets/docker-architecture.webp';
 const WhatIsDockerPage = () => {
     return (
         <>
@@ -47,12 +47,12 @@ const WhatIsDockerPage = () => {
             <h2 className='text-2xl font-bold mt-12' data-aos='zoom-in'>
                 Docker의 Architecture
             </h2>
-            <img className='mt-4' src={architecture} data-aos='fade-left'></img>
+            <img className='mt-4' src={architecture} data-aos='zoom-in'></img>
 
             <h3 className='text-2xl font-bold mt-12'>도커 데몬(Docker Daemon)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='fade-left'
+                data-aos='zoom-in'
             >
                 <p>
                     도커 데몬은 Docker API요청에 대해서 listening합니다. 또한, Docker Objects에
@@ -64,7 +64,7 @@ const WhatIsDockerPage = () => {
             <h3 className='text-2xl font-bold mt-12'>도커 클라이언트(Docker Client)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='fade-left'
+                data-aos='zoom-in'
             >
                 <p>
                     도커 클라이언트는 많은 Docker사용자가 Docker와 상호작용 하기 위해 사용되는 주된
@@ -79,7 +79,7 @@ const WhatIsDockerPage = () => {
             <h3 className='text-2xl font-bold mt-12'>도커 레지스트리(Docker Registries)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='fade-left'
+                data-aos='zoom-in'
             >
                 <p>
                     도커 레지스트리는 Docker Image들을 저장하고 있습니다. 대표적으로 누구나 사용할
@@ -93,14 +93,27 @@ const WhatIsDockerPage = () => {
                     자신이 만든 이미지는 docker push 명령을 통해 레지스트리에 등록할 수 있습니다.
                 </p>
             </div>
+
             <h3 className='text-2xl font-bold mt-12'>도커 오브젝트(Docker Objects)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='fade-left'
+                data-aos='zoom-in'
             >
                 <p>
                     Docker사용자는 Docker Object들을 생성 및 사용할 수 있습니다. <br />
-                    Image, Container, Network, Volume, plugins 등등이 Docker Object에 포함됩니다.
+                    Docker Object에 포함되는 요소들은 다음과 같습니다.
+                    <br />
+                    <br />
+                    1. Image
+                    <br />
+                    2. Container
+                    <br />
+                    3. Network
+                    <br />
+                    4. Volume
+                    <br />
+                    5. plugins <br />
+                    6. 기타 등등
                 </p>
             </div>
         </>
