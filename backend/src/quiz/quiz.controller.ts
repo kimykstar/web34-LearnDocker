@@ -21,7 +21,7 @@ export class QuizController {
     @Get('/:id/submit')
     @UseGuards(AuthGuard)
     submitQuiz(@Param('id', ParseIntPipe) quizId: number, @Req() req: RequestWithSession) {
-        const { containerId } = req.session;
-        return this.quizService.submitQuiz(quizId, containerId);
+        const { containerPort } = req.session;
+        return this.quizService.submitQuiz(quizId, containerPort);
     }
 }
