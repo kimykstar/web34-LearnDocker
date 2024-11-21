@@ -23,10 +23,6 @@ const TextAreaQuizPage = () => {
     const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
 
     useEffect(() => {
-        setInitVisualization();
-    }, []);
-
-    useEffect(() => {
         const fetchQuizData = async () => {
             const data = await requestQuizData(quizNum, navigate);
 
@@ -35,6 +31,7 @@ const TextAreaQuizPage = () => {
             }
 
             setQuizData(data);
+            setInitVisualization();
         };
 
         fetchQuizData();

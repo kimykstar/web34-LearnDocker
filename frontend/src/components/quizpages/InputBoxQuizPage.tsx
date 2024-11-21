@@ -24,10 +24,6 @@ const InputBoxQuizPage = () => {
     } = useDockerVisualization();
 
     useEffect(() => {
-        setInitVisualization();
-    }, []);
-
-    useEffect(() => {
         const fetchQuizData = async () => {
             const data = await requestQuizData(quizNum, navigate);
 
@@ -36,6 +32,7 @@ const InputBoxQuizPage = () => {
             }
 
             setQuizData(data);
+            setInitVisualization();
         };
         fetchQuizData();
     }, [navigate]);
