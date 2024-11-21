@@ -69,7 +69,7 @@ const Sidebar = () => {
             const data = await requestExpriationTime();
             if (Object.keys(data).includes('maxAge')) {
                 const expirationData = data as ExpirationTime;
-                const maxAge = new Date(expirationData.maxAge).getTime();
+                const maxAge = new Date(expirationData.endDate).getTime();
                 setMaxAge(maxAge);
             }
         };

@@ -1,3 +1,3 @@
 export type ExpirationTime = {
-    maxAge: string;
+    endDate: string;
 };
