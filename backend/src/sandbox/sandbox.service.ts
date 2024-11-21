@@ -46,17 +46,27 @@ export class SandboxService {
 
     // TODO: ECONNREFUSED 에러 처리
     async getUserContainerImagesV2(containerPort: string) {
-        const imageResponse = await this.httpService.axiosRef.get(
-            `http://${process.env.SANDBOX_HOST}:${containerPort}/images/json`
-        );
-        const images = this.parseImagesV2(imageResponse.data);
+        const imageResponse = await this.getUserImages(containerPort);
+        const images = this.parseImagesV2(imageResponse);
 
-        const containerResponse = await this.httpService.axiosRef.get(
-            `http://${process.env.SANDBOX_HOST}:${containerPort}/containers/json?all=true`
-        );
-        const containers = this.parseContainersV2(containerResponse.data);
+        const containerResponse = await this.getUserContainers(containerPort);
+        const containers = this.parseContainersV2(containerResponse);
 
         return { images, containers };
+    }
+
+    async getUserImages(containerPort: string) {
+        const response = await this.httpService.axiosRef.get(
+            `http://${process.env.SANDBOX_HOST}:${containerPort}/images/json`
+        );
+        return response.data;
+    }
+
+    async getUserContainers(containerPort: string) {
+        const response = await this.httpService.axiosRef.get(
+            `http://${process.env.SANDBOX_HOST}:${containerPort}/containers/json?all=true`
+        );
+        return response.data;
     }
 
     parseImagesV2(imageData: Array<Record<string, any>>) {
@@ -144,6 +154,8 @@ export class SandboxService {
             containerPort,
             renew: false,
             startTime: new Date(),
+            // TODO: 현재 테스트를 위해 레벨을 최대로 설정 중
+            level: 9,
         });
 
         this.logger.log(
