@@ -45,10 +45,10 @@ LearnDocker는 다음과 같은 사용자들을 위해 설계되었습니다:
 
 # ✨ 주요 기능
 ## 📚 통합된 학습 경험
-![통합된_학습경험2](https://github.com/user-attachments/assets/25c79a35-3f34-421a-a8a8-5a5b20cd8aeb)
+![통합된_학습경험2](https://github.com/user-attachments/assets/e2160d26-7b10-4580-83c1-37a028ee65f0)
 
 ## 🎯 실시간 시각화
-![hello_world_시각화_예시2](https://github.com/user-attachments/assets/c1b48e52-180d-45e1-bdfe-50a44efb0a93)
+![4주차_예시](https://github.com/user-attachments/assets/e0cf5d77-d37f-4912-b59e-9d7b122ed896)
 
 ## 🔄 단계별 실습
 ![사이드바](https://github.com/user-attachments/assets/1d07d8a7-1d51-468e-9709-9dba76e9ca37)
@@ -66,4 +66,4 @@ LearnDocker는 다음과 같은 사용자들을 위해 설계되었습니다:
 ![image](https://github.com/user-attachments/assets/41d78b17-9b07-4195-930c-aa10d2cfcd87)
 
 ### 설계 2
-![아키텍처2](https://github.com/user-attachments/assets/11fcc456-fdb5-4dce-a57e-b256b34e9245)
+![아키텍처2](https://github.com/user-attachments/assets/0b9fda36-8628-4a59-a1c7-b431a7b32b60)
