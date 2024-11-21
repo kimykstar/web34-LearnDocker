@@ -7,7 +7,7 @@ const PROXY_PORT = import.meta.env.VITE_PROXY_PORT;
 export const requestExpriationTime = async (): Promise<ExpirationTime | object> => {
     try {
         const response = await axios.get<ExpirationTime>(
-            `http://${PROXY_HOST}:${PROXY_PORT}/api/endDate`
+            `http://${PROXY_HOST}:${PROXY_PORT}/api/andbox/endDate`
         );
         console.log('session Time: ', response.data);
         return response.data;
