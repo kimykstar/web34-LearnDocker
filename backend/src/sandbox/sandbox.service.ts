@@ -144,6 +144,7 @@ export class SandboxService {
             containerPort,
             renew: false,
             startTime: new Date(),
+            level: 1,
         });
 
         this.logger.log(

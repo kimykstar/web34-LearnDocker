@@ -1,6 +1,6 @@
-import { ContainerSession } from "./session";
-import { Request } from "express";
+import { UserSession } from './session';
+import { Request } from 'express';
 
 export interface RequestWithSession extends Request {
-    session: ContainerSession;
+    session: UserSession;
 }
