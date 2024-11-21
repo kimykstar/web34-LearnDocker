@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Quiz } from '../types/quiz';
-import { requestQuizData } from '../api/quiz';
-import DockerVisualization from './visualization/DockerVisualization';
-import QuizDescription from './quiz/QuizDescription';
-import QuizTextArea from './quiz/QuizTextarea';
-import QuizButtons from './quiz/QuizButtons';
-import useDockerVisualization from '../hooks/useDockerVisualization';
+import { requestQuizData } from '../../api/quiz';
+import { useLocation, useNavigate } from 'react-router-dom';
+import DockerVisualization from '../visualization/DockerVisualization';
+import { Quiz } from '../../types/quiz';
+import QuizDescription from '../quiz/QuizDescription';
+import QuizButtons from '../quiz/QuizButtons';
+import QuizTextArea from '../quiz/QuizTextarea';
+import QuizInputBox from '../quiz/QuizInputBox';
+import useDockerVisualization from '../../hooks/useDockerVisualization';
 
-const ImagePullPage = () => {
+const InputBoxQuizPage = () => {
     const navigate = useNavigate();
+    const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const { images, animation, dockerOperation, updateVisualizationData, handleAnimationComplete } =
         useDockerVisualization();
-
     useEffect(() => {
         const fetchQuizData = async () => {
-            const data = await requestQuizData(navigate);
+            const data = await requestQuizData(quizNum, navigate);
 
             if (!data) {
                 return;
@@ -24,14 +25,12 @@ const ImagePullPage = () => {
 
             setQuizData(data);
         };
-
         fetchQuizData();
     }, [navigate]);
 
     return (
-        <div className='w-[calc(100vw-17rem)] p-4'>
-            {/*TODO: image 가져오기 같은 헤더도 url param으로 업데이트 필요 */}
-            <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>image 가져오기</h1>
+        <div className='w-[calc(100vw-17rem)]'>
+            <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{quizData?.title}</h1>
             <section className='flex h-1/2'>
                 <QuizDescription content={quizData?.content} />
                 <DockerVisualization
@@ -43,8 +42,10 @@ const ImagePullPage = () => {
                 />
             </section>
             <QuizTextArea updateVisualizationData={updateVisualizationData} />
+            <QuizInputBox />
             <QuizButtons />
         </div>
     );
 };
-export default ImagePullPage;
+
+export default InputBoxQuizPage;
