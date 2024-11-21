@@ -1,3 +1,4 @@
+import { Terminal } from '@xterm/xterm';
 import { Quiz, QuizResult } from '../types/quiz';
 import { Visualization } from '../types/visualization';
 import axios from 'axios';
@@ -56,10 +57,10 @@ export const createHostContainer = async (navigate: NavigateFunction) => {
     }
 };
 
-export const requestSubmitResult = async (navigate: NavigateFunction) => {
+export const requestSubmitResult = async (quizNumber: number, navigate: NavigateFunction) => {
     try {
-        const response = await axios.post<QuizResult>(
-            `${PROXY_URL}/api/quiz/1/submit`
+        const response = await axios.get<QuizResult>(
+            `${PROXY_URL}/api/quiz/${quizNumber}/submit`
         );
         return response.data;
     } catch (error) {
@@ -70,7 +71,8 @@ export const requestSubmitResult = async (navigate: NavigateFunction) => {
 export const requestCommandResult = async (
     command: string,
     navigate: NavigateFunction,
-    customErrorCallback?: (error: unknown) => void
+    customErrorCallback?: (term: Terminal) => void,
+    term?: Terminal
 ) => {
     try {
         const response = await axios.post<string>(
@@ -79,8 +81,8 @@ export const requestCommandResult = async (
         );
         return response.data;
     } catch (error) {
-        if (customErrorCallback !== undefined) {
-            customErrorCallback(error);
+        if (customErrorCallback && term) {
+            customErrorCallback(term);
         } else {
             handleErrorResponse(error, navigate);
         }

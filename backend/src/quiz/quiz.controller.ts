@@ -9,14 +9,24 @@ export class QuizController {
 
     @Get('/:id')
     @UseGuards(AuthGuard)
-    getQuizById(@Param('id', ParseIntPipe) id: number) {
-        return this.quizService.getQuizById(id)
+    getQuizById(@Param('id', ParseIntPipe) quizId: number, @Req() req: RequestWithSession) {
+        const { level } = req.session;
+        this.quizService.accessQuiz(level, quizId);
+        return this.quizService.getQuizById(quizId);
     }
 
     @Get('/:id/submit')
     @UseGuards(AuthGuard)
     submitQuiz(@Param('id', ParseIntPipe) quizId: number, @Req() req: RequestWithSession) {
-        const {containerId} = req.session
-        return this.quizService.submitQuiz(quizId, containerId)
+        const { containerPort } = req.session;
+        return this.quizService.submitQuiz(quizId, containerPort);
+    }
+
+    @Get('/:id/access')
+    @UseGuards(AuthGuard)
+    accessQuiz(@Param('id', ParseIntPipe) quizId: number, @Req() req: RequestWithSession) {
+        const { level } = req.session;
+        this.quizService.accessQuiz(level, quizId);
+        return;
     }
 }

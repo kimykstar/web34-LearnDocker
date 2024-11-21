@@ -2,7 +2,10 @@ import { Injectable, MethodNotAllowedException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quiz } from './quiz.entity';
-import { EntityNotExistException } from '../common/exception/errors';
+import {
+    EntityNotExistException,
+    PreviousProblemUnsolvedExeption,
+} from '../common/exception/errors';
 import { SandboxService } from 'src/sandbox/sandbox.service';
 
 @Injectable()
@@ -67,26 +70,49 @@ export class QuizService {
         return quiz;
     }
 
-    async submitQuiz(quizId: number, containerId: string) {
+    accessQuiz(level: number, quizId: number) {
+        if (level < quizId) {
+            throw new PreviousProblemUnsolvedExeption();
+        }
+    }
+
+    async submitQuiz(quizId: number, containerPort: string) {
         switch (quizId) {
-            case 1: {
-                const command = 'docker inspect hello-world';
-                const output = await this.sandboxService.processUserCommand(command, containerId);
-                if (Array.isArray(output)) {
-                    if (output.length > 0) {
-                        return { quizResult: 'SUCCESS' };
-                    }
-                    return { quizResult: 'FAIL' };
-                }
-                this.logger.error({
-                    message: 'docker inspect output is not array',
-                    details: output,
-                });
-                throw new Error('docker inspect의 출력값으로 배열이 나오지 않았습니다.');
-            }
+            case 1:
+                return this.submitQuiz1(containerPort);
+            case 4:
+                // 컨테이너 생성하기
+                return this.submitQuiz4(containerPort);
+            // case 5:
+            // 컨테이너 실행하기
             default:
                 throw new MethodNotAllowedException(`${quizId}번 퀴즈는 아직 채점할 수 없습니다.`);
         }
     }
-}
 
+    private async submitQuiz1(containerPort: string) {
+        const validImages = ['hello-world'];
+        const images = await this.sandboxService.getUserImages(containerPort);
+        const result = images.filter((image: Record<string, any>) =>
+            validImages.includes(image.RepoTags[0]?.split(':')[0])
+        );
+        if (result.length > 0) {
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz4(containerPort: string) {
+        const validImages = ['hello-world'];
+        const containers = await this.sandboxService.getUserContainers(containerPort);
+        const result = containers.filter((container: Record<string, any>) =>
+            validImages.includes(container.Image)
+        );
+        if (result.length > 0) {
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+}

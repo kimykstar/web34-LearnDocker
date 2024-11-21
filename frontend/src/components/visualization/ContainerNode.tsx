@@ -15,11 +15,11 @@ const ContainerNode = ({
                 gridColumnStart: gridColumn,
             }}
         >
-            <div className='-translate-y-20 -translate-x-8 flex flex-col items-center gap-2'>
+            <div className='absolute -translate-y-20 -translate-x-8 flex flex-col items-center gap-2'>
                 <span className='text-sm'>{label}</span>
                 <Icon size={64} />
             </div>
-            <div className='flex flex-col overflow-auto'>
+            <div className='flex flex-col overflow-auto h-full'>
                 {containerData?.map(({ id, name, color }) => (
                     <div
                         className='border-4 rounded m-1 text-xs'

@@ -14,7 +14,7 @@ export type Image = {
 export type Container = {
     id: string;
     name: string;
-    imageId: string;
+    image: string;
     // TODO: status는 나중에 type으로 지정해도 좋을 듯(백엔드랑 협의 필요)
     status: string;
     color?: string;

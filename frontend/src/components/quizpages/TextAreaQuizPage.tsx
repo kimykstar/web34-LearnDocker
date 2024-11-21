@@ -4,15 +4,22 @@ import { Quiz } from '../../types/quiz';
 import { requestQuizData } from '../../api/quiz';
 import DockerVisualization from '../visualization/DockerVisualization';
 import QuizDescription from '../quiz/QuizDescription';
-import QuizTextArea from '../quiz/QuizTextarea';
+import XTerminal from '../quiz/XTerminal';
 import QuizButtons from '../quiz/QuizButtons';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
 
 const TextAreaQuizPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
-    const { images, animation, dockerOperation, updateVisualizationData, handleAnimationComplete } =
-        useDockerVisualization();
+    const {
+        images,
+        containers,
+        animation,
+        dockerOperation,
+        updateVisualizationData,
+        handleAnimationComplete,
+        setInitVisualization,
+    } = useDockerVisualization();
     const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
 
     useEffect(() => {
@@ -24,6 +31,7 @@ const TextAreaQuizPage = () => {
             }
 
             setQuizData(data);
+            setInitVisualization();
         };
 
         fetchQuizData();
@@ -38,11 +46,11 @@ const TextAreaQuizPage = () => {
                     animationState={animation}
                     dockerOperation={dockerOperation}
                     images={images}
-                    containers={undefined}
+                    containers={containers}
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
-            <QuizTextArea updateVisualizationData={updateVisualizationData} />
+            <XTerminal updateVisualizationData={updateVisualizationData} />
             <QuizButtons quizId={+quizNum} />
         </div>
     );

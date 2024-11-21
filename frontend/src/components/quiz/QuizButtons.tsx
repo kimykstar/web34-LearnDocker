@@ -7,7 +7,8 @@ const QuizButtons = ({ quizId }: { quizId: number }) => {
     const navigate = useNavigate();
 
     const handleSubmitButtonClick = async () => {
-        const submitResponse = await requestSubmitResult(navigate);
+        // TODO: 퀴즈 번호에 따라 request 쿼리 파라미터에 값이 추가될 수 있다.
+        const submitResponse = await requestSubmitResult(quizId, navigate);
         if (!submitResponse) {
             return;
         }
