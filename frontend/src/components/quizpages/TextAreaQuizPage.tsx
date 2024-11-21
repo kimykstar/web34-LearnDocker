@@ -51,7 +51,7 @@ const TextAreaQuizPage = () => {
                 />
             </section>
             <XTerminal updateVisualizationData={updateVisualizationData} />
-            <QuizButtons />
+            <QuizButtons quizId={+quizNum} />
         </div>
     );
 };

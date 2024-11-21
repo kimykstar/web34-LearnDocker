@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { AuthGuard } from '../common/auth/auth.guard';
 import { RequestWithSession } from '../common/types/request';

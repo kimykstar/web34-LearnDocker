@@ -83,7 +83,7 @@ export class QuizService {
             case 4:
                 // 컨테이너 생성하기
                 return this.submitQuiz4(containerPort);
-            case 5:
+            // case 5:
             // 컨테이너 실행하기
             default:
                 throw new MethodNotAllowedException(`${quizId}번 퀴즈는 아직 채점할 수 없습니다.`);

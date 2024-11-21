@@ -52,7 +52,7 @@ const InputBoxQuizPage = () => {
             </section>
             <XTerminal updateVisualizationData={updateVisualizationData} />
             <QuizInputBox />
-            <QuizButtons />
+            <QuizButtons quizId={+quizNum} />
         </div>
     );
 };
