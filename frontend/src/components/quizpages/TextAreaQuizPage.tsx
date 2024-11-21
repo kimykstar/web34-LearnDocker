@@ -30,7 +30,7 @@ const TextAreaQuizPage = () => {
     }, [navigate]);
 
     return (
-        <div className='w-[calc(100vw-17rem)] p-4 h-full'>
+        <div className='w-[calc(100vw-17rem)]'>
             <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{quizData?.title}</h1>
             <section className='flex h-1/2'>
                 <QuizDescription content={quizData?.content} />

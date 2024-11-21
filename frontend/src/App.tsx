@@ -24,7 +24,7 @@ const App = () => {
             <Header />
             <div className='flex font-pretendard'>
                 <Sidebar />
-                <div className='ml-[17rem] mt-16 flex-row p-10 w-full z-0'>
+                <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
                     <Routes>
                         <Route path='/' element={<LandingPage />} />
                         <Route path='/what-is-docker' element={<WhatIsDockerPage />} />

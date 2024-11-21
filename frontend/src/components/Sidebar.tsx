@@ -67,7 +67,7 @@ const Sidebar = () => {
     useEffect(() => {
         const fetchTime = async () => {
             const data = await requestExpriationTime();
-            if (Object.keys(data).includes('maxAge')) {
+            if (Object.keys(data).includes('endDate')) {
                 const expirationData = data as ExpirationTime;
                 const maxAge = new Date(expirationData.endDate).getTime();
                 setMaxAge(maxAge);
