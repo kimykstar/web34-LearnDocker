@@ -13,7 +13,7 @@ const TextAreaQuizPage = () => {
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const { images, animation, dockerOperation, updateVisualizationData, handleAnimationComplete } =
         useDockerVisualization();
-    const quizNum = useLocation().pathname.split('/').at(-1) as string;
+    const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
 
     useEffect(() => {
         const fetchQuizData = async () => {

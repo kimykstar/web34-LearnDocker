@@ -15,7 +15,7 @@ const ContainerNode = ({
                 gridColumnStart: gridColumn,
             }}
         >
-            <div className='fixed -translate-y-20 -translate-x-8 flex flex-col items-center gap-2'>
+            <div className='-translate-y-20 -translate-x-8 flex flex-col items-center gap-2'>
                 <span className='text-sm'>{label}</span>
                 <Icon size={64} />
             </div>

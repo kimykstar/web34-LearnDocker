@@ -11,7 +11,7 @@ import useDockerVisualization from '../../hooks/useDockerVisualization';
 
 const InputBoxQuizPage = () => {
     const navigate = useNavigate();
-    const quizNum = useLocation().pathname.split('/').at(-1) as string;
+    const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const { images, animation, dockerOperation, updateVisualizationData, handleAnimationComplete } =
         useDockerVisualization();
@@ -26,7 +26,7 @@ const InputBoxQuizPage = () => {
             setQuizData(data);
         };
         fetchQuizData();
-    }, []);
+    }, [navigate]);
 
     return (
         <div className='w-[calc(100vw-17rem)] p-4 h-full'>
