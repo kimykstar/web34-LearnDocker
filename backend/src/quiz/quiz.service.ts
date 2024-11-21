@@ -2,7 +2,10 @@ import { Injectable, MethodNotAllowedException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quiz } from './quiz.entity';
-import { EntityNotExistException } from '../common/exception/errors';
+import {
+    EntityNotExistException,
+    PreviousProblemUnsolvedExeption,
+} from '../common/exception/errors';
 import { SandboxService } from 'src/sandbox/sandbox.service';
 
 @Injectable()
@@ -65,6 +68,12 @@ export class QuizService {
             throw new EntityNotExistException('Quiz');
         }
         return quiz;
+    }
+
+    accessQuiz(level: number, quizId: number) {
+        if (level < quizId) {
+            throw new PreviousProblemUnsolvedExeption();
+        }
     }
 
     async submitQuiz(quizId: number, containerPort: string) {
