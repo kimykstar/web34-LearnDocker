@@ -13,8 +13,16 @@ const InputBoxQuizPage = () => {
     const navigate = useNavigate();
     const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
     const [quizData, setQuizData] = useState<Quiz | null>(null);
-    const { images, animation, dockerOperation, updateVisualizationData, handleAnimationComplete } =
-        useDockerVisualization();
+    const {
+        images,
+        containers,
+        animation,
+        dockerOperation,
+        updateVisualizationData,
+        handleAnimationComplete,
+        setInitVisualization,
+    } = useDockerVisualization();
+
     useEffect(() => {
         const fetchQuizData = async () => {
             const data = await requestQuizData(quizNum, navigate);
@@ -24,6 +32,7 @@ const InputBoxQuizPage = () => {
             }
 
             setQuizData(data);
+            setInitVisualization();
         };
         fetchQuizData();
     }, [navigate]);
@@ -37,7 +46,7 @@ const InputBoxQuizPage = () => {
                     animationState={animation}
                     dockerOperation={dockerOperation}
                     images={images}
-                    containers={undefined}
+                    containers={containers}
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
