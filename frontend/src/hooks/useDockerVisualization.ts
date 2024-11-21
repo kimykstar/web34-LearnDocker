@@ -36,13 +36,24 @@ const useDockerVisualization = () => {
         });
     };
 
-    const setImageColors = (images: Image[]) => {
-        return images.map((image, index) => {
+    const setColorToElements = (images: Image[], containers: Container[]) => {
+        const initImages = images.map((image, index) => {
             return {
                 ...image,
                 color: colors[index % colors.length],
             };
         });
+
+        const initContainers = containers.map((container) => {
+            const image = initImages.find((image) => {
+                return image.name === container.image;
+            });
+            return {
+                ...container,
+                color: image?.color,
+            };
+        });
+        return { initImages, initContainers };
     };
 
     // callback function for updating image and container visualization
@@ -89,10 +100,10 @@ const useDockerVisualization = () => {
         const data = await requestVisualizationData(navigate);
         if (!data) return;
 
-        const initImages = setImageColors(data.images);
+        const { initImages, initContainers } = setColorToElements(data.images, data.containers);
         setImages(initImages);
         // TODO: Container색상 지정 해야함
-        setContainers(data.containers);
+        setContainers(initContainers);
     };
 
     const handleAnimationComplete = () => {
