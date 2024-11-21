@@ -5,7 +5,7 @@ import DockerVisualization from '../visualization/DockerVisualization';
 import { Quiz } from '../../types/quiz';
 import QuizDescription from '../quiz/QuizDescription';
 import QuizButtons from '../quiz/QuizButtons';
-import QuizTextArea from '../quiz/QuizTextarea';
+import XTerminal from '../quiz/XTerminal';
 import QuizInputBox from '../quiz/QuizInputBox';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
 
@@ -41,7 +41,7 @@ const InputBoxQuizPage = () => {
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
-            <QuizTextArea updateVisualizationData={updateVisualizationData} />
+            <XTerminal updateVisualizationData={updateVisualizationData} />
             <QuizInputBox />
             <QuizButtons />
         </div>
