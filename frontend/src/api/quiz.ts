@@ -55,10 +55,10 @@ export const createHostContainer = async (navigate: NavigateFunction) => {
     }
 };
 
-export const requestSubmitResult = async (navigate: NavigateFunction) => {
+export const requestSubmitResult = async (quizNumber: string, navigate: NavigateFunction) => {
     try {
-        const response = await axios.post<QuizResult>(
-            `http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/1/submit`
+        const response = await axios.get<QuizResult>(
+            `http://${PROXY_HOST}:${PROXY_PORT}/api/quiz/${quizNumber}/submit`
         );
         return response.data;
     } catch (error) {
