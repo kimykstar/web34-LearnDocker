@@ -12,7 +12,7 @@ export async function requestDockerCommand(
             AttachStdin: false,
             AttachStdout: true,
             AttachStderr: true,
-            Tty: false,
+            Tty: true,
             Cmd: command,
         }
     );
@@ -21,7 +21,6 @@ export async function requestDockerCommand(
         {
             Detach: false,
             Tty: true,
-            ConsoleSize: [80, 64],
         }
     );
 

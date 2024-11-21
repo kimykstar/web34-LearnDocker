@@ -4,7 +4,7 @@ import { Quiz } from '../../types/quiz';
 import { requestQuizData } from '../../api/quiz';
 import DockerVisualization from '../visualization/DockerVisualization';
 import QuizDescription from '../quiz/QuizDescription';
-import QuizTextArea from '../quiz/QuizTextarea';
+import XTerminal from '../quiz/XTerminal';
 import QuizButtons from '../quiz/QuizButtons';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
 
@@ -50,7 +50,7 @@ const TextAreaQuizPage = () => {
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
-            <QuizTextArea updateVisualizationData={updateVisualizationData} />
+            <XTerminal updateVisualizationData={updateVisualizationData} />
             <QuizButtons />
         </div>
     );

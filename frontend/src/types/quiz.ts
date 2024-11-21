@@ -9,5 +9,5 @@ export type QuizResult = {
 };
 
 export type QuizTextAreaProps = {
-    updateVisualizationData: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+    updateVisualizationData: () => Promise<void>;
 };
