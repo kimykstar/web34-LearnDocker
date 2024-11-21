@@ -16,59 +16,52 @@ const useDockerVisualization = () => {
 
     const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
         const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
-
         return newImages.map((newImage, index) => {
             const prevImage = prevImages.find((img) => img.id === newImage.id);
             if (prevImage) {
                 return prevImage;
             }
-
             return {
                 ...newImage,
-                //TODO: 이미 동일한 색상의 이미지가 있으면 다음 색상을 부여하는 로직 필요
                 color: colors[index % colors.length],
             };
         });
     };
 
-    // callback function for updating image and container visualization
     const handleTerminalEnterCallback = (data: Visualization) => {
-        const { images: newImages, containers: newContainers } = data;
-        // TODO: container 애니매이션은 아직 안 만듬
-        console.log(newContainers);
-        if (images.length === newImages.length) {
-            setAnimation((prev) => ({
-                isVisible: false,
-                key: prev.key,
-            }));
-            return;
-        }
+        const { images: newImages } = data;
 
-        const operation =
-            images.length < newImages.length
-                ? DOCKER_OPERATIONS.IMAGE_PULL
-                : DOCKER_OPERATIONS.IMAGE_DELETE;
-
-        const updatedImages = updateImageColors(newImages, images);
-        setPendingImages(updatedImages);
-        setAnimation((prev) => ({
-            isVisible: true,
-            key: prev.key + 1,
-        }));
-
-        setDockerOperation(operation);
-    };
-
-    const updateVisualizationData = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === 'Enter') {
-            const data = await requestVisualizationData(navigate);
-
-            if (!data) {
-                return;
+        setImages((currentImages) => {
+            if (currentImages.length === newImages.length) {
+                setAnimation((prev) => ({
+                    isVisible: false,
+                    key: prev.key,
+                }));
+                return currentImages;
             }
 
-            handleTerminalEnterCallback(data);
-        }
+            const operation =
+                currentImages.length < newImages.length
+                    ? DOCKER_OPERATIONS.IMAGE_PULL
+                    : DOCKER_OPERATIONS.IMAGE_DELETE;
+
+            const updatedImages = updateImageColors(newImages, currentImages);
+
+            setPendingImages(updatedImages);
+            setDockerOperation(operation);
+            setAnimation((prev) => ({
+                isVisible: true,
+                key: prev.key + 1,
+            }));
+
+            return currentImages;
+        });
+    };
+
+    const updateVisualizationData = async () => {
+        const data = await requestVisualizationData(navigate);
+        if (!data) return;
+        handleTerminalEnterCallback(data);
     };
 
     const handleAnimationComplete = () => {
