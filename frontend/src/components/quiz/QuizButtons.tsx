@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { requestSubmitResult } from '../../api/quiz';
+import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 
-const QuizButtons = () => {
+const QuizButtons = ({ quizId }: { quizId: number }) => {
     const [submitResult, setSubmitResult] = useState('default');
     const navigate = useNavigate();
 
@@ -24,13 +24,36 @@ const QuizButtons = () => {
         console.log(submitResult);
     };
 
+    const handleNextButtonClick = async () => {
+        const isAccessable = await requestQuizAccessability(quizId);
+        if (!isAccessable) {
+            alert('아직 풀 수 없습니다');
+            return;
+        }
+
+        if (quizId > 9) {
+            alert('마지막 문제입니다');
+            return;
+        }
+
+        if (quizId === 3) {
+            navigate('/what-is-docker-container');
+            return;
+        }
+
+        navigate(`/quiz/${quizId + 1}`);
+    };
+
     // TODO: 이전. 다음버튼에 이벤트 추가가 필요합니다.
     return (
         <section className='w-[85%] flex justify-end'>
-            <button className='text-lg text-white rounded-lg bg-gray-400 hover:bg-gray-500 py-2 px-4 my-4 mx-1'>
+            <button className='text-lg text-white rounded-lg bg-gray-300 hover:bg-gray-400 py-2 px-4 my-4 mx-1'>
                 이전
             </button>
-            <button className='text-lg text-white rounded-lg bg-gray-400 hover:bg-gray-500 py-2 px-4 m-4'>
+            <button
+                className='text-lg text-white rounded-lg bg-sky-400 hover:bg-sky-500 py-2 px-4 m-4'
+                onClick={handleNextButtonClick}
+            >
                 다음
             </button>
             <button

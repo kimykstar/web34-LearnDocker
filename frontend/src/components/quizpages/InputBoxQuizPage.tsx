@@ -43,7 +43,7 @@ const InputBoxQuizPage = () => {
             </section>
             <QuizTextArea updateVisualizationData={updateVisualizationData} />
             <QuizInputBox />
-            <QuizButtons />
+            <QuizButtons quizId={+quizNum} />
         </div>
     );
 };
