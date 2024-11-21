@@ -46,13 +46,18 @@ export class SandboxService {
 
     // TODO: ECONNREFUSED 에러 처리
     async getUserContainerImagesV2(containerPort: string) {
-        const imageResponse = await this.getUserImages(containerPort);
-        const images = this.parseImagesV2(imageResponse);
+        // TODO: 임시로 시연을 위해 try-catch로 해결
+        try {
+            const imageResponse = await this.getUserImages(containerPort);
+            const images = this.parseImagesV2(imageResponse);
 
-        const containerResponse = await this.getUserContainers(containerPort);
-        const containers = this.parseContainersV2(containerResponse);
-
-        return { images, containers };
+            const containerResponse = await this.getUserContainers(containerPort);
+            const containers = this.parseContainersV2(containerResponse);
+            return { images, containers };
+        } catch (error) {
+            this.logger.error(error);
+            return { images: [], containers: [] };
+        }
     }
 
     async getUserImages(containerPort: string) {
