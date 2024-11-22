@@ -22,15 +22,24 @@ const useDockerVisualization = () => {
     });
 
     const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
+
+    const getNotUsedColor = (images: Image[]) => {
+        const notUsedColors = colors.filter((color) => {
+            return !images.some((image) => image.color === color);
+        });
+        console.log('Not used color: ', notUsedColors);
+        return notUsedColors[0];
+    };
+
     const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
-        return newImages.map((newImage, index) => {
+        return newImages.map((newImage) => {
             const prevImage = prevImages.find((img) => img.id === newImage.id);
             if (prevImage) {
                 return prevImage;
             }
             return {
                 ...newImage,
-                color: colors[index % colors.length],
+                color: getNotUsedColor(prevImages),
             };
         });
     };
@@ -72,6 +81,7 @@ const useDockerVisualization = () => {
                 currentImages.length < newImages.length
                     ? DOCKER_OPERATIONS.IMAGE_PULL
                     : DOCKER_OPERATIONS.IMAGE_DELETE;
+            // container 명령어에 따른 처리 해야함
 
             const updatedImages = updateImageColors(newImages, currentImages);
 
