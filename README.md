@@ -4,7 +4,7 @@
    <h1> 🐳 LearnDocker 🐳 </h1>
    <h3> Docker에 대해서 알고싶으신가요? 샌드박스 환경을 통해 단계별 학습을 해봅시다. 시각화는 덤입니다! </h3>
 <p>
-  <a href="#">LearnDocker 홈페이지</a>
+  <a href="http://211.188.54.226:3000">LearnDocker 홈페이지</a>
 </p>
   <p>
   <a href="https://github.com/boostcampwm-2024/web34-LearnDocker/wiki">📚 프로젝트 위키</a>
