@@ -68,6 +68,8 @@ export type AnimationProps = {
 export const DOCKER_OPERATIONS = {
     IMAGE_PULL: 'IMAGE_PULL',
     IMAGE_DELETE: 'IMEAGE_DELETE',
+    CONTAINER_CREATE: 'CONTAINER_CREATE',
+    CONTAINER_DELETE: 'CONTAINER_DELETE',
 } as const;
 
 export type DockerOperation = (typeof DOCKER_OPERATIONS)[keyof typeof DOCKER_OPERATIONS];

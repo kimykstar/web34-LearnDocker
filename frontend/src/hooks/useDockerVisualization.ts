@@ -15,6 +15,7 @@ const useDockerVisualization = () => {
     const [containers, setContainers] = useState<Container[]>([]);
     const [images, setImages] = useState<Image[]>([]);
     const [pendingImages, setPendingImages] = useState<Image[]>([]);
+    const [pendingContainers, setPendingContainers] = useState<Container[]>([]);
     const [dockerOperation, setDockerOperation] = useState<DockerOperation>();
     const [animation, setAnimation] = useState<AnimationState>({
         isVisible: false,
@@ -27,7 +28,6 @@ const useDockerVisualization = () => {
         const notUsedColors = colors.filter((color) => {
             return !images.some((image) => image.color === color);
         });
-        console.log('Not used color: ', notUsedColors);
         return notUsedColors[0];
     };
 
@@ -41,6 +41,18 @@ const useDockerVisualization = () => {
                 ...newImage,
                 color: getNotUsedColor(prevImages),
             };
+        });
+    };
+    const updateContainerColors = (newContainers: Container[], newImages: Image[]) => {
+        return newContainers.map((newContainer) => {
+            if (!Object.keys(newContainer).includes('color')) {
+                const matchedImage = newImages.find((image) => image.name === newContainer.image);
+                return {
+                    ...newContainer,
+                    color: matchedImage?.color,
+                };
+            }
+            return newContainer;
         });
     };
 
@@ -66,14 +78,9 @@ const useDockerVisualization = () => {
 
     // callback function for updating image and container visualization
     const handleTerminalEnterCallback = (data: Visualization) => {
-        const { images: newImages } = data;
-
+        const { images: newImages, containers: newContainers } = data;
         setImages((currentImages) => {
             if (currentImages.length === newImages.length) {
-                setAnimation((prev) => ({
-                    isVisible: false,
-                    key: prev.key,
-                }));
                 return currentImages;
             }
 
@@ -81,7 +88,6 @@ const useDockerVisualization = () => {
                 currentImages.length < newImages.length
                     ? DOCKER_OPERATIONS.IMAGE_PULL
                     : DOCKER_OPERATIONS.IMAGE_DELETE;
-            // container 명령어에 따른 처리 해야함
 
             const updatedImages = updateImageColors(newImages, currentImages);
 
@@ -91,8 +97,27 @@ const useDockerVisualization = () => {
                 isVisible: true,
                 key: prev.key + 1,
             }));
-
             return currentImages;
+        });
+
+        setContainers((currentContainers) => {
+            if (currentContainers.length === newContainers.length) {
+                return currentContainers;
+            }
+
+            const operation =
+                currentContainers.length < newContainers.length
+                    ? DOCKER_OPERATIONS.CONTAINER_CREATE
+                    : DOCKER_OPERATIONS.CONTAINER_DELETE;
+            const updatedContainers = updateContainerColors(newContainers, newImages);
+            setPendingContainers(updatedContainers);
+            setDockerOperation(operation);
+            setAnimation((prev) => ({
+                isVisible: true,
+                key: prev.key + 1,
+            }));
+
+            return currentContainers;
         });
     };
 
@@ -108,12 +133,22 @@ const useDockerVisualization = () => {
 
         const { initImages, initContainers } = setColorToElements(data.images, data.containers);
         setImages(initImages);
-        // TODO: Container색상 지정 해야함
         setContainers(initContainers);
     };
 
     const handleAnimationComplete = () => {
-        setImages(pendingImages);
+        if (
+            dockerOperation === DOCKER_OPERATIONS.IMAGE_PULL ||
+            dockerOperation === DOCKER_OPERATIONS.IMAGE_DELETE
+        )
+            setImages(pendingImages);
+        if (
+            dockerOperation === DOCKER_OPERATIONS.CONTAINER_CREATE ||
+            dockerOperation === DOCKER_OPERATIONS.CONTAINER_DELETE
+        ) {
+            console.log('pendingContainers==-===', pendingContainers);
+            setContainers(pendingContainers);
+        }
         setAnimation((prev) => ({
             isVisible: false,
             key: prev.key,
