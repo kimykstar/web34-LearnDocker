@@ -74,7 +74,7 @@ export const ArrowAnimation = ({ isVisible, onComplete, dockerOperation }: Anima
                         className={isVisible ? 'relative top-28 animate-showAndHideSecond' : ''}
                         icon={MoveDownRight}
                         gridColumn={4}
-                        gridRow={4}
+                        gridRow={3}
                         isVisible={isVisible}
                     />
                     <Arrow

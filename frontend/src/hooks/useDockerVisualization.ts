@@ -31,6 +31,7 @@ const useDockerVisualization = () => {
         return notUsedColors[0];
     };
 
+    //이전 Image상태를 가져와야 함..
     const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
         return newImages.map((newImage) => {
             const prevImage = prevImages.find((img) => img.id === newImage.id);
@@ -109,13 +110,17 @@ const useDockerVisualization = () => {
                 currentContainers.length < newContainers.length
                     ? DOCKER_OPERATIONS.CONTAINER_CREATE
                     : DOCKER_OPERATIONS.CONTAINER_DELETE;
-            const updatedContainers = updateContainerColors(newContainers, newImages);
-            setPendingContainers(updatedContainers);
-            setDockerOperation(operation);
-            setAnimation((prev) => ({
-                isVisible: true,
-                key: prev.key + 1,
-            }));
+            let updatedContainers: Container[] = [];
+            setImages((currentImages) => {
+                updatedContainers = updateContainerColors(newContainers, currentImages);
+                setPendingContainers(updatedContainers);
+                setDockerOperation(operation);
+                setAnimation((prev) => ({
+                    isVisible: true,
+                    key: prev.key + 1,
+                }));
+                return currentImages;
+            });
 
             return currentContainers;
         });
