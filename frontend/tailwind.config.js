@@ -14,6 +14,8 @@ export default {
                 'Secondary-Green': '#58C126',
                 'Secondary-Red': '#C12626',
                 'Stopped-Status-Color': '#FF0000',
+                'Running-Status-Color': '#00FF00',
+                'Restarting-Status-Color': '#FFFF00',
             },
         },
 

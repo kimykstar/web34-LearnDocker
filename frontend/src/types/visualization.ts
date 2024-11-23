@@ -75,6 +75,12 @@ export const DOCKER_OPERATIONS = {
 
 export const DOCKER_CONTAINER_STATUS = {
     EXITED: 'exited',
+    RUNNING: 'running',
+    CREATED: 'created',
+    PAUSED: 'paused',
+    STOPPED: 'stopped',
+    DEAD: 'dead',
+    RESTARTING: 'restarting',
 };
 
 export type DockerOperation = (typeof DOCKER_OPERATIONS)[keyof typeof DOCKER_OPERATIONS];

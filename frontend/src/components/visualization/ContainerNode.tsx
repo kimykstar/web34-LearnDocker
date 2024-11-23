@@ -7,6 +7,8 @@ import {
 
 const STATUS_COLORS = {
     [DOCKER_CONTAINER_STATUS.EXITED]: 'bg-Stopped-Status-Color',
+    [DOCKER_CONTAINER_STATUS.RESTARTING]: 'bg-Restarting-Status-Color',
+    [DOCKER_CONTAINER_STATUS.RUNNING]: 'bg-Running-Status-Color',
 };
 
 const isContainer = (element: Image | Container): element is Container => {
