@@ -22,7 +22,7 @@ const useDockerVisualization = () => {
         key: 0,
     });
 
-    const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
+    const colors = ['#000000', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
 
     const getNotUsedColor = (images: Image[]) => {
         const notUsedColors = colors.filter((color) => {
@@ -44,21 +44,22 @@ const useDockerVisualization = () => {
             };
         });
     };
-    const updateContainerColors = (newContainers: Container[], newImages: Image[]) => {
-        return newContainers.map((newContainer) => {
-            if (!Object.keys(newContainer).includes('color')) {
-                const matchedImage = newImages.find((image) => image.name === newContainer.image);
-                return {
-                    ...newContainer,
-                    color: matchedImage?.color,
-                };
-            }
-            return newContainer;
-        });
-    };
+    // const updateContainerColors = (newContainers: Container[], newImages: Image[]) => {
+    //     return newContainers.map((newContainer) => {
+    //         if (!Object.keys(newContainer).includes('color')) {
+    //             const matchedImage = newImages.find((image) => image.name === newContainer.image);
+    //             return {
+    //                 ...newContainer,
+    //                 color: matchedImage?.color,
+    //             };
+    //         }
+    //         return newContainer;
+    //     });
+    // };
 
     const setColorToElements = (images: Image[], containers: Container[]) => {
-        const initImages = images.map((image, index) => {
+        const sortedImages = images.sort((a, b) => a.id.localeCompare(b.id));
+        const initImages = sortedImages.map((image, index) => {
             return {
                 ...image,
                 color: colors[index % colors.length],
@@ -106,14 +107,20 @@ const useDockerVisualization = () => {
                 return currentContainers;
             }
 
-            const operation =
-                currentContainers.length < newContainers.length
-                    ? DOCKER_OPERATIONS.CONTAINER_CREATE
-                    : DOCKER_OPERATIONS.CONTAINER_DELETE;
-            let updatedContainers: Container[] = [];
             setImages((currentImages) => {
-                updatedContainers = updateContainerColors(newContainers, currentImages);
-                setPendingContainers(updatedContainers);
+                let operation = null;
+                if (
+                    currentContainers.length < newContainers.length &&
+                    currentImages.length < newImages.length
+                )
+                    operation = DOCKER_OPERATIONS.CONTAINER_RUN;
+                else if (currentContainers.length < newContainers.length)
+                    operation = DOCKER_OPERATIONS.CONTAINER_CREATE;
+                else operation = DOCKER_OPERATIONS.CONTAINER_DELETE;
+
+                const result = setColorToElements(newImages, newContainers);
+                console.log('initCon--------', result);
+                setPendingContainers(result.initContainers);
                 setDockerOperation(operation);
                 setAnimation((prev) => ({
                     isVisible: true,
@@ -152,6 +159,15 @@ const useDockerVisualization = () => {
             dockerOperation === DOCKER_OPERATIONS.CONTAINER_DELETE
         ) {
             setContainers(pendingContainers);
+        }
+        if (dockerOperation === DOCKER_OPERATIONS.CONTAINER_RUN) {
+            setImages(() => {
+                setTimeout(() => {
+                    console.log('pendingC--------: ', pendingContainers);
+                    setContainers(pendingContainers);
+                }, 0);
+                return pendingImages;
+            });
         }
         setAnimation((prev) => ({
             isVisible: false,

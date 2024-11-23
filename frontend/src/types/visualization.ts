@@ -70,6 +70,11 @@ export const DOCKER_OPERATIONS = {
     IMAGE_DELETE: 'IMEAGE_DELETE',
     CONTAINER_CREATE: 'CONTAINER_CREATE',
     CONTAINER_DELETE: 'CONTAINER_DELETE',
+    CONTAINER_RUN: 'CONTAINER_RUN',
 } as const;
+
+export const DOCKER_CONTAINER_STATUS = {
+    EXITED: 'exited',
+};
 
 export type DockerOperation = (typeof DOCKER_OPERATIONS)[keyof typeof DOCKER_OPERATIONS];

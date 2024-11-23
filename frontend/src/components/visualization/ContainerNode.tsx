@@ -1,4 +1,17 @@
-import { ContainerNodeProps } from '../../types/visualization';
+import {
+    ContainerNodeProps,
+    DOCKER_CONTAINER_STATUS,
+    Image,
+    Container,
+} from '../../types/visualization';
+
+const STATUS_COLORS = {
+    [DOCKER_CONTAINER_STATUS.EXITED]: 'bg-Stopped-Status-Color',
+};
+
+const isContainer = (element: Image | Container): element is Container => {
+    return (element as Container).status !== undefined;
+};
 
 const ContainerNode = ({
     label,
@@ -28,11 +41,15 @@ const ContainerNode = ({
                         }}
                         key={element.id}
                     >
-                        {Object.keys(element).includes('image') && (
-                            <span className='absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full bg-sky-400 opacity-75 animate-ping'></span>
+                        {isContainer(element) && (
+                            <span
+                                className={`absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full ${STATUS_COLORS[element.status]} opacity-75 animate-ping`}
+                            ></span>
                         )}
-                        {Object.keys(element).includes('image') && (
-                            <span className='absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 bg-sky-500'></span>
+                        {isContainer(element) && (
+                            <span
+                                className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
+                            ></span>
                         )}
                         {element.name}
                     </div>
