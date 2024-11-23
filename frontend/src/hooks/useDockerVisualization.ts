@@ -44,18 +44,6 @@ const useDockerVisualization = () => {
             };
         });
     };
-    // const updateContainerColors = (newContainers: Container[], newImages: Image[]) => {
-    //     return newContainers.map((newContainer) => {
-    //         if (!Object.keys(newContainer).includes('color')) {
-    //             const matchedImage = newImages.find((image) => image.name === newContainer.image);
-    //             return {
-    //                 ...newContainer,
-    //                 color: matchedImage?.color,
-    //             };
-    //         }
-    //         return newContainer;
-    //     });
-    // };
 
     const setColorToElements = (images: Image[], containers: Container[]) => {
         const sortedImages = images.sort((a, b) => a.id.localeCompare(b.id));
@@ -119,7 +107,6 @@ const useDockerVisualization = () => {
                 else operation = DOCKER_OPERATIONS.CONTAINER_DELETE;
 
                 const result = setColorToElements(newImages, newContainers);
-                console.log('initCon--------', result);
                 setPendingContainers(result.initContainers);
                 setDockerOperation(operation);
                 setAnimation((prev) => ({
@@ -163,7 +150,6 @@ const useDockerVisualization = () => {
         if (dockerOperation === DOCKER_OPERATIONS.CONTAINER_RUN) {
             setImages(() => {
                 setTimeout(() => {
-                    console.log('pendingC--------: ', pendingContainers);
                     setContainers(pendingContainers);
                 }, 0);
                 return pendingImages;
