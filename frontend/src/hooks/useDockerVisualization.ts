@@ -151,7 +151,6 @@ const useDockerVisualization = () => {
             dockerOperation === DOCKER_OPERATIONS.CONTAINER_CREATE ||
             dockerOperation === DOCKER_OPERATIONS.CONTAINER_DELETE
         ) {
-            console.log('pendingContainers==-===', pendingContainers);
             setContainers(pendingContainers);
         }
         setAnimation((prev) => ({

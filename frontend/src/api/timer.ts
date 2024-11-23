@@ -9,7 +9,6 @@ export const requestExpriationTime = async (): Promise<ExpirationTime | object> 
         const response = await axios.get<ExpirationTime>(
             `http://${PROXY_HOST}:${PROXY_PORT}/api/sandbox/endDate`
         );
-        console.log('session Time: ', response.data);
         return response.data;
     } catch (error) {
         console.error(error);

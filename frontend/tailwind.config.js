@@ -37,12 +37,19 @@ export default {
                 '61%, 80%': { opacity: '1', visibility: 'visible' },
                 '81%, 100%': { opacity: '0', visibility: 'hidden' },
             },
+            ping: {
+                '75%, 100%': {
+                    transform: 'scale(2)',
+                    opacity: 0,
+                },
+            },
         },
         animation: {
             showAndHideFirst: 'showAndHideFirst 2s linear forwards',
             showAndHideSecond: 'showAndHideSecond 2s linear forwards',
             showAndHideThird: 'showAndHideThird 2s linear forwards',
             showAndHideFourth: 'showAndHideFourth 2s linear forwards',
+            ping: `ping 1s cubic-bezier(0, 0, 0.2, 1) infinite`,
         },
     },
     plugins: [],
