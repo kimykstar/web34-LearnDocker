@@ -4,10 +4,6 @@ import { Visualization } from '../types/visualization';
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 
-const PROXY_HOST = import.meta.env.VITE_PROXY_HOST;
-const PROXY_PORT = import.meta.env.VITE_PROXY_PORT;
-const PROXY_URL = `http://${PROXY_HOST}:${PROXY_PORT}`;
-
 const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
     if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -28,9 +24,7 @@ const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
 
 export const requestQuizData = async (quizNumber: string, navigate: NavigateFunction) => {
     try {
-        const response = await axios.get<Quiz>(
-            `${PROXY_URL}/api/quiz/${quizNumber}`
-        );
+        const response = await axios.get<Quiz>(`/api/quiz/${quizNumber}`);
         return response.data;
     } catch (error) {
         return handleErrorResponse(error, navigate);
@@ -39,9 +33,7 @@ export const requestQuizData = async (quizNumber: string, navigate: NavigateFunc
 
 export const requestVisualizationData = async (navigate: NavigateFunction) => {
     try {
-        const response = await axios.get<Visualization>(
-            `${PROXY_URL}/api/sandbox/elements`
-        );
+        const response = await axios.get<Visualization>(`/api/sandbox/elements`);
         return response.data;
     } catch (error) {
         return handleErrorResponse(error, navigate);
@@ -50,7 +42,7 @@ export const requestVisualizationData = async (navigate: NavigateFunction) => {
 
 export const createHostContainer = async (navigate: NavigateFunction) => {
     try {
-        await axios.post(`${PROXY_URL}/api/sandbox/start`);
+        await axios.post(`/api/sandbox/start`);
         return true;
     } catch (error) {
         return handleErrorResponse(error, navigate);
@@ -59,9 +51,7 @@ export const createHostContainer = async (navigate: NavigateFunction) => {
 
 export const requestSubmitResult = async (quizNumber: number, navigate: NavigateFunction) => {
     try {
-        const response = await axios.get<QuizResult>(
-            `${PROXY_URL}/api/quiz/${quizNumber}/submit`
-        );
+        const response = await axios.get<QuizResult>(`/api/quiz/${quizNumber}/submit`);
         return response.data;
     } catch (error) {
         return handleErrorResponse(error, navigate);
@@ -75,10 +65,7 @@ export const requestCommandResult = async (
     term?: Terminal
 ) => {
     try {
-        const response = await axios.post<string>(
-            `${PROXY_URL}/api/sandbox/command`,
-            { command }
-        );
+        const response = await axios.post<string>(`/api/sandbox/command`, { command });
         return response.data;
     } catch (error) {
         if (customErrorCallback && term) {
@@ -92,7 +79,7 @@ export const requestCommandResult = async (
 
 export const requestQuizAccessability = async (quizId: number) => {
     try {
-        await axios.get(`${PROXY_URL}/api/quiz/${quizId}/access`)
+        await axios.get(`/api/quiz/${quizId}/access`);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response && error.response.status === 403) {
@@ -102,4 +89,4 @@ export const requestQuizAccessability = async (quizId: number) => {
         throw error;
     }
     return true;
-}
+};
