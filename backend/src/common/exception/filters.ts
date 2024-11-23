@@ -16,6 +16,8 @@ import {
     PreviousProblemUnsolvedExeption,
     SessionAlreadyAssignedException,
 } from './errors';
+import { isAxiosError } from 'axios';
+import { formatAxiosError } from './axios-formatter';
 
 @Catch()
 export class LastExceptionFilter implements ExceptionFilter {
@@ -40,8 +42,8 @@ export class LastExceptionFilter implements ExceptionFilter {
         };
 
         if (this.constructor.name === 'LastExceptionFilter') {
-            if (exception instanceof Error) {
-                this.logger.error(exception.message, exception);
+            if (isAxiosError(exception)) {
+                this.logger.error(formatAxiosError(exception));
             } else {
                 this.logger.error(exception);
             }

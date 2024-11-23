@@ -5,6 +5,8 @@ import { requestDockerCommand } from './exec.api';
 import { Container, ContainerData, Image, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
+import { formatAxiosError } from '../common/exception/axios-formatter';
+import { isAxiosError } from 'axios';
 
 @Injectable()
 export class SandboxService {
@@ -55,7 +57,9 @@ export class SandboxService {
             const containers = this.parseContainersV2(containerResponse);
             return { images, containers };
         } catch (error) {
-            this.logger.error(error);
+            if (isAxiosError(error)) {
+                this.logger.error(formatAxiosError(error));
+            }
             return { images: [], containers: [] };
         }
     }
