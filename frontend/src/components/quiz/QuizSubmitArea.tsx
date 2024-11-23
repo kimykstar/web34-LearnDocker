@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import QuizButtons from './QuizButtons';
 import QuizInputBox from './QuizInputBox';
+import { CUSTOM_QUIZZES } from '../../constant/quiz';
 
 type QuizSubmitAreaProps = {
     quizId: number;
@@ -8,14 +9,13 @@ type QuizSubmitAreaProps = {
 
 const QuizSubmitArea = ({ quizId }: QuizSubmitAreaProps) => {
     const [answer, setAnswer] = useState('');
-    const customQuizzes = [2, 5, 6, 7];
 
     return (
         <>
-            {customQuizzes.includes(quizId) ? (
+            {CUSTOM_QUIZZES.includes(quizId) ? (
                 <QuizInputBox answer={answer} setAnswer={setAnswer} />
             ) : null}
-            <QuizButtons quizId={quizId} answer={answer} customQuizzes={customQuizzes} />
+            <QuizButtons quizId={quizId} answer={answer} />
         </>
     );
 };

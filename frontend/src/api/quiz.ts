@@ -3,6 +3,7 @@ import { Quiz, QuizResult } from '../types/quiz';
 import { Visualization } from '../types/visualization';
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
+import { CUSTOM_QUIZZES } from '../constant/quiz';
 
 const PROXY_HOST = import.meta.env.VITE_PROXY_HOST;
 const PROXY_PORT = import.meta.env.VITE_PROXY_PORT;
@@ -56,10 +57,9 @@ export const createHostContainer = async (navigate: NavigateFunction) => {
 export const requestSubmitResult = async (
     quizNumber: number,
     userAnswer: string,
-    customQuizzes: number[],
     navigate: NavigateFunction
 ) => {
-    if (customQuizzes.includes(quizNumber)) {
+    if (CUSTOM_QUIZZES.includes(quizNumber)) {
         return requestCustomQuizResult(quizNumber, userAnswer, navigate);
     } else {
         return requestDockerQuizResult(quizNumber, navigate);

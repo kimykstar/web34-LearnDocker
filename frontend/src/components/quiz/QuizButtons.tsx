@@ -5,15 +5,14 @@ import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 type QuizButtonsProps = {
     quizId: number;
     answer: string;
-    customQuizzes: number[];
 };
 
-const QuizButtons = ({ quizId, answer, customQuizzes }: QuizButtonsProps) => {
+const QuizButtons = ({ quizId, answer }: QuizButtonsProps) => {
     const [submitResult, setSubmitResult] = useState('default');
     const navigate = useNavigate();
 
     const handleSubmitButtonClick = async () => {
-        const submitResponse = await requestSubmitResult(quizId, answer, customQuizzes, navigate);
+        const submitResponse = await requestSubmitResult(quizId, answer, navigate);
         if (!submitResponse) {
             return;
         }
