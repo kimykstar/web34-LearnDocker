@@ -14,6 +14,13 @@ export class CacheService {
         this.store.set(key, value);
     }
 
+    updateLevel(key: string, level: number) {
+        const session = this.store.get(key);
+        if (session != null) {
+            session.level = level;
+        }
+    }
+
     delete(key: string) {
         this.store.delete(key);
     }
