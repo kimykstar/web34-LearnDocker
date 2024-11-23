@@ -163,6 +163,26 @@ export const ArrowAnimation = ({ isVisible, onComplete, dockerOperation }: Anima
                     />
                 </>
             );
+        case DOCKER_OPERATIONS.CONTAINER_STOP:
+            return (
+                <>
+                    <Arrow
+                        className={isVisible ? 'animate-showAndHideFirst' : ''}
+                        icon={MoveRight}
+                        gridColumn={2}
+                        gridRow={3}
+                        isVisible={isVisible}
+                    />
+                    <Arrow
+                        className={isVisible ? 'relative top-28 animate-showAndHideSecond' : ''}
+                        icon={MoveUpRight}
+                        gridColumn={4}
+                        gridRow={2}
+                        isVisible={isVisible}
+                        onAnimationEnd={onComplete}
+                    />
+                </>
+            );
         default:
             return null;
     }

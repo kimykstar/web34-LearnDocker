@@ -92,6 +92,15 @@ const useDockerVisualization = () => {
 
         setContainers((currentContainers) => {
             if (currentContainers.length === newContainers.length) {
+                if (isChangedContainerStatus(currentContainers, newContainers)) {
+                    setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STOP);
+                    const elements = setColorToElements(newImages, newContainers);
+                    setPendingContainers(elements.initContainers);
+                    setAnimation((prev) => ({
+                        isVisible: true,
+                        key: prev.key + 1,
+                    }));
+                }
                 return currentContainers;
             }
 
@@ -120,6 +129,25 @@ const useDockerVisualization = () => {
         });
     };
 
+    const isChangedContainerStatus = (
+        prevContainers: Container[],
+        currentContainers: Container[]
+    ) => {
+        const result = prevContainers.reduce<Container[]>((reducer, prevContainer) => {
+            const matchedContainer = currentContainers.find((currentContainer) => {
+                return currentContainer.id === prevContainer.id;
+            });
+            if (!matchedContainer) {
+                throw new Error('isChangedContainerStatue함수 undefind 에러');
+            }
+            if (matchedContainer.status !== prevContainer.status) {
+                reducer.push(matchedContainer);
+            }
+            return reducer;
+        }, []);
+        return result.length > 0 ? true : false;
+    };
+
     const updateVisualizationData = async () => {
         const data = await requestVisualizationData(navigate);
         if (!data) return;
@@ -143,7 +171,8 @@ const useDockerVisualization = () => {
             setImages(pendingImages);
         if (
             dockerOperation === DOCKER_OPERATIONS.CONTAINER_CREATE ||
-            dockerOperation === DOCKER_OPERATIONS.CONTAINER_DELETE
+            dockerOperation === DOCKER_OPERATIONS.CONTAINER_DELETE ||
+            dockerOperation === DOCKER_OPERATIONS.CONTAINER_STOP
         ) {
             setContainers(pendingContainers);
         }
