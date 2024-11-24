@@ -22,11 +22,8 @@ export class QuizController {
         @Req() req: RequestWithSession,
         @Query('userAnswer') userAnswer?: string
     ) {
-        const sessionId = req.cookies['sid'];
-        const { containerPort, level } = req.session;
-
+        const { sessionId, containerPort, level } = req.session;
         this.quizService.accessQuiz(level, quizId);
-
         return this.quizService.submitQuiz(quizId, sessionId, containerPort, level, userAnswer);
     }
 

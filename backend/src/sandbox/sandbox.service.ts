@@ -155,6 +155,7 @@ export class SandboxService {
 
         const newSessionId = randomUUID();
         this.cacheService.set(newSessionId, {
+            sessionId: newSessionId,
             containerId,
             containerPort,
             renew: false,
