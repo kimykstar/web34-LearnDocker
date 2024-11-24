@@ -131,25 +131,20 @@ const useDockerVisualization = () => {
         });
     };
 
-    const isChangedContainerStatus = (
-        prevContainers: Container[],
-        currentContainers: Container[]
-    ) => {
-        const result = prevContainers.reduce<Container[]>((reducer, prevContainer) => {
-            const matchedContainer = currentContainers.find((currentContainer) => {
-                return currentContainer.id === prevContainer.id;
-            });
-            if (!matchedContainer) {
-                throw new Error('isChangedContainerStatue함수 undefind 에러');
-            }
-            if (matchedContainer.status !== prevContainer.status) {
-                reducer.push(matchedContainer);
-            }
-            return reducer;
-        }, []);
-        return result.length > 0 ? true : false;
-    };
-
+const isChangedContainerStatus = (
+    prevContainers: Container[],
+    currentContainers: Container[]
+) => {
+    return prevContainers.some(prevContainer => {
+        const matchedContainer = currentContainers.find(
+            currentContainer => currentContainer.id === prevContainer.id
+        );
+        if (!matchedContainer) {
+            throw new Error('isChangedContainerStatus함수 undefined 에러');
+        }
+        return matchedContainer.status !== prevContainer.status;
+    });
+};
     const updateVisualizationData = async (command: string) => {
         const data = await requestVisualizationData(navigate);
         if (!data) return;
