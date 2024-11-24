@@ -26,39 +26,95 @@ export class QuizService {
 
         const quizzeData = [
             {
+                //TODO: pull 명령어나 이미지 명령어의 경우 앞에 registry를 붙여야 된다고 알려주기
                 id: 1,
                 title: 'Docker Image 가져오기',
                 content:
-                    'Docker의 첫 걸음을 시작해볼까요?\n가장 먼저 해볼 것은 hello-world 이미지를 가져오는 것입니다.\n적절한 Docker 명령어를 사용하여 이미지를 다운로드해보세요\n',
+                    'Docker의 첫 걸음을 시작해볼까요?\n' +
+                    'Docker Hub에서 제공하는 hello-world 이미지를 가져와보세요.\n\n' +
+                    '1. docker pull 명령어를 사용하여 hello-world 이미지를 다운로드하세요.\n' +
+                    '2. 이미지가 성공적으로 다운로드되면 자동으로 로컬 시스템에 저장됩니다.\n\n' +
+                    '힌트: docker pull <이미지명> 형식으로 명령어를 작성하세요.',
             },
             {
                 id: 2,
                 title: 'Docker Image 목록 확인하기',
-                content: '',
+                content:
+                    '로컬 시스템에 저장된 Docker 이미지들을 확인해볼까요?\n\n' +
+                    '1. docker images 명령어를 사용하여 현재 시스템에 있는 모든 Docker 이미지를 조회하세요.\n' +
+                    '2. 명령어 실행 후 출력된 결과에서 hello-world 이미지의 Image ID 앞 4자리를 입력하세요.\n\n' +
+                    '힌트: 이미지 목록을 확인하는 명령어는 별도의 인자가 필요하지 않습니다.',
             },
             {
                 id: 3,
                 title: 'Docker Image 삭제하기',
-                content: '',
+                content:
+                    '더 이상 필요하지 않은 Docker 이미지를 삭제하는 방법을 알아봅시다.\n\n' +
+                    '1. docker rmi 명령어를 사용하여 hello-world 이미지를 삭제하세요.\n' +
+                    '2. 삭제 후 docker images 명령어로 이미지가 정상적으로 삭제되었는지 확인하세요.\n\n' +
+                    '힌트: docker rmi <이미지명> 형식으로 명령어를 작성하세요.',
             },
             {
                 id: 4,
                 title: 'Container 생성하기',
-                content: '',
+                content:
+                    'Docker 이미지를 기반으로 컨테이너를 생성해봅시다.\n\n' +
+                    '1. docker create 명령어를 사용하여 hello-world 이미지로부터 컨테이너를 생성하세요.\n\n' +
+                    '힌트: docker create <이미지명> 형식으로 명령어를 작성하세요.',
             },
+            //TODO: hello-world, hello-world2(가제) 이미지를 커스텀 해서 터미널에 정답이 나오게 하기
             {
                 id: 5,
                 title: 'Container 실행하기',
-                content: '',
+                content:
+                    '생성된 컨테이너를 실행해보겠습니다.\n\n' +
+                    '1. docker start 명령어를 사용하여 이전 단계에서 생성한 컨테이너를 실행하세요.\n' +
+                    '2. 컨테이너 ID나 이름을 사용하여 실행할 수 있습니다.\n' +
+                    '3. 실행 후 터미널에 표시되는 "answer: " 다음에 나오는 값을 입력해주세요.\n\n' +
+                    '힌트: docker start <컨테이너ID> 형식으로 명령어를 작성하세요.\n' +
+                    '힌트: 컨테이너ID 전부 적을 필요는 없습니다.',
             },
+            // TODO: hello-world2는 가제 수정 필요
             {
                 id: 6,
                 title: 'Container 생성 및 실행하기',
-                content: '',
+                content:
+                    '컨테이너의 생성과 실행을 한 번에 수행해봅시다.\n\n' +
+                    '1. docker run 명령어를 사용하여 hello-world2 이미지로 컨테이너를 생성하고 실행하세요.\n' +
+                    '2. 이 명령어는 create와 start를 연속으로 실행하는 것과 같은 효과입니다.\n' +
+                    '3. 실행 후 터미널에 표시되는 "answer: " 다음에 나오는 값을 입력해주세요.\n\n' +
+                    '힌트: docker run <이미지명> 형식으로 명령어를 작성하세요.',
             },
-            { id: 7, title: 'Container 목록 확인하기', content: '' },
-            { id: 8, title: 'Container 중지하기', content: '' },
-            { id: 9, title: 'Container 삭제하기', content: '' },
+            {
+                id: 7,
+                title: 'Container 목록 확인하기',
+                content:
+                    '실행 중이거나 중지된 모든 컨테이너를 확인해봅시다.\n\n' +
+                    '1. docker ps -a 명령어를 사용하여 모든 컨테이너 목록을 확인하세요.\n' +
+                    '2. 출력된 결과에서 hello-world2 컨테이너의 ID 앞 4자리를 입력하세요.\n\n' +
+                    '힌트: docker ps -a 명령어로 모든 컨테이너를 확인할 수 있습니다.',
+            },
+            {
+                id: 8,
+                title: 'Container 중지하기',
+                content:
+                    '실행 중인 컨테이너를 중지해보겠습니다.\n\n' +
+                    '1. docker stop 명령어를 사용하여 실행 중인 모든 컨테이너를 중지하세요.\n' +
+                    '2. 컨테이너가 중지되면 상태가 Exited로 변경됩니다.\n\n' +
+                    '힌트: docker stop <컨테이너ID> 형식으로 명령어를 작성하세요.\n' +
+                    '힌트: 컨테이너ID 전부 적을 필요는 없습니다.',
+            },
+            {
+                id: 9,
+                title: 'Container 삭제하기',
+                content:
+                    '더 이상 필요하지 않은 컨테이너를 삭제해봅시다.\n\n' +
+                    '1. docker rm 명령어를 사용하여 모든 컨테이너를 삭제하세요.\n' +
+                    '2. 컨테이너가 실행 중인 경우 먼저 중지한 후 삭제해야 합니다.\n' +
+                    '3. 삭제 후 docker ps -a로 확인해보세요.\n\n' +
+                    '힌트: docker rm <컨테이너ID> 형식으로 명령어를 작성하세요.\n' +
+                    '힌트: 컨테이너ID 전부 적을 필요는 없습니다.',
+            },
         ];
 
         await this.quizRepository.insert(quizzeData);
@@ -93,13 +149,32 @@ export class QuizService {
     ) {
         switch (quizId) {
             case 1:
+                // 이미지 가져오기
                 return this.submitQuiz1(sessionId, containerPort, level);
+            case 2:
+                //이미지 목록 확인하기
+                return this.submitQuiz2(sessionId, containerPort, userAnswer, level);
+            case 3:
+                //이미지 삭제 하기
+                return this.submitQuiz3(sessionId, containerPort, level);
             case 4:
                 // 컨테이너 생성하기
                 return this.submitQuiz4(sessionId, containerPort, level);
             case 5:
                 //컨테이너 실행하기
                 return this.submitQuiz5(sessionId, userAnswer, level);
+            case 6:
+                //컨테이너 생성및 실행하기
+                return this.submitQuiz6(sessionId, userAnswer, level);
+            case 7:
+                //컨테이너 목록 확인하기
+                return this.submitQuiz7(sessionId, containerPort, userAnswer, level);
+            case 8:
+                //컨테이너 중지하기
+                return this.submitQuiz8(sessionId, containerPort, level);
+            case 9:
+                //컨테이너 삭제하기
+                return this.submitQuiz9(sessionId, containerPort, level);
             default:
                 throw new MethodNotAllowedException(`${quizId}번 퀴즈는 아직 채점할 수 없습니다.`);
         }
@@ -119,11 +194,51 @@ export class QuizService {
         }
     }
 
-    private async submitQuiz4(sessionId: string, containerPort: string, level: number) {
+    private async submitQuiz2(
+        sessionId: string,
+        containerPort: string,
+        userAnswer: string | undefined,
+        level: number
+    ) {
+        // TODO: 로컬레지스트리 사용시 이미지ID 동일한지 확인 필요
+        // 동일하면 로직 수정 필요
+        if (userAnswer?.length !== 4) {
+            return { quizResult: 'FAIL' };
+        }
+
+        const imageIdPrefix = 'sha256:';
+        const images = await this.sandboxService.getUserImages(containerPort);
+        const result = images.filter((image: Record<string, any>) =>
+            image.Id.startsWith(`${imageIdPrefix}${userAnswer}`)
+        );
+
+        if (result.length > 0) {
+            this.updateLevel(sessionId, level, 3);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz3(sessionId: string, containerPort: string, level: number) {
         const validImages = ['hello-world'];
+        const images = await this.sandboxService.getUserImages(containerPort);
+        const result = images.filter((image: Record<string, any>) =>
+            validImages.includes(image.RepoTags[0]?.split(':')[0])
+        );
+        if (result.length === 0) {
+            this.updateLevel(sessionId, level, 4);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz4(sessionId: string, containerPort: string, level: number) {
+        const validImage = ['hello-world'];
         const containers = await this.sandboxService.getUserContainers(containerPort);
         const result = containers.filter((container: Record<string, any>) =>
-            validImages.includes(container.Image)
+            validImage.includes(container.Image)
         );
         if (result.length > 0) {
             this.updateLevel(sessionId, level, 5);
@@ -138,6 +253,69 @@ export class QuizService {
 
         if (userAnswer === answer) {
             this.updateLevel(sessionId, level, 6);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz6(sessionId: string, userAnswer: string | undefined, level: number) {
+        // TODO: 커스텀 이미지 만들고 answer 수정해야함
+        const answer = 'hello-world';
+
+        if (userAnswer === answer) {
+            this.updateLevel(sessionId, level, 7);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz7(
+        sessionId: string,
+        containerPort: string,
+        userAnswer: string | undefined,
+        level: number
+    ) {
+        if (userAnswer?.length !== 4) {
+            return { quizResult: 'FAIL' };
+        }
+
+        const containers = await this.sandboxService.getUserContainers(containerPort);
+        const result = containers.filter((container: Record<string, any>) =>
+            container.Id.startsWith(userAnswer)
+        );
+
+        if (result.length > 0) {
+            this.updateLevel(sessionId, level, 8);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz8(sessionId: string, containerPort: string, level: number) {
+        const containers = await this.sandboxService.getUserContainers(containerPort);
+        if (containers.length === 0) {
+            return { quizResult: 'FAIL' };
+        }
+
+        const result = containers.every(
+            (container: Record<string, any>) => container.State === 'exited'
+        );
+        if (result) {
+            this.updateLevel(sessionId, level, 9);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz9(sessionId: string, containerPort: string, level: number) {
+        const containers = await this.sandboxService.getUserContainers(containerPort);
+
+        if (containers.length === 0) {
+            this.updateLevel(sessionId, level, 10);
             return { quizResult: 'SUCCESS' };
         } else {
             return { quizResult: 'FAIL' };
