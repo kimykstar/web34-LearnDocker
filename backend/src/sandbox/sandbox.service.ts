@@ -5,6 +5,8 @@ import { requestDockerCommand } from './exec.api';
 import { Container, ContainerData, Image, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
+import { formatAxiosError } from '../common/exception/axios-formatter';
+import { isAxiosError } from 'axios';
 
 @Injectable()
 export class SandboxService {
@@ -55,7 +57,9 @@ export class SandboxService {
             const containers = this.parseContainersV2(containerResponse);
             return { images, containers };
         } catch (error) {
-            this.logger.error(error);
+            if (isAxiosError(error)) {
+                this.logger.error(formatAxiosError(error));
+            }
             return { images: [], containers: [] };
         }
     }
@@ -155,12 +159,13 @@ export class SandboxService {
 
         const newSessionId = randomUUID();
         this.cacheService.set(newSessionId, {
+            sessionId: newSessionId,
             containerId,
             containerPort,
             renew: false,
             startTime: new Date(),
-            // TODO: 현재 테스트를 위해 레벨을 최대로 설정 중
-            level: 9,
+            // TODO: 현재 테스트를 위해 레벨을 임의로 조정중
+            level: 5,
         });
 
         this.logger.log(

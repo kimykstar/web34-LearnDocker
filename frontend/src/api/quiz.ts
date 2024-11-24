@@ -3,6 +3,7 @@ import { Quiz, QuizResult } from '../types/quiz';
 import { Visualization } from '../types/visualization';
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
+import { CUSTOM_QUIZZES } from '../constant/quiz';
 
 const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
     if (axios.isAxiosError(error)) {
@@ -49,7 +50,36 @@ export const createHostContainer = async (navigate: NavigateFunction) => {
     }
 };
 
-export const requestSubmitResult = async (quizNumber: number, navigate: NavigateFunction) => {
+export const requestSubmitResult = async (
+    quizNumber: number,
+    userAnswer: string,
+    navigate: NavigateFunction
+) => {
+    if (CUSTOM_QUIZZES.includes(quizNumber)) {
+        return requestCustomQuizResult(quizNumber, userAnswer, navigate);
+    } else {
+        return requestDockerQuizResult(quizNumber, navigate);
+    }
+};
+
+const requestCustomQuizResult = async (
+    quizNumber: number,
+    userAnswer: string,
+    navigate: NavigateFunction
+) => {
+    try {
+        const response = await axios.get<QuizResult>(`/api/quiz/${quizNumber}/submit`, {
+            params: {
+                userAnswer,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
+};
+
+const requestDockerQuizResult = async (quizNumber: number, navigate: NavigateFunction) => {
     try {
         const response = await axios.get<QuizResult>(`/api/quiz/${quizNumber}/submit`);
         return response.data;

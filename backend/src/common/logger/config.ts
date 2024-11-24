@@ -4,7 +4,7 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 
 const productionFormat = winston.format.combine(
     winston.format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss',
+        format: 'YY-MM-DD HH:mm:ss',
     }),
     winston.format.ms(),
     nestWinstonModuleUtilities.format.nestLike('SandBoxProxy', {
@@ -14,7 +14,7 @@ const productionFormat = winston.format.combine(
 );
 const developmentFormat = winston.format.combine(
     winston.format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss',
+        format: 'YY-MM-DD HH:mm:ss',
     }),
     winston.format.ms(),
     nestWinstonModuleUtilities.format.nestLike('SandBoxProxy', {
@@ -29,22 +29,23 @@ const productionTransports = [
         level: 'info',
         dirname: 'logs/log',
         filename: '%DATE%.log',
-        datePattern: 'YYYY-MM-DD',
+        datePattern: 'YY-MM-DD_HH',
         zippedArchive: false,
         maxSize: '20m',
-        frequency: '1d',
+        frequency: '3h',
         maxFiles: '14d',
         format: productionFormat,
+        
     }),
     // Error 레벨 로그
     new DailyRotateFile({
         level: 'error',
         dirname: 'logs/error',
         filename: '%DATE%.log',
-        datePattern: 'YYYY-MM-DD',
+        datePattern: 'YY-MM-DD_HH',
         zippedArchive: false,
         maxSize: '20m',
-        frequency: '1d',
+        frequency: '3h',
         maxFiles: '14d',
         format: productionFormat,
     }),

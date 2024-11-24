@@ -7,6 +7,7 @@ import {
     PreviousProblemUnsolvedExeption,
 } from '../common/exception/errors';
 import { SandboxService } from 'src/sandbox/sandbox.service';
+import { CacheService } from 'src/common/cache/cache.service';
 
 @Injectable()
 export class QuizService {
@@ -14,7 +15,8 @@ export class QuizService {
     constructor(
         @InjectRepository(Quiz)
         private readonly quizRepository: Repository<Quiz>,
-        private readonly sandboxService: SandboxService
+        private readonly sandboxService: SandboxService,
+        private readonly cacheService: CacheService
     ) {
         this.initializeQuizData();
     }
@@ -76,40 +78,66 @@ export class QuizService {
         }
     }
 
-    async submitQuiz(quizId: number, containerPort: string) {
+    updateLevel(sessionId: string, prevLevel: number, newLevel: number) {
+        if (prevLevel < newLevel) {
+            this.cacheService.updateLevel(sessionId, newLevel);
+        }
+    }
+
+    async submitQuiz(
+        quizId: number,
+        sessionId: string,
+        containerPort: string,
+        level: number,
+        userAnswer?: string
+    ) {
         switch (quizId) {
             case 1:
-                return this.submitQuiz1(containerPort);
+                return this.submitQuiz1(sessionId, containerPort, level);
             case 4:
                 // 컨테이너 생성하기
-                return this.submitQuiz4(containerPort);
-            // case 5:
-            // 컨테이너 실행하기
+                return this.submitQuiz4(sessionId, containerPort, level);
+            case 5:
+                //컨테이너 실행하기
+                return this.submitQuiz5(sessionId, userAnswer, level);
             default:
                 throw new MethodNotAllowedException(`${quizId}번 퀴즈는 아직 채점할 수 없습니다.`);
         }
     }
 
-    private async submitQuiz1(containerPort: string) {
+    private async submitQuiz1(sessionId: string, containerPort: string, level: number) {
         const validImages = ['hello-world'];
         const images = await this.sandboxService.getUserImages(containerPort);
         const result = images.filter((image: Record<string, any>) =>
             validImages.includes(image.RepoTags[0]?.split(':')[0])
         );
         if (result.length > 0) {
+            this.updateLevel(sessionId, level, 2);
             return { quizResult: 'SUCCESS' };
         } else {
             return { quizResult: 'FAIL' };
         }
     }
 
-    private async submitQuiz4(containerPort: string) {
+    private async submitQuiz4(sessionId: string, containerPort: string, level: number) {
         const validImages = ['hello-world'];
         const containers = await this.sandboxService.getUserContainers(containerPort);
         const result = containers.filter((container: Record<string, any>) =>
             validImages.includes(container.Image)
         );
         if (result.length > 0) {
+            this.updateLevel(sessionId, level, 5);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz5(sessionId: string, userAnswer: string | undefined, level: number) {
+        const answer = 'docker start';
+
+        if (userAnswer === answer) {
+            this.updateLevel(sessionId, level, 6);
             return { quizResult: 'SUCCESS' };
         } else {
             return { quizResult: 'FAIL' };
