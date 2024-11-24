@@ -5,7 +5,7 @@ import { createTerminal } from '../../utils/terminalUtils';
 import '@xterm/xterm/css/xterm.css';
 
 type XTerminalProps = {
-    updateVisualizationData: () => Promise<void>;
+    updateVisualizationData: (command: string) => Promise<void>;
 };
 
 const XTerminal = ({ updateVisualizationData }: XTerminalProps) => {

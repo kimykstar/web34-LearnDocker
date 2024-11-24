@@ -21,7 +21,8 @@ const useDockerVisualization = () => {
         isVisible: false,
         key: 0,
     });
-
+    const STATE_CHANGE_COMMAND_REGEX =
+        /^docker\s+(run|create|start|stop|pull|rmi|rm|restart|pause|unpause|rename|attach|tag|build|load|commit|kill)(\s|$)/;
     const colors = ['#000000', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
 
     const getNotUsedColor = (images: Image[]) => {
@@ -31,7 +32,6 @@ const useDockerVisualization = () => {
         return notUsedColors[0];
     };
 
-    //이전 Image상태를 가져와야 함..
     const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
         return newImages.map((newImage) => {
             const prevImage = prevImages.find((img) => img.id === newImage.id);
@@ -67,7 +67,7 @@ const useDockerVisualization = () => {
     };
 
     // callback function for updating image and container visualization
-    const handleTerminalEnterCallback = (data: Visualization) => {
+    const handleTerminalEnterCallback = (data: Visualization, command: string) => {
         const { images: newImages, containers: newContainers } = data;
         setImages((currentImages) => {
             if (currentImages.length === newImages.length) {
@@ -96,10 +96,12 @@ const useDockerVisualization = () => {
                     setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STOP);
                     const elements = setColorToElements(newImages, newContainers);
                     setPendingContainers(elements.initContainers);
-                    setAnimation((prev) => ({
-                        isVisible: true,
-                        key: prev.key + 1,
-                    }));
+                    if (command.match(STATE_CHANGE_COMMAND_REGEX))
+                        setAnimation((prev) => ({
+                            isVisible: true,
+                            key: prev.key + 1,
+                        }));
+                    else setContainers(elements.initContainers);
                 }
                 return currentContainers;
             }
@@ -148,10 +150,10 @@ const useDockerVisualization = () => {
         return result.length > 0 ? true : false;
     };
 
-    const updateVisualizationData = async () => {
+    const updateVisualizationData = async (command: string) => {
         const data = await requestVisualizationData(navigate);
         if (!data) return;
-        handleTerminalEnterCallback(data);
+        handleTerminalEnterCallback(data, command);
     };
 
     const setInitVisualization = async () => {

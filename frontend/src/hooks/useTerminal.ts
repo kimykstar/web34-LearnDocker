@@ -9,7 +9,7 @@ import {
 } from '../utils/terminalUtils';
 import { ENTER_KEY, BACKSPACE_KEY } from '../constant/xterm';
 
-export function useTerminal(updateVisualizationData: () => Promise<void>) {
+export function useTerminal(updateVisualizationData: (command: string) => Promise<void>) {
     const navigate = useNavigate();
     const currentLineRef = useRef<string>('');
 
