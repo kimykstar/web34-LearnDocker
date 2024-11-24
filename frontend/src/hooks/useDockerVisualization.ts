@@ -93,7 +93,7 @@ const useDockerVisualization = () => {
         setContainers((currentContainers) => {
             if (currentContainers.length === newContainers.length) {
                 if (isChangedContainerStatus(currentContainers, newContainers)) {
-                    setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STOP);
+                    setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED);
                     const elements = setColorToElements(newImages, newContainers);
                     setPendingContainers(elements.initContainers);
                     if (command.match(STATE_CHANGE_COMMAND_REGEX))
@@ -131,20 +131,20 @@ const useDockerVisualization = () => {
         });
     };
 
-const isChangedContainerStatus = (
-    prevContainers: Container[],
-    currentContainers: Container[]
-) => {
-    return prevContainers.some(prevContainer => {
-        const matchedContainer = currentContainers.find(
-            currentContainer => currentContainer.id === prevContainer.id
-        );
-        if (!matchedContainer) {
-            throw new Error('isChangedContainerStatus함수 undefined 에러');
-        }
-        return matchedContainer.status !== prevContainer.status;
-    });
-};
+    const isChangedContainerStatus = (
+        prevContainers: Container[],
+        currentContainers: Container[]
+    ) => {
+        return prevContainers.some((prevContainer) => {
+            const matchedContainer = currentContainers.find(
+                (currentContainer) => currentContainer.id === prevContainer.id
+            );
+            if (!matchedContainer) {
+                throw new Error('isChangedContainerStatus함수 undefined 에러');
+            }
+            return matchedContainer.status !== prevContainer.status;
+        });
+    };
     const updateVisualizationData = async (command: string) => {
         const data = await requestVisualizationData(navigate);
         if (!data) return;
@@ -169,7 +169,7 @@ const isChangedContainerStatus = (
         if (
             dockerOperation === DOCKER_OPERATIONS.CONTAINER_CREATE ||
             dockerOperation === DOCKER_OPERATIONS.CONTAINER_DELETE ||
-            dockerOperation === DOCKER_OPERATIONS.CONTAINER_STOP
+            dockerOperation === DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED
         ) {
             setContainers(pendingContainers);
         }

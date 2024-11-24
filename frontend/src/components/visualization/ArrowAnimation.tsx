@@ -163,7 +163,7 @@ export const ArrowAnimation = ({ isVisible, onComplete, dockerOperation }: Anima
                     />
                 </>
             );
-        case DOCKER_OPERATIONS.CONTAINER_STOP:
+        case DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED:
             return (
                 <>
                     <Arrow
