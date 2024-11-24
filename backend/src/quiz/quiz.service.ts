@@ -42,7 +42,7 @@ export class QuizService {
                 content:
                     '로컬 시스템에 저장된 Docker 이미지들을 확인해볼까요?\n\n' +
                     '1. docker images 명령어를 사용하여 현재 시스템에 있는 모든 Docker 이미지를 조회하세요.\n' +
-                    '2. 명령어 실행 후 출력된 결과에서 hello-world 이미지의 Image ID 앞 4자리를 입력하세요.\n\n' +
+                    '2. 명령어 실행 후 출력된 결과에서 hello-world 이미지의 Image ID 최소 앞 4자리를 입력하세요.\n\n' +
                     '힌트: 이미지 목록을 확인하는 명령어는 별도의 인자가 필요하지 않습니다.',
             },
             {
@@ -91,7 +91,7 @@ export class QuizService {
                 content:
                     '실행 중이거나 중지된 모든 컨테이너를 확인해봅시다.\n\n' +
                     '1. docker ps -a 명령어를 사용하여 모든 컨테이너 목록을 확인하세요.\n' +
-                    '2. 출력된 결과에서 hello-world2 컨테이너의 ID 앞 4자리를 입력하세요.\n\n' +
+                    '2. 출력된 결과에서 hello-world2 컨테이너의 ID 최소 앞 4자리를 입력하세요.\n\n' +
                     '힌트: docker ps -a 명령어로 모든 컨테이너를 확인할 수 있습니다.',
             },
             {
@@ -202,7 +202,7 @@ export class QuizService {
     ) {
         // TODO: 로컬레지스트리 사용시 이미지ID 동일한지 확인 필요
         // 동일하면 로직 수정 필요
-        if (userAnswer?.length !== 4) {
+        if (!userAnswer || userAnswer.length < 4) {
             return { quizResult: 'FAIL' };
         }
 
@@ -277,7 +277,7 @@ export class QuizService {
         userAnswer: string | undefined,
         level: number
     ) {
-        if (userAnswer?.length !== 4) {
+        if (!userAnswer || userAnswer.length < 4) {
             return { quizResult: 'FAIL' };
         }
 
