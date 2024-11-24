@@ -9,6 +9,10 @@ const STATUS_COLORS = {
     [DOCKER_CONTAINER_STATUS.EXITED]: 'bg-Stopped-Status-Color',
     [DOCKER_CONTAINER_STATUS.RESTARTING]: 'bg-Restarting-Status-Color',
     [DOCKER_CONTAINER_STATUS.RUNNING]: 'bg-Running-Status-Color',
+    [DOCKER_CONTAINER_STATUS.CREATED]: 'bg-Stopped-Status-Color',
+    [DOCKER_CONTAINER_STATUS.PAUSED]: 'bg-Stopped-Status-Color',
+    [DOCKER_CONTAINER_STATUS.STOPPED]: 'bg-Stopped-Status-Color',
+    [DOCKER_CONTAINER_STATUS.DEAD]: 'bg-Stopped-Status-Color',
 };
 
 const isContainer = (element: Image | Container): element is Container => {
