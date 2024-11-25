@@ -48,19 +48,19 @@ const QuizButtons = ({ quizId, answer }: QuizButtonsProps) => {
     };
 
     const handleNextButtonClick = async () => {
-        const isAccessable = await requestQuizAccessability(quizId);
-        if (!isAccessable) {
-            alert('아직 풀 수 없습니다');
-            return;
-        }
-
         if (quizId > 8) {
             alert('마지막 문제입니다');
             return;
         }
-
+        
         if (quizId === 3) {
             navigate('/what-is-docker-container');
+            return;
+        }
+
+        const isAccessable = await requestQuizAccessability(quizId + 1);
+        if (!isAccessable) {
+            alert('아직 풀 수 없습니다');
             return;
         }
 
