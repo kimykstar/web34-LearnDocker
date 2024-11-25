@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { requestVisualizationData } from '../api/quiz';
 import {
     Image,
@@ -21,9 +21,11 @@ const useDockerVisualization = () => {
         isVisible: false,
         key: 0,
     });
+
     const STATE_CHANGE_COMMAND_REGEX =
         /^docker\s+(run|create|start|stop|pull|rmi|rm|restart|pause|unpause|rename|attach|tag|build|load|commit|kill)(\s|$)/;
-    const DOCKER_RUN_COMMAND_WITHOUT_IMAGE = /docker\s+run(\s|$)/;
+    const imagesRef = useRef<Image[]>();
+    const containersRef = useRef<Container[]>();
     const colors = ['#000000', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
 
     const getNotUsedColor = (images: Image[]) => {
@@ -66,74 +68,94 @@ const useDockerVisualization = () => {
             };
         });
     };
-    // callback function for updating image and container visualization
+
     const handleTerminalEnterCallback = (data: Visualization, command: string) => {
         const { images: newImages, containers: newContainers } = data;
-        setImages((currentImages) => {
-            if (
-                currentImages.length === newImages.length ||
-                command.match(DOCKER_RUN_COMMAND_WITHOUT_IMAGE)
-            ) {
-                return currentImages;
-            }
-            const operation =
-                currentImages.length < newImages.length
-                    ? DOCKER_OPERATIONS.IMAGE_PULL
-                    : DOCKER_OPERATIONS.IMAGE_DELETE;
+        const prevImages = imagesRef.current as Image[];
+        const prevContainers = containersRef.current as Container[];
+        console.log(command);
+        // image Pull
+        if (
+            newImages.length > prevImages.length &&
+            newContainers.length === prevContainers.length
+        ) {
+            const updatedImages = updateImageColors(newImages, prevImages);
 
-            const updatedImages = updateImageColors(newImages, currentImages);
-
+            imagesRef.current = [...updatedImages];
             setPendingImages(updatedImages);
-            setDockerOperation(operation);
+            setDockerOperation(DOCKER_OPERATIONS.IMAGE_PULL);
             setAnimation((prev) => ({
                 isVisible: true,
                 key: prev.key + 1,
             }));
-            return currentImages;
-        });
+        } else if (newImages.length < prevImages.length) {
+            // docker rmi
+            const updatedImages = updateImageColors(newImages, prevImages);
 
-        setContainers((currentContainers) => {
-            setImages((currentImages) => {
-                if (currentContainers.length === newContainers.length) {
-                    if (isChangedContainerStatus(currentContainers, newContainers)) {
-                        setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED);
-                        const coloredContainers = updateContainerColors(
-                            currentImages,
-                            newContainers
-                        );
-                        setPendingContainers(coloredContainers);
-                        if (command.match(STATE_CHANGE_COMMAND_REGEX))
-                            setAnimation((prev) => ({
-                                isVisible: true,
-                                key: prev.key + 1,
-                            }));
-                        else setContainers(coloredContainers);
-                    }
-                    return currentImages;
-                }
-                let operation = null;
-                if (
-                    currentContainers.length < newContainers.length &&
-                    currentImages.length < newImages.length
-                ) {
-                    const elements = setColorToElements(currentImages, newImages, newContainers);
-                    operation = DOCKER_OPERATIONS.CONTAINER_RUN;
-                    setPendingImages(elements.initImages);
-                } else if (currentContainers.length < newContainers.length)
-                    operation = DOCKER_OPERATIONS.CONTAINER_CREATE;
-                else operation = DOCKER_OPERATIONS.CONTAINER_DELETE;
-                const result = setColorToElements(currentImages, newImages, newContainers);
-                setPendingContainers(result.initContainers);
-                setDockerOperation(operation);
+            imagesRef.current = [...updatedImages];
+            setPendingImages(updatedImages);
+            setDockerOperation(DOCKER_OPERATIONS.IMAGE_DELETE);
+            setAnimation((prev) => ({
+                isVisible: true,
+                key: prev.key + 1,
+            }));
+        } else if (
+            prevImages.length === newImages.length &&
+            prevContainers.length < newContainers.length
+        ) {
+            // docker run의 경우(이미지가 있을 때)
+            const updatedContainers = updateContainerColors(prevImages, newContainers);
+
+            containersRef.current = [...updatedContainers];
+            setPendingContainers(updatedContainers);
+            setDockerOperation(DOCKER_OPERATIONS.CONTAINER_CREATE);
+            setAnimation((prev) => ({
+                isVisible: true,
+                key: prev.key + 1,
+            }));
+        } else if (
+            // docker run (이미지가 없을 때)
+            prevImages.length < newImages.length &&
+            prevContainers.length < newContainers.length
+        ) {
+            const { initImages, initContainers } = setColorToElements(
+                prevImages,
+                newImages,
+                newContainers
+            );
+
+            imagesRef.current = [...initImages];
+            containersRef.current = [...initContainers];
+            setPendingImages(initImages);
+            setPendingContainers(initContainers);
+            setDockerOperation(DOCKER_OPERATIONS.CONTAINER_RUN);
+            setAnimation((prev) => ({
+                isVisible: true,
+                key: prev.key + 1,
+            }));
+        } else if (prevContainers.length > newContainers.length) {
+            // docker rm의 경우
+            const updatedContainers = updateContainerColors(prevImages, newContainers);
+
+            containersRef.current = [...updatedContainers];
+            setPendingContainers(updatedContainers);
+            setDockerOperation(DOCKER_OPERATIONS.CONTAINER_DELETE);
+            setAnimation((prev) => ({
+                isVisible: true,
+                key: prev.key + 1,
+            }));
+        } else if (isChangedContainerStatus(prevContainers, newContainers)) {
+            const updatedContainers = updateContainerColors(prevImages, newContainers);
+            containersRef.current = [...updatedContainers];
+            setPendingContainers(updatedContainers);
+            setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED);
+            if (command.match(STATE_CHANGE_COMMAND_REGEX))
                 setAnimation((prev) => ({
                     isVisible: true,
                     key: prev.key + 1,
                 }));
-                return currentImages;
-            });
-
-            return currentContainers;
-        });
+            else setContainers(updatedContainers);
+        }
     };
 
     const isChangedContainerStatus = (
@@ -161,6 +183,8 @@ const useDockerVisualization = () => {
         if (!data) return;
 
         const { initImages, initContainers } = setColorToElements([], data.images, data.containers);
+        imagesRef.current = [...initImages];
+        containersRef.current = [...initContainers];
         setImages(initImages);
         setContainers(initContainers);
     };
@@ -195,6 +219,7 @@ const useDockerVisualization = () => {
         dockerOperation,
         handleAnimationComplete,
         updateVisualizationData,
+        handleTerminalEnterCallback,
         setInitVisualization,
     };
 };
