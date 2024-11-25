@@ -48,7 +48,7 @@ export const handleEnter = async (
         return;
     }
 
-    const commandResponse = await requestCommandResult(command, navigate, handleCommandError, term);
+    const commandResponse = await requestCommandResult(command, navigate, term, handleCommandError);
     term.write('\r\n' + commandResponse);
     await updateVisualization();
 
