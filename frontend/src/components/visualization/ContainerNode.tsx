@@ -48,14 +48,14 @@ const ContainerNode = ({
                         key={element.id}
                     >
                         {isContainer(element) && (
-                            <span
-                                className={`absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full ${STATUS_COLORS[element.status]} opacity-75 animate-ping`}
-                            ></span>
-                        )}
-                        {isContainer(element) && (
-                            <span
-                                className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
-                            ></span>
+                            <>
+                                <span
+                                    className={`absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full ${STATUS_COLORS[element.status]} opacity-75 animate-ping`}
+                                ></span>
+                                <span
+                                    className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
+                                ></span>
+                            </>
                         )}
                         {element.name}
                     </div>
