@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
+import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
+import { SubmitStatus } from '../../types/quiz';
 
 type QuizButtonsProps = {
     quizId: number;
@@ -8,20 +10,18 @@ type QuizButtonsProps = {
 };
 
 const QuizButtons = ({ quizId, answer }: QuizButtonsProps) => {
-    const [submitResult, setSubmitResult] = useState('default');
+    const [submitResult, setSubmitResult] = useState<SubmitStatus>('FAIL');
+    const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmitButtonClick = async () => {
         const submitResponse = await requestSubmitResult(quizId, answer, navigate);
-        if (!submitResponse) {
+        if (submitResponse == null) {
             return;
         }
 
-        if (submitResponse.quizResult === 'SUCCESS') {
-            setSubmitResult('SUCCESS');
-        } else {
-            setSubmitResult('FAIL');
-        }
+        setSubmitResult(submitResponse.quizResult);
+        setOpenModal(true);
 
         // TODO: submitResult의 상태에 따라 모달창을 띄워줘야 한다.
         // 아래 console.log는 테스트 용도, 나중에 삭제해야 함
@@ -30,7 +30,6 @@ const QuizButtons = ({ quizId, answer }: QuizButtonsProps) => {
         // default가 나오는 이유는 setState가 비동기적으로 실행 되기 때문입니다.
         // useEffect를 사용하거나 바뀐값을 변수에 담고 변수값을 console.log로 보여줘도 될 것 같아요
         // 일단 아직 결정된 사항이 없어서 주석에 적기만 하겠습니다.
-        console.log(submitResult);
     };
 
     const handlePrevButtonClick = async () => {
@@ -52,7 +51,7 @@ const QuizButtons = ({ quizId, answer }: QuizButtonsProps) => {
             alert('마지막 문제입니다');
             return;
         }
-        
+
         if (quizId === 3) {
             navigate('/what-is-docker-container');
             return;
@@ -87,6 +86,12 @@ const QuizButtons = ({ quizId, answer }: QuizButtonsProps) => {
             >
                 채점하기
             </button>
+            <QuizSubmitResultModal
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                submitResult={submitResult}
+                handleNextButtonClick={handleNextButtonClick}
+            ></QuizSubmitResultModal>
         </section>
     );
 };
