@@ -48,10 +48,7 @@ export const updateContainerColors = (prevElements: Visualization, newElements: 
     });
 };
 
-export const isChangedContainerStatus = (
-    prevElements: Visualization,
-    newElements: Visualization
-) => {
+const isChangedContainerStatus = (prevElements: Visualization, newElements: Visualization) => {
     const { containers: prevContainers } = prevElements;
     const { containers: currentContainers } = newElements;
     return prevContainers.some((prevContainer) => {
