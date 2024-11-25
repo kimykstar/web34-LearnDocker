@@ -1,6 +1,8 @@
+import flowbite from 'flowbite-react/tailwind';
+
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ['./index.html', './src/**/*.{js,jsx,tsx,ts}'],
+    content: ['./index.html', './src/**/*.{js,jsx,tsx,ts}', flowbite.content()],
     theme: {
         extend: {
             fontFamily: {
@@ -45,5 +47,5 @@ export default {
             showAndHideFourth: 'showAndHideFourth 2s linear forwards',
         },
     },
-    plugins: [],
+    plugins: [flowbite.plugin()],
 };
