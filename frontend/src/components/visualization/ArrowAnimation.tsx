@@ -137,7 +137,6 @@ export const ArrowAnimation = ({ isVisible, onComplete, dockerOperation }: Anima
                         gridColumn={6}
                         gridRow={4}
                         isVisible={isVisible}
-                        onAnimationEnd={onComplete}
                     />
                     <Arrow
                         className={isVisible ? 'animate-showAndHideFifth' : ''}

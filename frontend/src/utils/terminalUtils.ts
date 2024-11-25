@@ -50,10 +50,8 @@ export const handleEnter = async (
     }
 
     const commandResponse = await requestCommandResult(command, navigate, handleCommandError, term);
-    if (commandResponse) {
-        term.write('\r\n' + commandResponse);
-        await updateVisualization(command);
-    }
+    term.write('\r\n' + commandResponse);
+    await updateVisualization(command);
 
     term.write('\r\n~$ ');
 };

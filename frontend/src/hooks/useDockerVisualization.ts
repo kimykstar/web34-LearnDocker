@@ -23,6 +23,7 @@ const useDockerVisualization = () => {
     });
     const STATE_CHANGE_COMMAND_REGEX =
         /^docker\s+(run|create|start|stop|pull|rmi|rm|restart|pause|unpause|rename|attach|tag|build|load|commit|kill)(\s|$)/;
+    const DOCKER_RUN_COMMAND_WITHOUT_IMAGE = /docker\s+run(\s|$)/;
     const colors = ['#000000', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
 
     const getNotUsedColor = (images: Image[]) => {
@@ -32,8 +33,14 @@ const useDockerVisualization = () => {
         return notUsedColors[0];
     };
 
+    const setColorToElements = (prevImages: Image[], images: Image[], containers: Container[]) => {
+        const initImages = updateImageColors(images, prevImages);
+        const initContainers = updateContainerColors(initImages, containers);
+
+        return { initImages, initContainers };
+    };
+
     const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
-        // prevImages에 할당되지 않은 것들이 여러개인 경우 prevImages를 갱신해나가지 않는다면 색상이 동일하게 적용됨
         return newImages.map((newImage) => {
             const prevImage = prevImages.find((img) => img.id === newImage.id);
             if (prevImage && Object.keys(prevImage).includes('color')) {
@@ -43,17 +50,14 @@ const useDockerVisualization = () => {
                 ...newImage,
                 color: getNotUsedColor(prevImages),
             };
-            // console.log('newData', newData);
             prevImages.push(newData);
             return newData;
         });
     };
 
-    const setColorToElements = (prevImages: Image[], images: Image[], containers: Container[]) => {
-        const initImages = updateImageColors(images, prevImages);
-
-        const initContainers = containers.map((container) => {
-            const image = initImages.find((image) => {
+    const updateContainerColors = (coloredImages: Image[], containers: Container[]) => {
+        return containers.map((container) => {
+            const image = coloredImages.find((image) => {
                 return image.name === container.image;
             });
             return {
@@ -61,19 +65,17 @@ const useDockerVisualization = () => {
                 color: image?.color,
             };
         });
-        return { initImages, initContainers };
     };
-
     // callback function for updating image and container visualization
     const handleTerminalEnterCallback = (data: Visualization, command: string) => {
         const { images: newImages, containers: newContainers } = data;
-        let currentImageList: Image[] = [];
         setImages((currentImages) => {
-            currentImageList = currentImages;
-            if (currentImages.length === newImages.length) {
+            if (
+                currentImages.length === newImages.length ||
+                command.match(DOCKER_RUN_COMMAND_WITHOUT_IMAGE)
+            ) {
                 return currentImages;
             }
-
             const operation =
                 currentImages.length < newImages.length
                     ? DOCKER_OPERATIONS.IMAGE_PULL
@@ -91,33 +93,36 @@ const useDockerVisualization = () => {
         });
 
         setContainers((currentContainers) => {
-            if (currentContainers.length === newContainers.length) {
-                if (isChangedContainerStatus(currentContainers, newContainers)) {
-                    setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED);
-                    const elements = setColorToElements(currentImageList, newImages, newContainers);
-                    setPendingContainers(elements.initContainers);
-                    if (command.match(STATE_CHANGE_COMMAND_REGEX))
-                        setAnimation((prev) => ({
-                            isVisible: true,
-                            key: prev.key + 1,
-                        }));
-                    else setContainers(elements.initContainers);
-                }
-                return currentContainers;
-            }
-
             setImages((currentImages) => {
+                if (currentContainers.length === newContainers.length) {
+                    if (isChangedContainerStatus(currentContainers, newContainers)) {
+                        setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED);
+                        const coloredContainers = updateContainerColors(
+                            currentImages,
+                            newContainers
+                        );
+                        setPendingContainers(coloredContainers);
+                        if (command.match(STATE_CHANGE_COMMAND_REGEX))
+                            setAnimation((prev) => ({
+                                isVisible: true,
+                                key: prev.key + 1,
+                            }));
+                        else setContainers(coloredContainers);
+                    }
+                    return currentImages;
+                }
                 let operation = null;
                 if (
                     currentContainers.length < newContainers.length &&
                     currentImages.length < newImages.length
-                )
+                ) {
+                    const elements = setColorToElements(currentImages, newImages, newContainers);
                     operation = DOCKER_OPERATIONS.CONTAINER_RUN;
-                else if (currentContainers.length < newContainers.length)
+                    setPendingImages(elements.initImages);
+                } else if (currentContainers.length < newContainers.length)
                     operation = DOCKER_OPERATIONS.CONTAINER_CREATE;
                 else operation = DOCKER_OPERATIONS.CONTAINER_DELETE;
-                console.log('container Op-----', operation);
-                const result = setColorToElements(currentImageList, newImages, newContainers);
+                const result = setColorToElements(currentImages, newImages, newContainers);
                 setPendingContainers(result.initContainers);
                 setDockerOperation(operation);
                 setAnimation((prev) => ({
@@ -156,7 +161,6 @@ const useDockerVisualization = () => {
         if (!data) return;
 
         const { initImages, initContainers } = setColorToElements([], data.images, data.containers);
-        console.log(initImages, initContainers);
         setImages(initImages);
         setContainers(initContainers);
     };
