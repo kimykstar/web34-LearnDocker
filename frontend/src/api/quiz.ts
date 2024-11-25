@@ -5,6 +5,7 @@ import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 import { CUSTOM_QUIZZES } from '../constant/quiz';
 import LoadingTerminal from '../utils/LoadingTerminal';
+import { HostStatus } from '../constant/hostStatus';
 
 const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
     if (axios.isAxiosError(error)) {
@@ -83,6 +84,15 @@ const requestCustomQuizResult = async (
 const requestDockerQuizResult = async (quizNumber: number, navigate: NavigateFunction) => {
     try {
         const response = await axios.get<QuizResult>(`/api/quiz/${quizNumber}/submit`);
+        return response.data;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
+};
+
+export const requestHostStatus = async (navigate: NavigateFunction) => {
+    try {
+        const response = await axios.get<HostStatus>(`/api/sandbox/hostStatus`);
         return response.data;
     } catch (error) {
         return handleErrorResponse(error, navigate);
