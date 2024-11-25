@@ -13,7 +13,6 @@ export function createTerminal(container: HTMLElement): Terminal {
     terminal.loadAddon(fitAddon);
     terminal.open(container);
     fitAddon.fit();
-    terminal.write('~$ ');
 
     return terminal;
 }
