@@ -10,8 +10,7 @@ import { Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
-import TextAreaQuizPage from './components/quizpages/TextAreaQuizPage';
-import InputBoxQuizPage from './components/quizpages/InputBoxQuizPage';
+import { QuizPage } from './components/quiz/QuizPage';
 
 const App = () => {
     useEffect(() => {
@@ -19,6 +18,7 @@ const App = () => {
             duration: 500,
         });
     }, []);
+
     return (
         <div className='w-full overflow-x-hidden overflow-y-hidden'>
             <Header />
@@ -27,22 +27,17 @@ const App = () => {
                 <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
                     <Routes>
                         <Route path='/' element={<LandingPage />} />
+
                         <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
                         <Route path='/what-is-docker-image' element={<WhatIsDockerImagePage />} />
-                        <Route path='/quiz/1' element={<TextAreaQuizPage />} />
-                        <Route path='/quiz/2' element={<InputBoxQuizPage />} />
-                        <Route path='/quiz/3' element={<TextAreaQuizPage />} />
                         <Route path='/what-is-docker-container' element={<DockerContainerPage />} />
                         <Route
                             path='/what-is-container-lifecycle'
                             element={<DockerContainerLifeCyclePage />}
                         />
-                        <Route path='/quiz/4' element={<TextAreaQuizPage />} />
-                        <Route path='/quiz/5' element={<InputBoxQuizPage />} />
-                        <Route path='/quiz/6' element={<InputBoxQuizPage />} />
-                        <Route path='/quiz/7' element={<InputBoxQuizPage />} />
-                        <Route path='/quiz/8' element={<TextAreaQuizPage />} />
-                        <Route path='/quiz/9' element={<TextAreaQuizPage />} />
+
+                        <Route path='/quiz/:quizNumber' element={<QuizPage />} />
+
                         <Route path='/error/:id' element={<ErrorPage />} />
                     </Routes>
                 </div>
