@@ -20,8 +20,7 @@ export function createTerminal(container: HTMLElement): Terminal {
 
 const handleClear = (term: Terminal) => {
     term.clear();
-    term.write('\x1b[2K\r');
-    term.write('\r\n~$ ');
+    term.write('\x1b[2K\r~$ ');
 };
 
 export const handleBackspace = (term: Terminal, currentLine: string) => {
