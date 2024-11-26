@@ -5,7 +5,9 @@ import { requestCommandResult } from '../api/quiz';
 export function createTerminal(container: HTMLElement): Terminal {
     const terminal = new Terminal({
         cursorBlink: true,
+        fontFamily: '"Noto Sans Mono", "Noto Sans KR", courier-new, courier, monospace',
         fontSize: 14,
+        fontWeight: '300',
     });
 
     const fitAddon = new FitAddon();
