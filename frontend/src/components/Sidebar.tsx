@@ -3,9 +3,9 @@ import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
 import { SidebarSectionProps } from '../types/sidebar';
-import { Timer } from './Timer';
 import { requestExpriationTime } from '../api/timer';
 import { ExpirationTime } from '../types/timer';
+import TimerArea from './TimerArea';
 
 const links = [
     { title: 'Home', path: '/' },
@@ -75,6 +75,7 @@ const Sidebar = () => {
         };
         fetchTime();
     }, []);
+
     return (
         <nav className='fixed h-[calc(100vh-4rem)] w-[17rem] bg-gray-100 mt-16 flex flex-col justify-between'>
             <div className='flex-grow'>
@@ -89,7 +90,11 @@ const Sidebar = () => {
                 <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
             </div>
-            {maxAge ? <Timer expirationTime={maxAge} /> : <StartButton setMaxAge={setMaxAge} />}
+            {maxAge ? (
+                <TimerArea expirationTime={maxAge} setMaxAge={setMaxAge} />
+            ) : (
+                <StartButton setMaxAge={setMaxAge} />
+            )}
         </nav>
     );
 };

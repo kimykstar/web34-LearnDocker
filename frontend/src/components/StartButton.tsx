@@ -36,7 +36,7 @@ const StartButton = (props: StartButtonProps) => {
                         <span>loading</span>
                     </>
                 ) : (
-                    '시작하기'
+                    '학습 시작하기'
                 )}
             </button>
         </div>
