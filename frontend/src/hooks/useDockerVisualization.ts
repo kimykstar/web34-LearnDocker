@@ -139,9 +139,9 @@ const useDockerVisualization = () => {
 
     return {
         elements,
-        animation,
+        animationState: animation,
         dockerOperation,
-        handleAnimationComplete,
+        onAnimationComplete: handleAnimationComplete,
         updateVisualizationData,
         handleTerminalEnterCallback,
         setInitVisualization,

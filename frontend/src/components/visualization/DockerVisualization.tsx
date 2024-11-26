@@ -6,11 +6,11 @@ import { ArrowAnimation } from './ArrowAnimation';
 
 const DockerVisualization = ({
     animationState,
-    containers,
-    images,
+    elements,
     dockerOperation,
     onAnimationComplete,
 }: DockerVisualizationProps) => {
+    const { images, containers } = elements;
     const initBaseNodes = [
         {
             label: 'client',

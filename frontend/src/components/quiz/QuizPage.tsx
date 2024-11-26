@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
-import { requestQuizData } from '../../api/quiz';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DockerVisualization from '../visualization/DockerVisualization';
-import { Quiz } from '../../types/quiz';
 import QuizDescription from '../quiz/QuizDescription';
 import XTerminal from '../quiz/XTerminal';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
-import QuizSubmitArea from '../quiz/QuizSubmitArea';
+import { QuizSubmitArea } from './QuizSubmitArea';
+import { CUSTOM_QUIZZES } from '../../constant/quiz';
+import { useQuizData } from '../../hooks/useQuizData';
 import { HostStatus, HOST_STATUS } from '../../constant/hostStatus';
 import { requestHostStatus } from '../../api/quiz';
 
@@ -14,21 +15,15 @@ type Props = {
     showAlert: (message: string) => void;
 };
 
-const InputBoxQuizPage = ({ showAlert }: Props) => {
+export const QuizPage = ({ showAlert }: Props) => {
     const navigate = useNavigate();
-    const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
-    const [quizData, setQuizData] = useState<Quiz | null>(null);
+    const params = useParams<{ quizNumber: string }>();
+    const quizNumber = params.quizNumber ?? '';
+    const { title, content } = useQuizData(quizNumber);
     const [hostStatus, setHostStatus] = useState<HostStatus>(HOST_STATUS.STARTING);
     const pollingRef = useRef<boolean>(true);
     const pollingIntervalRef = useRef<number | null>(null);
-    const {
-        elements,
-        animation,
-        dockerOperation,
-        updateVisualizationData,
-        handleAnimationComplete,
-        setInitVisualization,
-    } = useDockerVisualization();
+    const visualizationProps = useDockerVisualization();
 
     const checkHostStatus = async () => {
         const response = await requestHostStatus(navigate);
@@ -48,25 +43,17 @@ const InputBoxQuizPage = ({ showAlert }: Props) => {
     };
 
     useEffect(() => {
-        const fetchQuizData = async () => {
-            const data = await requestQuizData(quizNum, navigate);
-
-            if (!data) {
-                return;
-            }
-
-            setQuizData(data);
-
+        const pollingHostStatus = async () => {
             await checkHostStatus();
 
             if (pollingRef.current) {
                 pollingIntervalRef.current = setInterval(checkHostStatus, 1000);
             } else {
-                setInitVisualization();
+                visualizationProps.setInitVisualization();
             }
         };
 
-        fetchQuizData();
+        pollingHostStatus();
 
         return () => {
             if (pollingIntervalRef.current) {
@@ -76,23 +63,20 @@ const InputBoxQuizPage = ({ showAlert }: Props) => {
         };
     }, [navigate]);
 
+    const isCustomQuiz = CUSTOM_QUIZZES.includes(+quizNumber);
+
     return (
         <div className='w-[calc(100vw-17rem)]'>
-            <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{quizData?.title}</h1>
+            <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{title}</h1>
             <section className='flex h-1/2'>
-                <QuizDescription content={quizData?.content} />
-                <DockerVisualization
-                    animationState={animation}
-                    dockerOperation={dockerOperation}
-                    images={elements.images}
-                    containers={elements.containers}
-                    onAnimationComplete={handleAnimationComplete}
-                />
+                <QuizDescription content={content} />
+                <DockerVisualization {...visualizationProps} />
             </section>
-            <XTerminal updateVisualizationData={updateVisualizationData} hostStatus={hostStatus} />
-            <QuizSubmitArea quizId={+quizNum} showAlert={showAlert} />
+            <XTerminal
+                updateVisualizationData={visualizationProps.updateVisualizationData}
+                hostStatus={hostStatus}
+            />
+            <QuizSubmitArea quizId={+quizNumber} showInput={isCustomQuiz} showAlert={showAlert} />
         </div>
     );
 };
-
-export default InputBoxQuizPage;
