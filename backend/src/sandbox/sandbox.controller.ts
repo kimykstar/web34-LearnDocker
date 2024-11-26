@@ -57,6 +57,14 @@ export class SandboxController {
         return { endDate };
     }
 
+    @Delete('release')
+    @UseGuards(AuthGuard)
+    releaseUserSession(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+        const sessionId = req.cookies['sid'];
+        this.sandboxService.releaseUserSession(sessionId);
+        res.clearCookie('sid');
+    }
+
     // 개발용 API입니다. 배포 시 노출되면 안됩니다.
     @Delete('clear')
     @HideInProduction()

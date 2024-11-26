@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import { formatAxiosError } from '../common/exception/axios-formatter';
 import { isAxiosError } from 'axios';
 import { HOST_STATUS } from './constant';
+import { UserSession } from 'src/common/types/session';
 
 @Injectable()
 export class SandboxService {
@@ -207,6 +208,19 @@ export class SandboxService {
         const containers = await this.getContainers();
         await Promise.all(
             containers.map((container: { Id: string }) => this.deleteContainer(container.Id))
+        );
+    }
+
+    async releaseUserSession(sessionId: string) {
+        const { containerId, containerPort } = this.cacheService.get(sessionId) as UserSession;
+
+        await this.httpService.axiosRef.delete(
+            `${process.env.SANDBOX_URL}/containers/${containerId}?force=true&v=true`
+        );
+        this.cacheService.delete(sessionId);
+
+        this.logger.log(
+            `Container Released: ${containerId}\t Session: ${sessionId} \t Port: ${containerPort}`
         );
     }
 }
