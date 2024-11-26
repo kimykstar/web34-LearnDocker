@@ -7,6 +7,7 @@ import { CacheService } from '../common/cache/cache.service';
 import { randomUUID } from 'crypto';
 import { formatAxiosError } from '../common/exception/axios-formatter';
 import { isAxiosError } from 'axios';
+import { HOST_STATUS } from './constant';
 
 @Injectable()
 export class SandboxService {
@@ -98,6 +99,20 @@ export class SandboxService {
             });
             return containerReducer;
         }, []);
+    }
+
+    async getHostStatus(containerPort: string) {
+        try {
+            await this.httpService.axiosRef.get(
+                `http://${process.env.SANDBOX_HOST}:${containerPort}/_ping`
+            );
+            return HOST_STATUS.READY;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                return HOST_STATUS.STARTING;
+            }
+            throw error;
+        }
     }
 
     async processUserCommand(command: string, containerId: string) {

@@ -13,15 +13,13 @@ export function createTerminal(container: HTMLElement): Terminal {
     terminal.loadAddon(fitAddon);
     terminal.open(container);
     fitAddon.fit();
-    terminal.write('~$ ');
 
     return terminal;
 }
 
 const handleClear = (term: Terminal) => {
     term.clear();
-    term.write('\x1b[2K\r');
-    term.write('\r\n~$ ');
+    term.write('\x1b[2K\r~$ ');
 };
 
 export const handleBackspace = (term: Terminal, currentLine: string) => {
@@ -37,7 +35,7 @@ export const handleEnter = async (
     command: string,
     navigate: NavigateFunction,
     handleCommandError: (term: Terminal) => void,
-    updateVisualization: () => Promise<void>
+    updateVisualization: (command: string) => Promise<void>
 ) => {
     if (!command) {
         term.write('\r\n~$ ');
@@ -49,12 +47,10 @@ export const handleEnter = async (
         return;
     }
 
-    const commandResponse = await requestCommandResult(command, navigate, handleCommandError, term);
-    if (commandResponse) {
-        term.write('\r\n' + commandResponse);
-        await updateVisualization();
-    }
-
+    const commandResponse = await requestCommandResult(command, navigate, term, handleCommandError);
+    term.write('\r\n' + commandResponse);
+    await updateVisualization(command);
+    
     term.write('\r\n~$ ');
 };
 

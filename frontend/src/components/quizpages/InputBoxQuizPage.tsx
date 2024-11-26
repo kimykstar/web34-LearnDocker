@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { requestQuizData } from '../../api/quiz';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DockerVisualization from '../visualization/DockerVisualization';
@@ -7,6 +7,8 @@ import QuizDescription from '../quiz/QuizDescription';
 import XTerminal from '../quiz/XTerminal';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
 import QuizSubmitArea from '../quiz/QuizSubmitArea';
+import { HostStatus, HOST_STATUS } from '../../constant/hostStatus';
+import { requestHostStatus } from '../../api/quiz';
 
 type Props = {
     showAlert: (message: string) => void;
@@ -16,15 +18,34 @@ const InputBoxQuizPage = ({ showAlert }: Props) => {
     const navigate = useNavigate();
     const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
     const [quizData, setQuizData] = useState<Quiz | null>(null);
+    const [hostStatus, setHostStatus] = useState<HostStatus>(HOST_STATUS.STARTING);
+    const pollingRef = useRef<boolean>(true);
+    const pollingIntervalRef = useRef<number | null>(null);
     const {
-        images,
-        containers,
+        elements,
         animation,
         dockerOperation,
         updateVisualizationData,
         handleAnimationComplete,
         setInitVisualization,
     } = useDockerVisualization();
+
+    const checkHostStatus = async () => {
+        const response = await requestHostStatus(navigate);
+
+        if (!response) {
+            return;
+        }
+
+        setHostStatus(response);
+
+        if (response === HOST_STATUS.READY) {
+            pollingRef.current = false;
+            if (pollingIntervalRef.current) {
+                clearInterval(pollingIntervalRef.current);
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchQuizData = async () => {
@@ -35,9 +56,24 @@ const InputBoxQuizPage = ({ showAlert }: Props) => {
             }
 
             setQuizData(data);
-            setInitVisualization();
+
+            await checkHostStatus();
+
+            if (pollingRef.current) {
+                pollingIntervalRef.current = setInterval(checkHostStatus, 1000);
+            } else {
+                setInitVisualization();
+            }
         };
+
         fetchQuizData();
+
+        return () => {
+            if (pollingIntervalRef.current) {
+                clearInterval(pollingIntervalRef.current);
+                pollingIntervalRef.current = null;
+            }
+        };
     }, [navigate]);
 
     return (
@@ -48,12 +84,12 @@ const InputBoxQuizPage = ({ showAlert }: Props) => {
                 <DockerVisualization
                     animationState={animation}
                     dockerOperation={dockerOperation}
-                    images={images}
-                    containers={containers}
+                    images={elements.images}
+                    containers={elements.containers}
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
-            <XTerminal updateVisualizationData={updateVisualizationData} />
+            <XTerminal updateVisualizationData={updateVisualizationData} hostStatus={hostStatus} />
             <QuizSubmitArea quizId={+quizNum} showAlert={showAlert} />
         </div>
     );
