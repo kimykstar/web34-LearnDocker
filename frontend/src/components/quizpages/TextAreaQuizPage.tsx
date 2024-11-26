@@ -12,8 +12,7 @@ const TextAreaQuizPage = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const {
-        images,
-        containers,
+        elements,
         animation,
         dockerOperation,
         updateVisualizationData,
@@ -45,8 +44,8 @@ const TextAreaQuizPage = () => {
                 <DockerVisualization
                     animationState={animation}
                     dockerOperation={dockerOperation}
-                    images={images}
-                    containers={containers}
+                    images={elements.images}
+                    containers={elements.containers}
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>

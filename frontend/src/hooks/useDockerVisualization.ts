@@ -1,109 +1,136 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { requestVisualizationData } from '../api/quiz';
-import {
-    Image,
-    DOCKER_OPERATIONS,
-    AnimationState,
-    DockerOperation,
-    Container,
-} from '../types/visualization';
+import { DOCKER_OPERATIONS, AnimationState, DockerOperation } from '../types/visualization';
 import { useNavigate } from 'react-router-dom';
 import { Visualization } from '../types/visualization';
+import {
+    setColorToElements,
+    updateImageColors,
+    updateContainerColors,
+    getDockerOperation,
+} from '../utils/visualizationUtils';
+import { STATE_CHANGE_COMMAND_REGEX } from '../constant/visualization';
 
 const useDockerVisualization = () => {
     const navigate = useNavigate();
-    const [containers, setContainers] = useState<Container[]>([]);
-    const [images, setImages] = useState<Image[]>([]);
-    const [pendingImages, setPendingImages] = useState<Image[]>([]);
+    const [elements, setElements] = useState<Visualization>({ images: [], containers: [] });
     const [dockerOperation, setDockerOperation] = useState<DockerOperation>();
     const [animation, setAnimation] = useState<AnimationState>({
         isVisible: false,
         key: 0,
     });
+    const elementsRef = useRef<Visualization>({ images: [], containers: [] });
 
-    const colors = ['#FF6B6B', '#FFC107', '#4CAF50', '#2196F3', '#673AB7', '#E91E63'];
-    const updateImageColors = (newImages: Image[], prevImages: Image[]) => {
-        return newImages.map((newImage, index) => {
-            const prevImage = prevImages.find((img) => img.id === newImage.id);
-            if (prevImage) {
-                return prevImage;
-            }
-            return {
-                ...newImage,
-                color: colors[index % colors.length],
-            };
-        });
+    const handleImageStateLengthChange = (
+        prevElements: Visualization,
+        newElements: Visualization,
+        dockerOperation: DockerOperation
+    ) => {
+        const updatedImages = updateImageColors(prevElements, newElements);
+
+        elementsRef.current.images = [...updatedImages];
+        setDockerOperation(dockerOperation);
+        setAnimation((prev) => ({
+            isVisible: true,
+            key: prev.key + 1,
+        }));
     };
 
-    const setColorToElements = (images: Image[], containers: Container[]) => {
-        const initImages = images.map((image, index) => {
-            return {
-                ...image,
-                color: colors[index % colors.length],
-            };
-        });
+    const handleContainerStateLengthChange = (
+        newElements: Visualization,
+        dockerOperation: DockerOperation
+    ) => {
+        const prevImages = elementsRef.current;
+        const updatedContainers = updateContainerColors(prevImages, newElements);
 
-        const initContainers = containers.map((container) => {
-            const image = initImages.find((image) => {
-                return image.name === container.image;
-            });
-            return {
-                ...container,
-                color: image?.color,
-            };
-        });
-        return { initImages, initContainers };
+        elementsRef.current.containers = [...updatedContainers];
+        setDockerOperation(dockerOperation);
+        setAnimation((prev) => ({
+            isVisible: true,
+            key: prev.key + 1,
+        }));
     };
 
-    // callback function for updating image and container visualization
-    const handleTerminalEnterCallback = (data: Visualization) => {
-        const { images: newImages } = data;
+    const handleElementsStateLengthChange = (newElements: Visualization) => {
+        const prevElements = elementsRef.current;
+        const { initImages, initContainers } = setColorToElements(prevElements, newElements);
 
-        setImages((currentImages) => {
-            if (currentImages.length === newImages.length) {
-                setAnimation((prev) => ({
-                    isVisible: false,
-                    key: prev.key,
-                }));
-                return currentImages;
-            }
+        elementsRef.current.images = [...initImages];
+        elementsRef.current.containers = [...initContainers];
+        setDockerOperation(DOCKER_OPERATIONS.CONTAINER_RUN);
+        setAnimation((prev) => ({
+            isVisible: true,
+            key: prev.key + 1,
+        }));
+    };
 
-            const operation =
-                currentImages.length < newImages.length
-                    ? DOCKER_OPERATIONS.IMAGE_PULL
-                    : DOCKER_OPERATIONS.IMAGE_DELETE;
+    const handleContainerStateChange = (newElements: Visualization, command: string) => {
+        const prevImages = elementsRef.current;
+        const updatedContainers = updateContainerColors(prevImages, newElements);
+        const elements = { images: prevImages.images, containers: updatedContainers };
 
-            const updatedImages = updateImageColors(newImages, currentImages);
+        elementsRef.current.containers = [...updatedContainers];
+        setDockerOperation(DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED);
 
-            setPendingImages(updatedImages);
-            setDockerOperation(operation);
+        if (command.match(STATE_CHANGE_COMMAND_REGEX)) {
             setAnimation((prev) => ({
                 isVisible: true,
                 key: prev.key + 1,
             }));
-
-            return currentImages;
-        });
+        } else {
+            setElements(elements);
+        }
     };
 
-    const updateVisualizationData = async () => {
+    const handleTerminalEnterCallback = (data: Visualization, command: string) => {
+        const prevElements = elementsRef.current;
+        const newElements = data;
+        const operation = getDockerOperation(prevElements, newElements);
+
+        switch (operation) {
+            case DOCKER_OPERATIONS.IMAGE_PULL:
+                handleImageStateLengthChange(prevElements, newElements, operation);
+                break;
+            case DOCKER_OPERATIONS.IMAGE_DELETE:
+                handleImageStateLengthChange(prevElements, newElements, operation);
+                break;
+            case DOCKER_OPERATIONS.CONTAINER_CREATE:
+                handleContainerStateLengthChange(newElements, operation);
+                break;
+            case DOCKER_OPERATIONS.CONTAINER_RUN:
+                handleElementsStateLengthChange(newElements);
+                break;
+            case DOCKER_OPERATIONS.CONTAINER_DELETE:
+                handleContainerStateLengthChange(newElements, operation);
+                break;
+            case DOCKER_OPERATIONS.CONTAINER_STATUS_CHANGED:
+                handleContainerStateChange(newElements, command);
+                break;
+        }
+    };
+
+    const updateVisualizationData = async (command: string) => {
         const data = await requestVisualizationData(navigate);
         if (!data) return;
-        handleTerminalEnterCallback(data);
+        handleTerminalEnterCallback(data, command);
     };
 
     const setInitVisualization = async () => {
-        const data = await requestVisualizationData(navigate);
-        if (!data) return;
+        const newElements = await requestVisualizationData(navigate);
+        if (!newElements) return;
 
-        const { initImages, initContainers } = setColorToElements(data.images, data.containers);
-        setImages(initImages);
-        // TODO: Container색상 지정 해야함
-        setContainers(initContainers);
+        const prevElements = elementsRef.current;
+        const { initImages, initContainers } = setColorToElements(prevElements, newElements);
+
+        elementsRef.current.images = [...initImages];
+        elementsRef.current.containers = [...initContainers];
+        setElements({ images: initImages, containers: initContainers });
     };
 
     const handleAnimationComplete = () => {
-        setImages(pendingImages);
+        const { images, containers } = elementsRef.current;
+
+        setElements({ images, containers });
         setAnimation((prev) => ({
             isVisible: false,
             key: prev.key,
@@ -111,12 +138,12 @@ const useDockerVisualization = () => {
     };
 
     return {
-        images,
-        containers,
+        elements,
         animation,
         dockerOperation,
         handleAnimationComplete,
         updateVisualizationData,
+        handleTerminalEnterCallback,
         setInitVisualization,
     };
 };

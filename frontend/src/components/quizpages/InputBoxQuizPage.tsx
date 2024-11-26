@@ -13,8 +13,7 @@ const InputBoxQuizPage = () => {
     const quizNum = useLocation().pathname.split('/').slice(-1)[0] as string;
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const {
-        images,
-        containers,
+        elements,
         animation,
         dockerOperation,
         updateVisualizationData,
@@ -44,8 +43,8 @@ const InputBoxQuizPage = () => {
                 <DockerVisualization
                     animationState={animation}
                     dockerOperation={dockerOperation}
-                    images={images}
-                    containers={containers}
+                    images={elements.images}
+                    containers={elements.containers}
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
