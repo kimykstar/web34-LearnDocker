@@ -11,8 +11,12 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 import { QuizPage } from './components/quiz/QuizPage';
+import { Alert } from 'flowbite-react';
+import { useAlert } from './hooks/useAlert';
 
 const App = () => {
+    const { openAlert, message, showAlert } = useAlert();
+
     useEffect(() => {
         AOS.init({
             duration: 500,
@@ -21,6 +25,14 @@ const App = () => {
 
     return (
         <div className='w-full overflow-x-hidden overflow-y-hidden'>
+            <Alert
+                color='failure'
+                className={`fixed left-1/2 -translate-x-1/2 top-6 z-50 transition-all duration-500 ease-in-out ${
+                    openAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
+                }`}
+            >
+                {message}
+            </Alert>
             <Header />
             <div className='flex font-pretendard'>
                 <Sidebar />
@@ -35,9 +47,10 @@ const App = () => {
                             path='/what-is-container-lifecycle'
                             element={<DockerContainerLifeCyclePage />}
                         />
-
-                        <Route path='/quiz/:quizNumber' element={<QuizPage />} />
-
+                        <Route
+                            path='/quiz/:quizNumber'
+                            element={<QuizPage showAlert={showAlert} />}
+                        />
                         <Route path='/error/:id' element={<ErrorPage />} />
                     </Routes>
                 </div>

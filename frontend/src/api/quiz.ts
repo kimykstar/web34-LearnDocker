@@ -4,6 +4,8 @@ import { Visualization } from '../types/visualization';
 import axios from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 import { CUSTOM_QUIZZES } from '../constant/quiz';
+import LoadingTerminal from '../utils/LoadingTerminal';
+import { HostStatus } from '../constant/hostStatus';
 
 const handleErrorResponse = (error: unknown, navigate: NavigateFunction) => {
     if (axios.isAxiosError(error)) {
@@ -88,17 +90,31 @@ const requestDockerQuizResult = async (quizNumber: number, navigate: NavigateFun
     }
 };
 
+export const requestHostStatus = async (navigate: NavigateFunction) => {
+    try {
+        const response = await axios.get<HostStatus>(`/api/sandbox/hostStatus`);
+        return response.data;
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
+};
+
 export const requestCommandResult = async (
     command: string,
     navigate: NavigateFunction,
-    customErrorCallback?: (term: Terminal) => void,
-    term?: Terminal
+    term: Terminal,
+    customErrorCallback: (term: Terminal) => void
 ) => {
+    const loadingTerminal = new LoadingTerminal(term);
+
     try {
+        loadingTerminal.spinnerStart();
         const response = await axios.post<string>(`/api/sandbox/command`, { command });
+        loadingTerminal.spinnerStop();
         return response.data;
     } catch (error) {
-        if (customErrorCallback && term) {
+        loadingTerminal.spinnerStop();
+        if (customErrorCallback) {
             customErrorCallback(term);
         } else {
             handleErrorResponse(error, navigate);
