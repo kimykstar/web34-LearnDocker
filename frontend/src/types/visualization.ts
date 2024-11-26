@@ -44,8 +44,7 @@ export type ContainerNodeProps = {
 export type DockerVisualizationProps = {
     animationState: AnimationState;
     // TODO: containers undefined는 컨테이너 시각화 완료하면 삭제해야함
-    containers: Container[] | undefined;
-    images: Image[];
+    elements: Visualization;
     dockerOperation: DockerOperation | undefined;
     onAnimationComplete: () => void;
 };
