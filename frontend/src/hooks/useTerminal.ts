@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { Terminal } from '@xterm/xterm';
-import { useNavigate } from 'react-router-dom';
 import {
     handleEnter,
     handleBackspace,
@@ -10,12 +9,11 @@ import {
 import { ENTER_KEY, BACKSPACE_KEY } from '../constant/xterm';
 
 export function useTerminal(updateVisualizationData: (command: string) => Promise<void>) {
-    const navigate = useNavigate();
     const currentLineRef = useRef<string>('');
 
     const handleCommandError = (term: Terminal) => {
         if (!term) return;
-        term.write('\r\n\x1b[91m허용되지 않은 명령어 입니다.\x1b[0m');
+        term.write('\x1b[91m허용되지 않은 명령어 입니다.\x1b[0m\r\n');
     };
 
     const handleKeyInput = async (term: Terminal, key: string) => {
@@ -24,7 +22,6 @@ export function useTerminal(updateVisualizationData: (command: string) => Promis
                 await handleEnter(
                     term,
                     currentLineRef.current.trim(),
-                    navigate,
                     handleCommandError,
                     updateVisualizationData
                 );

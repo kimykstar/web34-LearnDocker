@@ -1,6 +1,5 @@
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
-import { NavigateFunction } from 'react-router-dom';
 import { requestCommandResult } from '../api/quiz';
 
 export function createTerminal(container: HTMLElement): Terminal {
@@ -33,7 +32,6 @@ export const handleBackspace = (term: Terminal, currentLine: string) => {
 export const handleEnter = async (
     term: Terminal,
     command: string,
-    navigate: NavigateFunction,
     handleCommandError: (term: Terminal) => void,
     updateVisualization: (command: string) => Promise<void>
 ) => {
@@ -47,10 +45,14 @@ export const handleEnter = async (
         return;
     }
 
-    const commandResponse = await requestCommandResult(command, navigate, term, handleCommandError);
-    term.write('\r\n' + commandResponse);
+    term.write('\r\n');
+    const commandResponse = await requestCommandResult(command, term, handleCommandError);
+
+    if (commandResponse !== null) {
+        term.write(commandResponse);
+    }
     await updateVisualization(command);
-    
+
     term.write('\r\n~$ ');
 };
 
