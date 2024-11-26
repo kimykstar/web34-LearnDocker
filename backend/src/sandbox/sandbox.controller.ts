@@ -7,7 +7,8 @@ import { HideInProduction } from '../common/decorator/hide-in-production.decorat
 import { AuthGuard } from '../common/auth/auth.guard';
 import { AuthService } from '../common/auth/auth.service';
 import { RequestWithSession } from '../common/types/request';
-
+import { SessionAlreadyAssignedException } from 'src/common/exception/errors';
+import { getHashValueFromIP } from '../sandbox/utils';
 @Controller('sandbox')
 export class SandboxController {
     constructor(
@@ -36,10 +37,17 @@ export class SandboxController {
     @Post('start')
     async assignContainer(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
-        this.authService.throwIfSessionIsValid(sessionId);
-
-        const newSessionId = await this.sandboxService.assignContainer();
-        res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+        const ipAddress = req.ip as string;
+        const hashedSessionID = getHashValueFromIP(ipAddress);
+        try {
+            this.authService.throwIfSessionIsValid(hashedSessionID, sessionId);
+            const newSessionId = await this.sandboxService.assignContainer(ipAddress);
+            res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+        } catch (error) {
+            if (error instanceof SessionAlreadyAssignedException) {
+                res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
+            }
+        }
     }
 
     @Get('hostStatus')

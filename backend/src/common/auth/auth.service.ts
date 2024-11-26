@@ -11,7 +11,7 @@ export class AuthService {
         if (sessionId == null) {
             throw new InvalidSessionException();
         }
-        const session =  this.cacheService.get(sessionId);
+        const session = this.cacheService.get(sessionId);
         if (session == null) {
             throw new InvalidSessionException();
         }
@@ -21,9 +21,10 @@ export class AuthService {
         return session;
     }
 
-    throwIfSessionIsValid(sessionId?: string) {
+    throwIfSessionIsValid(hashedSessionID: string, sessionId?: string) {
         try {
-            this.validateSession(sessionId)
+            if (sessionId) this.validateSession(sessionId);
+            else this.validateSession(hashedSessionID);
             throw new SessionAlreadyAssignedException();
         } catch (error) {
             if (!(error instanceof InvalidSessionException)) {

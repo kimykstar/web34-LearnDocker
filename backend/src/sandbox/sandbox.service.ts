@@ -1,10 +1,14 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
+import {
+    parseStringToJson,
+    filterContainerInfo,
+    filterImageInfo,
+    getHashValueFromIP,
+} from './utils';
 import { requestDockerCommand } from './exec.api';
 import { Container, ContainerData, Image, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
-import { randomUUID } from 'crypto';
 import { formatAxiosError } from '../common/exception/axios-formatter';
 import { isAxiosError } from 'axios';
 import { HOST_STATUS } from './constant';
@@ -157,7 +161,7 @@ export class SandboxService {
         );
     }
 
-    async assignContainer() {
+    async assignContainer(ipAddress: string) {
         const containerId = await this.createContainer();
         let containerPort;
 
@@ -173,7 +177,7 @@ export class SandboxService {
             throw startError;
         }
 
-        const newSessionId = randomUUID();
+        const newSessionId = getHashValueFromIP(ipAddress);
         this.cacheService.set(newSessionId, {
             sessionId: newSessionId,
             containerId,
