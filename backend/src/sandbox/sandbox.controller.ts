@@ -42,6 +42,13 @@ export class SandboxController {
         res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
     }
 
+    @Get('hostStatus')
+    @UseGuards(AuthGuard)
+    getHostStatus(@Req() req: RequestWithSession) {
+        const { containerPort } = req.session;
+        return this.sandboxService.getHostStatus(containerPort);
+    }
+
     @Get('endDate')
     @UseGuards(AuthGuard)
     getMaxAge(@Req() req: RequestWithSession) {

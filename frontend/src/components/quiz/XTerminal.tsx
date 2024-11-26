@@ -3,29 +3,55 @@ import { Terminal } from '@xterm/xterm';
 import { useTerminal } from '../../hooks/useTerminal';
 import { createTerminal } from '../../utils/terminalUtils';
 import '@xterm/xterm/css/xterm.css';
+import { HostStatus, HOST_STATUS } from '../../constant/hostStatus';
+import LoadingTerminal from '../../utils/LoadingTerminal';
 
 type XTerminalProps = {
     updateVisualizationData: (command: string) => Promise<void>;
+    hostStatus: HostStatus;
 };
 
-const XTerminal = ({ updateVisualizationData }: XTerminalProps) => {
+const XTerminal = ({ updateVisualizationData, hostStatus }: XTerminalProps) => {
     const terminalRef = useRef<HTMLDivElement>(null);
     const terminalInstanceRef = useRef<Terminal | null>(null);
     const { handleKeyInput } = useTerminal(updateVisualizationData);
+    const loadingRef = useRef<LoadingTerminal | null>(null);
 
     useEffect(() => {
         if (!terminalRef.current) return;
 
         const terminal = createTerminal(terminalRef.current);
         terminalInstanceRef.current = terminal;
+        loadingRef.current = new LoadingTerminal(terminal);
 
-        terminal.onKey((event) => {
-            handleKeyInput(terminal, event.key);
-        });
+        if (hostStatus === HOST_STATUS.STARTING) {
+            loadingRef.current.hostSpinnerStart();
+            terminal.options.disableStdin = true; // 입력 비활성화
+        } else {
+            terminal.write('~$ ');
+        }
 
         return () => terminal.dispose();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (!terminalInstanceRef.current) return;
+
+        if (!loadingRef.current) return;
+
+        if (hostStatus === HOST_STATUS.READY) {
+            loadingRef.current.hostSpinnerStop();
+            terminalInstanceRef.current.write('~$ ');
+            terminalInstanceRef.current.options.disableStdin = false; // 입력 활성화
+            terminalInstanceRef.current.onKey((event) => {
+                if (hostStatus === HOST_STATUS.READY) {
+                    handleKeyInput(terminalInstanceRef.current as Terminal, event.key);
+                }
+            });
+            terminalInstanceRef.current.focus();
+        }
+    }, [hostStatus]);
 
     return (
         <div className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
