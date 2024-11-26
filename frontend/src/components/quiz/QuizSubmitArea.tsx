@@ -5,9 +5,10 @@ import { CUSTOM_QUIZZES } from '../../constant/quiz';
 
 type QuizSubmitAreaProps = {
     quizId: number;
+    showAlert: (message: string) => void;
 };
 
-const QuizSubmitArea = ({ quizId }: QuizSubmitAreaProps) => {
+const QuizSubmitArea = ({ quizId, showAlert }: QuizSubmitAreaProps) => {
     const [answer, setAnswer] = useState('');
 
     return (
@@ -15,7 +16,7 @@ const QuizSubmitArea = ({ quizId }: QuizSubmitAreaProps) => {
             {CUSTOM_QUIZZES.includes(quizId) ? (
                 <QuizInputBox answer={answer} setAnswer={setAnswer} />
             ) : null}
-            <QuizButtons quizId={quizId} answer={answer} />
+            <QuizButtons quizId={quizId} answer={answer} showAlert={showAlert} />
         </>
     );
 };
