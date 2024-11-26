@@ -10,6 +10,7 @@ import { ENTER_KEY, BACKSPACE_KEY } from '../constant/xterm';
 
 export function useTerminal(updateVisualizationData: (command: string) => Promise<void>) {
     const currentLineRef = useRef<string>('');
+    const blockingRef = useRef<boolean>(false);
 
     const handleCommandError = (term: Terminal) => {
         if (!term) return;
@@ -17,8 +18,11 @@ export function useTerminal(updateVisualizationData: (command: string) => Promis
     };
 
     const handleKeyInput = async (term: Terminal, key: string) => {
+        if (blockingRef.current) return;
+
         switch (key) {
             case ENTER_KEY: {
+                blockingRef.current = true;
                 await handleEnter(
                     term,
                     currentLineRef.current.trim(),
@@ -26,6 +30,7 @@ export function useTerminal(updateVisualizationData: (command: string) => Promis
                     updateVisualizationData
                 );
                 currentLineRef.current = '';
+                blockingRef.current = false;
                 break;
             }
 
