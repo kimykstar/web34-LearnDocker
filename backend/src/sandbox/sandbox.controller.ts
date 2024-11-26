@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Delete, Req, Res, UseGuards, Sse } from '@nestjs/common';
 import { interval } from 'rxjs';
-import { mergeMap, takeWhile } from 'rxjs/operators';
+import { filter, mergeMap, take, timeout } from 'rxjs/operators';
 import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
 import { Request, Response } from 'express';
@@ -62,10 +62,9 @@ export class SandboxController {
                 const status = await this.sandboxService.getHostStatus(containerPort);
                 return { data: status };
             }),
-            takeWhile(
-                (message) => message.data !== HOST_STATUS.READY,
-                true // READY 상태도 한번 전송 후 종료
-            )
+            filter((message) => message.data === HOST_STATUS.READY),
+            take(1),
+            timeout(30000)
         );
     }
 
