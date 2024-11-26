@@ -7,7 +7,7 @@ import { HostStatus, HOST_STATUS } from '../../constant/hostStatus';
 import LoadingTerminal from '../../utils/LoadingTerminal';
 
 type XTerminalProps = {
-    updateVisualizationData: () => Promise<void>;
+    updateVisualizationData: (command: string) => Promise<void>;
     hostStatus: HostStatus;
 };
 

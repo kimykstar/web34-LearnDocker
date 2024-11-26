@@ -18,8 +18,7 @@ const InputBoxQuizPage = () => {
     const pollingRef = useRef<boolean>(true);
     const pollingIntervalRef = useRef<number | null>(null);
     const {
-        images,
-        containers,
+        elements,
         animation,
         dockerOperation,
         updateVisualizationData,
@@ -81,8 +80,8 @@ const InputBoxQuizPage = () => {
                 <DockerVisualization
                     animationState={animation}
                     dockerOperation={dockerOperation}
-                    images={images}
-                    containers={containers}
+                    images={elements.images}
+                    containers={elements.containers}
                     onAnimationComplete={handleAnimationComplete}
                 />
             </section>
