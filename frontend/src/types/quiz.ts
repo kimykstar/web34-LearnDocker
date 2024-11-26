@@ -4,8 +4,10 @@ export type Quiz = {
     content: string | undefined;
 };
 
+export type SubmitStatus = 'SUCCESS' | 'FAIL';
+
 export type QuizResult = {
-    quizResult: 'SUCCESS' | 'FAIL';
+    quizResult: SubmitStatus;
 };
 
 export type QuizTextAreaProps = {

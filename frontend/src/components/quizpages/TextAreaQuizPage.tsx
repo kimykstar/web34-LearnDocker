@@ -10,7 +10,11 @@ import QuizSubmitArea from '../quiz/QuizSubmitArea';
 import { HostStatus, HOST_STATUS } from '../../constant/hostStatus';
 import { requestHostStatus } from '../../api/quiz';
 
-const TextAreaQuizPage = () => {
+type Props = {
+    showAlert: (message: string) => void;
+};
+
+const TextAreaQuizPage = ({ showAlert }: Props) => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [hostStatus, setHostStatus] = useState<HostStatus>(HOST_STATUS.STARTING);
@@ -87,7 +91,7 @@ const TextAreaQuizPage = () => {
                 />
             </section>
             <XTerminal updateVisualizationData={updateVisualizationData} hostStatus={hostStatus} />
-            <QuizSubmitArea quizId={+quizNum} />
+            <QuizSubmitArea quizId={+quizNum} showAlert={showAlert} />
         </div>
     );
 };

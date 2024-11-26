@@ -1,6 +1,8 @@
+import flowbite from 'flowbite-react/tailwind';
+
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ['./index.html', './src/**/*.{js,jsx,tsx,ts}'],
+    content: ['./index.html', './src/**/*.{js,jsx,tsx,ts}', flowbite.content()],
     theme: {
         extend: {
             fontFamily: {
@@ -73,5 +75,5 @@ export default {
             ping: `ping 1s cubic-bezier(0, 0, 0.2, 1) infinite`,
         },
     },
-    plugins: [],
+    plugins: [flowbite.plugin()],
 };
