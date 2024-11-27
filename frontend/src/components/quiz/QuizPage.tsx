@@ -4,16 +4,18 @@ import { QuizPageWrapper } from './QuizPageWrapper';
 
 type QuizContentProps = {
     showAlert: (message: string) => void;
+    eventSourceRef: React.MutableRefObject<EventSource | null>;
     quizId: string;
 };
 
 type QuizPageProps = {
     showAlert: (message: string) => void;
+    eventSourceRef: React.MutableRefObject<EventSource | null>;
 };
 
-export const QuizContent = ({ showAlert, quizId }: QuizContentProps) => {
+export const QuizContent = ({ showAlert, quizId, eventSourceRef }: QuizContentProps) => {
     const quizNodes = QuizNodes({ showAlert, quizId });
-    const visualNodes = VisualizationNodes();
+    const visualNodes = VisualizationNodes({ eventSourceRef });
 
     return (
         <div className='w-[calc(100vw-17rem)]'>
@@ -28,10 +30,16 @@ export const QuizContent = ({ showAlert, quizId }: QuizContentProps) => {
     );
 };
 
-export const QuizPage = ({ showAlert }: QuizPageProps) => {
+export const QuizPage = ({ showAlert, eventSourceRef }: QuizPageProps) => {
     return (
         <QuizPageWrapper showAlert={showAlert}>
-            {(quizId) => <QuizContent showAlert={showAlert} quizId={quizId} />}
+            {(quizId) => (
+                <QuizContent
+                    showAlert={showAlert}
+                    quizId={quizId}
+                    eventSourceRef={eventSourceRef}
+                />
+            )}
         </QuizPageWrapper>
     );
 };

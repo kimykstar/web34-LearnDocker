@@ -9,13 +9,14 @@ import ErrorPage from './components/ErrorPage';
 import { Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { QuizPage } from './components/quiz/QuizPage';
 import { Alert } from 'flowbite-react';
 import { useAlert } from './hooks/useAlert';
 
 const App = () => {
     const { openAlert, message, showAlert } = useAlert();
+    const eventSourceRef = useRef<EventSource | null>(null);
 
     useEffect(() => {
         AOS.init({
@@ -47,7 +48,12 @@ const App = () => {
                             path='/what-is-container-lifecycle'
                             element={<DockerContainerLifeCyclePage />}
                         />
-                        <Route path='/quiz/:quizId' element={<QuizPage showAlert={showAlert} />} />
+                        <Route
+                            path='/quiz/:quizId'
+                            element={
+                                <QuizPage showAlert={showAlert} eventSourceRef={eventSourceRef} />
+                            }
+                        />
                         <Route path='/error/:id' element={<ErrorPage />} />
                     </Routes>
                 </div>
