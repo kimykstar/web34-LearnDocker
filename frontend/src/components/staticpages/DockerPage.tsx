@@ -142,7 +142,7 @@ const WhatIsDockerPage = () => {
 
             <h3 className='text-2xl font-bold mt-12'>도커 오브젝트(Docker Objects)</h3>
             <div
-                className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
+                className='bg-Moby-Blue mt-4 mb-12 bg-opacity-15 rounded-lg shadow-md p-2'
                 data-aos='zoom-in'
             >
                 <p>
