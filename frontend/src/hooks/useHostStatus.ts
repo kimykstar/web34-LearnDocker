@@ -58,7 +58,9 @@ export const useHostStatus = ({ setInitVisualization }: UseHostStatusProps) => {
                 cleanupSSE();
             }
         };
-    }, [navigate]);
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return hostStatus;
 };
