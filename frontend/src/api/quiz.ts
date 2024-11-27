@@ -45,8 +45,9 @@ export const requestVisualizationData = async (navigate: NavigateFunction) => {
 
 export const createHostContainer = async (navigate: NavigateFunction) => {
     try {
-        await axios.post(`/api/sandbox/start`);
-        return true;
+        const response = await axios.post(`/api/sandbox/start`);
+        const { endDate } = response.data;
+        return endDate;
     } catch (error) {
         return handleErrorResponse(error, navigate);
     }
