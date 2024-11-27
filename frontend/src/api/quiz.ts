@@ -101,7 +101,6 @@ export const requestHostStatus = async (navigate: NavigateFunction) => {
 
 export const requestCommandResult = async (
     command: string,
-    navigate: NavigateFunction,
     term: Terminal,
     customErrorCallback: (term: Terminal) => void
 ) => {
@@ -114,10 +113,10 @@ export const requestCommandResult = async (
         return response.data;
     } catch (error) {
         loadingTerminal.spinnerStop();
-        if (customErrorCallback) {
+        if (axios.isAxiosError(error)) {
             customErrorCallback(term);
         } else {
-            handleErrorResponse(error, navigate);
+            console.error('unknown error');
         }
         return null;
     }
@@ -135,4 +134,12 @@ export const requestQuizAccessability = async (quizId: number) => {
         throw error;
     }
     return true;
+};
+
+export const requestReleaseSession = async (navigate: NavigateFunction) => {
+    try {
+        await axios.delete(`/api/sandbox/release`);
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
 };

@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { ExpirationTime } from '../types/timer';
 
-export const requestExpriationTime = async (): Promise<ExpirationTime | object> => {
+export const requestExpirationTime = async (): Promise<ExpirationTime | object> => {
     try {
-        const response = await axios.get<ExpirationTime>(
-            `/api/sandbox/endDate`
-        );
+        const response = await axios.get<ExpirationTime>(`/api/sandbox/endDate`);
         return response.data;
     } catch (error) {
         console.error(error);

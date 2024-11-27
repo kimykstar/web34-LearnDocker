@@ -34,7 +34,6 @@ export default class LoadingTerminal {
     }
 
     public spinnerStart(timeDelay: number = 1500) {
-        this.term.write('\r\n');
         this.loadingTimeout = setTimeout(() => {
             this.showSpinner();
         }, timeDelay);

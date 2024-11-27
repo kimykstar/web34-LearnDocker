@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Delete, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Req, Res, UseGuards, Sse } from '@nestjs/common';
+import { interval } from 'rxjs';
+import { filter, mergeMap, take, timeout } from 'rxjs/operators';
 import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
 import { Request, Response } from 'express';
@@ -7,6 +9,9 @@ import { HideInProduction } from '../common/decorator/hide-in-production.decorat
 import { AuthGuard } from '../common/auth/auth.guard';
 import { AuthService } from '../common/auth/auth.service';
 import { RequestWithSession } from '../common/types/request';
+import { HOST_STATUS } from './constant';
+import { SessionAlreadyAssignedException } from 'src/common/exception/errors';
+import { getHashValueFromIP } from '../sandbox/utils';
 
 @Controller('sandbox')
 export class SandboxController {
@@ -36,10 +41,19 @@ export class SandboxController {
     @Post('start')
     async assignContainer(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
-        this.authService.throwIfSessionIsValid(sessionId);
-
-        const newSessionId = await this.sandboxService.assignContainer();
-        res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+        const ipAddress = req.ip as string;
+        const hashedSessionID = getHashValueFromIP(ipAddress);
+        try {
+            this.authService.throwIfSessionIsValid(hashedSessionID, sessionId);
+            const newSessionId = await this.sandboxService.assignContainer(ipAddress);
+            res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+        } catch (error) {
+            if (error instanceof SessionAlreadyAssignedException) {
+                res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
+                return;
+            }
+            throw error;
+        }
     }
 
     @Get('hostStatus')
@@ -49,12 +63,36 @@ export class SandboxController {
         return this.sandboxService.getHostStatus(containerPort);
     }
 
+    @Sse('hostStatus/stream')
+    @UseGuards(AuthGuard)
+    streamHostStatus(@Req() req: RequestWithSession) {
+        const { containerPort } = req.session;
+
+        return interval(1000).pipe(
+            mergeMap(async () => {
+                const status = await this.sandboxService.getHostStatus(containerPort);
+                return { data: status };
+            }),
+            filter((message) => message.data === HOST_STATUS.READY),
+            take(1),
+            timeout(30000)
+        );
+    }
+
     @Get('endDate')
     @UseGuards(AuthGuard)
     getMaxAge(@Req() req: RequestWithSession) {
         const { startTime } = req.session;
         const endDate = new Date(startTime.getTime() + SESSION_DURATION);
         return { endDate };
+    }
+
+    @Delete('release')
+    @UseGuards(AuthGuard)
+    releaseUserSession(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+        const sessionId = req.cookies['sid'];
+        this.sandboxService.releaseUserSession(sessionId);
+        res.clearCookie('sid');
     }
 
     // 개발용 API입니다. 배포 시 노출되면 안됩니다.

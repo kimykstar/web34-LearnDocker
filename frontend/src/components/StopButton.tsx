@@ -1,0 +1,30 @@
+import { requestReleaseSession } from '../api/quiz';
+import { useNavigate } from 'react-router-dom';
+
+type StopButtonProps = {
+    setMaxAge: React.Dispatch<React.SetStateAction<number>>;
+};
+
+const StopButton = ({ setMaxAge }: StopButtonProps) => {
+    const navigate = useNavigate();
+
+    const handleStopButtonClick = async () => {
+        await requestReleaseSession(navigate);
+        setMaxAge(0);
+        navigate('/');
+    };
+
+    return (
+        <>
+            <button
+                type='button'
+                onClick={handleStopButtonClick}
+                className='w-full rounded-xl text-white bg-red-500 text-xl flex items-center justify-center'
+            >
+                학습 종료
+            </button>
+        </>
+    );
+};
+
+export default StopButton;
