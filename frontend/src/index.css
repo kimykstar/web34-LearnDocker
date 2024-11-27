@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-    .custom-terminal {
-        scrollbar-width: thin;
-        scrollbar-color: #666 #1e1e1e;
-    }
+.custom-terminal {
+    scrollbar-width: thin;
+    scrollbar-color: #666 #1e1e1e;
 }
