@@ -46,7 +46,9 @@ export class SandboxController {
         } catch (error) {
             if (error instanceof SessionAlreadyAssignedException) {
                 res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
+                return;
             }
+            throw error;
         }
     }
 
