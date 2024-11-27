@@ -15,6 +15,8 @@ import {
 } from './common/exception/filters';
 import { AuthModule } from './common/auth/auth.module';
 import { LoggerMiddleware } from './common/logger/middleware';
+import { CacheModule } from './common/cache/cache.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -37,6 +39,8 @@ import { LoggerMiddleware } from './common/logger/middleware';
             renderPath: '/*',
         }),
         AuthModule,
+        CacheModule,
+        ScheduleModule.forRoot(),
     ],
     controllers: [AppController],
     providers: [
