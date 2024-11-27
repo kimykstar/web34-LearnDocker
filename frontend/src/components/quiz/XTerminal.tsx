@@ -54,8 +54,8 @@ const XTerminal = ({ updateVisualizationData, hostStatus }: XTerminalProps) => {
     }, [hostStatus]);
 
     return (
-        <div className='h-[30%] w-[83.5%] border rounded-lg border-gray-300 bg-gray-50 ml-4'>
-            <div ref={terminalRef} className='h-full w-full p-2' />
+        <div className='h-[30%] w-[83.5%] border rounded-lg border-black bg-black ml-4'>
+            <div ref={terminalRef} className='h-full w-full p-2 custom-terminal' />
         </div>
     );
 };
