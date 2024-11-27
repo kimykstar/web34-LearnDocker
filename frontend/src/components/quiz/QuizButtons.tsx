@@ -5,18 +5,18 @@ import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
 import { SubmitStatus } from '../../types/quiz';
 
 type QuizButtonsProps = {
-    quizId: number;
+    quizNumber: number;
     answer: string;
     showAlert: (message: string) => void;
 };
 
-const QuizButtons = ({ quizId, answer, showAlert }: QuizButtonsProps) => {
+const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
     const [submitResult, setSubmitResult] = useState<SubmitStatus>('FAIL');
     const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmitButtonClick = async () => {
-        const submitResponse = await requestSubmitResult(quizId, answer, navigate);
+        const submitResponse = await requestSubmitResult(quizNumber, answer, navigate);
         if (submitResponse == null) {
             return;
         }
@@ -26,37 +26,36 @@ const QuizButtons = ({ quizId, answer, showAlert }: QuizButtonsProps) => {
     };
 
     const handlePrevButtonClick = async () => {
-        if (quizId === 1) {
+        if (quizNumber === 1) {
             showAlert('처음 문제입니다');
             return;
         }
 
-        if (quizId === 4) {
+        if (quizNumber === 4) {
             navigate('/what-is-container-lifecycle');
             return;
         }
 
-        navigate(`/quiz/${quizId - 1}`);
+        navigate(`/quiz/${quizNumber - 1}`);
     };
 
     const handleNextButtonClick = async () => {
-        if (quizId > 8) {
+        if (quizNumber > 8) {
             showAlert('마지막 문제입니다.');
             return;
         }
 
-        if (quizId === 3) {
+        if (quizNumber === 3) {
             navigate('/what-is-docker-container');
             return;
         }
 
-        const isAccessable = await requestQuizAccessability(quizId + 1);
+        const isAccessable = await requestQuizAccessability(quizNumber + 1);
         if (!isAccessable) {
             showAlert('아직 이동할 수 없습니다.');
             return;
         }
-
-        navigate(`/quiz/${quizId + 1}`);
+        navigate(`/quiz/${quizNumber + 1}`);
     };
 
     return (

@@ -47,10 +47,7 @@ const App = () => {
                             path='/what-is-container-lifecycle'
                             element={<DockerContainerLifeCyclePage />}
                         />
-                        <Route
-                            path='/quiz/:quizNumber'
-                            element={<QuizPage showAlert={showAlert} />}
-                        />
+                        <Route path='/quiz/:quizId' element={<QuizPage showAlert={showAlert} />} />
                         <Route path='/error/:id' element={<ErrorPage />} />
                     </Routes>
                 </div>
