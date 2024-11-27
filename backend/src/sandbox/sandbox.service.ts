@@ -126,7 +126,7 @@ export class SandboxService {
 
     async createContainer() {
         const requestBody = {
-            Image: 'docker:dind',
+            Image: 'dind',
             HostConfig: {
                 Privileged: true,
                 PortBindings: {
@@ -137,6 +137,7 @@ export class SandboxService {
                         },
                     ],
                 },
+                ExtraHosts: ['learndocker.io:172.17.0.1']
             },
             Env: ['DOCKER_TLS_CERTDIR='],
         };
