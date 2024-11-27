@@ -11,11 +11,18 @@ type Props = {
 export const QuizNodes = ({ showAlert, quizId }: Props) => {
     const { title, content } = useQuizData(quizId);
 
-    const isCustomQuiz = CUSTOM_QUIZZES.includes(+quizId);
+    const quizNumber = +quizId;
+    const isCustomQuiz = CUSTOM_QUIZZES.includes(quizNumber);
 
     return {
         head: <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{title}</h1>,
         description: <QuizDescription content={content} />,
-        submit: <QuizSubmitArea quizId={+quizId} showInput={isCustomQuiz} showAlert={showAlert} />,
+        submit: (
+            <QuizSubmitArea
+                quizNumber={quizNumber}
+                showInput={isCustomQuiz}
+                showAlert={showAlert}
+            />
+        ),
     };
 };
