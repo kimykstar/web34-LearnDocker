@@ -1,41 +1,37 @@
-import { useParams } from 'react-router-dom';
-import DockerVisualization from '../visualization/DockerVisualization';
-import QuizDescription from '../quiz/QuizDescription';
-import XTerminal from '../quiz/XTerminal';
-import useDockerVisualization from '../../hooks/useDockerVisualization';
-import { QuizSubmitArea } from './QuizSubmitArea';
-import { CUSTOM_QUIZZES } from '../../constant/quiz';
-import { useQuizData } from '../../hooks/useQuizData';
-import { useHostStatus } from '../../hooks/useHostStatus';
+import { QuizNodes } from './QuizNodes';
+import { VisualizationNodes } from './VisualizationNodes';
+import { QuizPageWrapper } from './QuizPageWrapper';
 
-type Props = {
+type QuizContentProps = {
+    showAlert: (message: string) => void;
+    quizId: string;
+};
+
+type QuizPageProps = {
     showAlert: (message: string) => void;
 };
 
-export const QuizPage = ({ showAlert }: Props) => {
-    const params = useParams<{ quizNumber: string }>();
-    const quizNumber = params.quizNumber ?? '';
-    const { title, content } = useQuizData(quizNumber);
-    const visualizationProps = useDockerVisualization();
-    
-    const hostStatus = useHostStatus({
-        setInitVisualization: visualizationProps.setInitVisualization,
-    });
-
-    const isCustomQuiz = CUSTOM_QUIZZES.includes(+quizNumber);
+export const QuizContent = ({ showAlert, quizId }: QuizContentProps) => {
+    const quizNodes = QuizNodes({ showAlert, quizId });
+    const visualNodes = VisualizationNodes();
 
     return (
         <div className='w-[calc(100vw-17rem)]'>
-            <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{title}</h1>
+            {quizNodes.head}
             <section className='flex h-1/2'>
-                <QuizDescription content={content} />
-                <DockerVisualization {...visualizationProps} />
+                {quizNodes.description}
+                {visualNodes.visualization}
             </section>
-            <XTerminal
-                updateVisualizationData={visualizationProps.updateVisualizationData}
-                hostStatus={hostStatus}
-            />
-            <QuizSubmitArea quizId={+quizNumber} showInput={isCustomQuiz} showAlert={showAlert} />
+            {visualNodes.terminal}
+            {quizNodes.submit}
         </div>
+    );
+};
+
+export const QuizPage = ({ showAlert }: QuizPageProps) => {
+    return (
+        <QuizPageWrapper showAlert={showAlert}>
+            {(quizId) => <QuizContent showAlert={showAlert} quizId={quizId} />}
+        </QuizPageWrapper>
     );
 };

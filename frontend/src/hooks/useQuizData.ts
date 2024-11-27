@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Quiz } from '../types/quiz';
 import { requestQuizData } from '../api/quiz';
 
-export const useQuizData = (quizNumber: string) => {
+export const useQuizData = (quizId: string) => {
     const [quizData, setQuizData] = useState<Quiz>({
         id: 0,
         title: '',
@@ -13,13 +13,13 @@ export const useQuizData = (quizNumber: string) => {
 
     useEffect(() => {
         const fetchQuizData = async () => {
-            const data = await requestQuizData(quizNumber, navigate);
+            const data = await requestQuizData(quizId, navigate);
             if (!data) return;
 
             setQuizData(data);
         };
         fetchQuizData();
-    }, [quizNumber, navigate]);
+    }, [quizId, navigate]);
 
     return {
         id: quizData.id,

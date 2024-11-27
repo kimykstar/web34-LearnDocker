@@ -3,18 +3,18 @@ import QuizButtons from './QuizButtons';
 import QuizInputBox from './QuizInputBox';
 
 type QuizSubmitAreaProps = {
-    quizId: number;
+    quizNumber: number;
     showInput: boolean;
     showAlert: (message: string) => void;
 };
 
-export const QuizSubmitArea = ({ quizId, showInput, showAlert }: QuizSubmitAreaProps) => {
+export const QuizSubmitArea = ({ quizNumber, showInput, showAlert }: QuizSubmitAreaProps) => {
     const [answer, setAnswer] = useState('');
 
     return (
         <>
             {showInput && <QuizInputBox answer={answer} setAnswer={setAnswer} />}
-            <QuizButtons quizId={quizId} answer={answer} showAlert={showAlert} />
+            <QuizButtons quizNumber={quizNumber} answer={answer} showAlert={showAlert} />
         </>
     );
 };
