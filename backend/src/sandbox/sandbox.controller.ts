@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Delete, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Req, Res, UseGuards, Sse } from '@nestjs/common';
+import { interval } from 'rxjs';
+import { filter, mergeMap, take, timeout } from 'rxjs/operators';
 import { SandboxService } from './sandbox.service';
 import { CommandValidationPipe } from './pipes/command.pipe';
 import { Request, Response } from 'express';
@@ -7,8 +9,10 @@ import { HideInProduction } from '../common/decorator/hide-in-production.decorat
 import { AuthGuard } from '../common/auth/auth.guard';
 import { AuthService } from '../common/auth/auth.service';
 import { RequestWithSession } from '../common/types/request';
+import { HOST_STATUS } from './constant';
 import { SessionAlreadyAssignedException } from 'src/common/exception/errors';
 import { getHashValueFromIP } from '../sandbox/utils';
+
 @Controller('sandbox')
 export class SandboxController {
     constructor(
@@ -57,6 +61,22 @@ export class SandboxController {
     getHostStatus(@Req() req: RequestWithSession) {
         const { containerPort } = req.session;
         return this.sandboxService.getHostStatus(containerPort);
+    }
+
+    @Sse('hostStatus/stream')
+    @UseGuards(AuthGuard)
+    streamHostStatus(@Req() req: RequestWithSession) {
+        const { containerPort } = req.session;
+
+        return interval(1000).pipe(
+            mergeMap(async () => {
+                const status = await this.sandboxService.getHostStatus(containerPort);
+                return { data: status };
+            }),
+            filter((message) => message.data === HOST_STATUS.READY),
+            take(1),
+            timeout(30000)
+        );
     }
 
     @Get('endDate')
