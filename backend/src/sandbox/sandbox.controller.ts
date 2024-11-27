@@ -22,7 +22,7 @@ export class SandboxController {
     ) {}
 
     @Get('elements')
-    @UseGuards(AuthGuard, RequestGuard)
+    @UseGuards(AuthGuard)
     getUserContainersImages(@Req() req: RequestWithSession) {
         const { containerPort } = req.session;
         // return this.sandboxService.getUserContainerImages(containerId);
@@ -67,7 +67,7 @@ export class SandboxController {
     }
 
     @Sse('hostStatus/stream')
-    @UseGuards(AuthGuard, RequestGuard)
+    @UseGuards(AuthGuard)
     streamHostStatus(@Req() req: RequestWithSession) {
         const { containerPort } = req.session;
 
@@ -83,7 +83,7 @@ export class SandboxController {
     }
 
     @Get('endDate')
-    @UseGuards(AuthGuard, RequestGuard)
+    @UseGuards(AuthGuard)
     getMaxAge(@Req() req: RequestWithSession) {
         const { startTime } = req.session;
         const endDate = new Date(startTime.getTime() + SESSION_DURATION);

@@ -15,6 +15,8 @@ import {
     InvalidSessionException,
     PreviousProblemUnsolvedExeption,
     SessionAlreadyAssignedException,
+    TooManyRequestsException,
+    RequestIntervalException,
 } from './errors';
 import { isAxiosError } from 'axios';
 import { formatAxiosError } from './axios-formatter';
@@ -82,6 +84,11 @@ export class BusinessExceptionsFilter extends LastExceptionFilter {
 
         if (exception instanceof PreviousProblemUnsolvedExeption) {
             super.catch(new ForbiddenException(exception), host);
+            return;
+        }
+
+        if (exception instanceof RequestIntervalException) {
+            super.catch(new TooManyRequestsException(), host);
             return;
         }
         super.catch(exception, host);

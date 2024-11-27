@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { RequestService } from './request.service';
-
+import { RequestIntervalException } from '../exception/errors';
 @Injectable()
 export class RequestGuard implements CanActivate {
     private readonly Logger = new Logger(RequestGuard.name);
@@ -12,14 +12,17 @@ export class RequestGuard implements CanActivate {
 
         const sessionId = request.cookies?.['sid'];
         if (sessionId) {
-            const result = this.requestService.validRequestInterval(sessionId);
-            if (!result) {
-                this.Logger.debug('Request blocked');
+            try {
+                const result = this.requestService.validRequestInterval(sessionId);
+                return result;
+            } catch (error) {
+                if (error instanceof RequestIntervalException) {
+                    this.Logger.debug('Request Blocked');
+                    throw new RequestIntervalException();
+                }
             }
-            return result;
         }
 
-        this.Logger.debug('Request blocked: Missing session ID in cookies');
         return false;
     }
 }

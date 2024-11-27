@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CacheService } from '../cache/cache.service';
 import { UserSession } from '../types/session';
+import { RequestIntervalException } from '../exception/errors';
 
 const LIMIT = 500;
 
@@ -12,7 +13,9 @@ export class RequestService {
         const prevReqTime = sessionDatas.lastRequest.getTime();
         const currentReqTime = new Date().getTime();
         const interval = currentReqTime - prevReqTime;
-        if (interval < LIMIT) return false;
+        if (interval < LIMIT) {
+            throw new RequestIntervalException();
+        }
         this.cacheService.set(sessionId, {
             ...sessionDatas,
             lastRequest: new Date(),

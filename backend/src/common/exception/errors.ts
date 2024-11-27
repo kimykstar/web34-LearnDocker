@@ -1,3 +1,5 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+
 export class BusinessException extends Error {
     constructor(message: string) {
         super(message);
@@ -26,5 +28,17 @@ export class EntityNotExistException extends BusinessException {
 export class InvalidSessionException extends BusinessException {
     constructor() {
         super('유효하지 않은 세션입니다');
+    }
+}
+
+export class RequestIntervalException extends BusinessException {
+    constructor() {
+        super('너무 짧은 간격의 요청입니다.');
+    }
+}
+
+export class TooManyRequestsException extends HttpException {
+    constructor() {
+        super('Too Many Requests', HttpStatus.TOO_MANY_REQUESTS);
     }
 }
