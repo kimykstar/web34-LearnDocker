@@ -16,8 +16,8 @@ type TimerProps = {
 };
 
 export const Timer = (props: TimerProps) => {
-    const expriationTime = props.expirationTime;
-    const [leftTime, setLeftTime] = useState(expriationTime - new Date().getTime());
+    const expirationTime = props.expirationTime;
+    const [leftTime, setLeftTime] = useState(expirationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
         if (leftTime < 0) clearInterval(timer);

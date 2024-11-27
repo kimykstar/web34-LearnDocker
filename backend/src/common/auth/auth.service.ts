@@ -21,10 +21,10 @@ export class AuthService {
         return session;
     }
 
-    throwIfSessionIsValid(hashedSessionID: string, sessionId?: string) {
+    throwIfSessionIsValid(hashedIpAddress: string, sessionId?: string) {
         try {
             if (sessionId) this.validateSession(sessionId);
-            else this.validateSession(hashedSessionID);
+            else this.validateSession(hashedIpAddress);
             throw new SessionAlreadyAssignedException();
         } catch (error) {
             if (!(error instanceof InvalidSessionException)) {

@@ -3,7 +3,7 @@ import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
 import { SidebarSectionProps } from '../types/sidebar';
-import { requestExpriationTime } from '../api/timer';
+import { requestExpirationTime } from '../api/timer';
 import { ExpirationTime } from '../types/timer';
 import TimerArea from './TimerArea';
 
@@ -66,7 +66,7 @@ const Sidebar = () => {
     const [maxAge, setMaxAge] = useState<number>(0);
     useEffect(() => {
         const fetchTime = async () => {
-            const data = await requestExpriationTime();
+            const data = await requestExpirationTime();
             if (Object.keys(data).includes('endDate')) {
                 const expirationData = data as ExpirationTime;
                 const maxAge = new Date(expirationData.endDate).getTime();

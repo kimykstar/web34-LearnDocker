@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createHostContainer } from '../api/quiz';
 import { LoaderCircle } from 'lucide-react';
-import { requestExpriationTime } from '../api/timer';
+import { requestExpirationTime } from '../api/timer';
 import { ExpirationTime } from '../types/timer';
 
 type StartButtonProps = {
@@ -17,7 +17,7 @@ const StartButton = (props: StartButtonProps) => {
     const handleButtonClick = async () => {
         setLoading(true);
         const success = await createHostContainer(navigate);
-        const { endDate } = (await requestExpriationTime()) as ExpirationTime;
+        const { endDate } = (await requestExpirationTime()) as ExpirationTime;
         if (success) {
             setLoading(false);
             setMaxAge(new Date(endDate).getTime());
