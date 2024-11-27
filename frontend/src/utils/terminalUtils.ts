@@ -7,12 +7,26 @@ export function createTerminal(container: HTMLElement): Terminal {
     const terminal = new Terminal({
         cursorBlink: true,
         fontSize: 14,
+        rows: 20,
     });
 
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
     terminal.open(container);
     fitAddon.fit();
+
+    const handleResize = () => {
+        fitAddon.fit();
+        terminal.resize(terminal.cols, 20);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    const originalDispose = terminal.dispose.bind(terminal);
+    terminal.dispose = () => {
+        window.removeEventListener('resize', handleResize);
+        originalDispose();
+    };
 
     return terminal;
 }
@@ -50,7 +64,7 @@ export const handleEnter = async (
     const commandResponse = await requestCommandResult(command, navigate, term, handleCommandError);
     term.write('\r\n' + commandResponse);
     await updateVisualization(command);
-    
+
     term.write('\r\n~$ ');
 };
 
