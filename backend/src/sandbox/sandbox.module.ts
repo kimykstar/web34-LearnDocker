@@ -3,6 +3,7 @@ import { SandboxService } from './sandbox.service';
 import { SandboxController } from './sandbox.controller';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '../common/cache/cache.module';
+import { RequestModule } from 'src/common/request/request.module';
 
 @Module({
     imports: [
@@ -10,6 +11,7 @@ import { CacheModule } from '../common/cache/cache.module';
             timeout: 10000,
         }),
         CacheModule,
+        RequestModule,
     ],
     providers: [SandboxService],
     controllers: [SandboxController],
