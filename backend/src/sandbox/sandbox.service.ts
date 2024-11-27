@@ -1,13 +1,18 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { parseStringToJson, filterContainerInfo, filterImageInfo } from './utils';
+import {
+    parseStringToJson,
+    filterContainerInfo,
+    filterImageInfo,
+    getHashValueFromIP,
+} from './utils';
 import { requestDockerCommand } from './exec.api';
 import { Container, ContainerData, Image, ImageData } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
-import { randomUUID } from 'crypto';
 import { formatAxiosError } from '../common/exception/axios-formatter';
 import { isAxiosError } from 'axios';
 import { HOST_STATUS } from './constant';
+import { UserSession } from 'src/common/types/session';
 
 @Injectable()
 export class SandboxService {
@@ -156,7 +161,7 @@ export class SandboxService {
         );
     }
 
-    async assignContainer() {
+    async assignContainer(ipAddress: string) {
         const containerId = await this.createContainer();
         let containerPort;
 
@@ -172,7 +177,7 @@ export class SandboxService {
             throw startError;
         }
 
-        const newSessionId = randomUUID();
+        const newSessionId = getHashValueFromIP(ipAddress);
         this.cacheService.set(newSessionId, {
             sessionId: newSessionId,
             containerId,
@@ -207,6 +212,19 @@ export class SandboxService {
         const containers = await this.getContainers();
         await Promise.all(
             containers.map((container: { Id: string }) => this.deleteContainer(container.Id))
+        );
+    }
+
+    async releaseUserSession(sessionId: string) {
+        const { containerId, containerPort } = this.cacheService.get(sessionId) as UserSession;
+
+        await this.httpService.axiosRef.delete(
+            `${process.env.SANDBOX_URL}/containers/${containerId}?force=true&v=true`
+        );
+        this.cacheService.delete(sessionId);
+
+        this.logger.log(
+            `Container Released: ${containerId}\t Session: ${sessionId} \t Port: ${containerPort}`
         );
     }
 }
