@@ -135,3 +135,11 @@ export const requestQuizAccessability = async (quizId: number) => {
     }
     return true;
 };
+
+export const requestReleaseSession = async (navigate: NavigateFunction) => {
+    try {
+        await axios.delete(`/api/sandbox/release`);
+    } catch (error) {
+        return handleErrorResponse(error, navigate);
+    }
+};

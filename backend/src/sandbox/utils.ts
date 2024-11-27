@@ -1,4 +1,5 @@
 import { Image, Container, ImageData, ContainerData } from './types/elements';
+import crypto from 'crypto';
 
 export function parseStringToJson(datas: string) {
     return datas.split('\n').reduce<Array<ImageData | ContainerData>>((jsonDatas, line) => {
@@ -27,4 +28,8 @@ export function filterImageInfo(images: Array<ImageData>) {
         });
         return imageReducer;
     }, []);
+}
+
+export function getHashValueFromIP(ipAddress: string) {
+    return crypto.createHash('sha256').update(ipAddress).digest('hex');
 }

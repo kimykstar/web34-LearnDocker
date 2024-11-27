@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HOUR, MINUTE, SECOND, MAX_TIME } from '../constant/timer';
+import { HOUR, MINUTE, SECOND } from '../constant/timer';
 
 const parseTime = (time: number) => {
     const hour = Math.floor(time / HOUR);
@@ -16,8 +16,8 @@ type TimerProps = {
 };
 
 export const Timer = (props: TimerProps) => {
-    const expriationTime = props.expirationTime || new Date().getTime() + MAX_TIME;
-    const [leftTime, setLeftTime] = useState(expriationTime - new Date().getTime());
+    const expirationTime = props.expirationTime;
+    const [leftTime, setLeftTime] = useState(expirationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
         if (leftTime < 0) clearInterval(timer);
@@ -29,7 +29,7 @@ export const Timer = (props: TimerProps) => {
 
     return (
         <>
-            <span className='flex justify-center align-middle font-bold text-Moby-Blue text-3xl content-center mb-5'>
+            <span className='flex justify-center align-middle font-bold text-Moby-Blue text-3xl content-center mb-2'>
                 {parseTime(leftTime)}
             </span>
         </>
