@@ -1,29 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Quiz } from '../types/quiz';
 import { requestQuizData } from '../api/quiz';
 
 export const useQuizData = (quizId: string) => {
-    const [quizData, setQuizData] = useState<Quiz>({
-        id: 0,
-        title: '',
-        content: '',
-    });
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchQuizData = async () => {
-            const data = await requestQuizData(quizId, navigate);
-            if (!data) return;
-
-            setQuizData(data);
-        };
-        fetchQuizData();
-    }, [quizId, navigate]);
+    const {
+        data: quizData,
+        isPending,
+        isError,
+    } = useQuery({
+        queryKey: ['quiz', quizId],
+        queryFn: () => requestQuizData(quizId, navigate),
+        staleTime: Infinity, // 데이터를 항상 fresh하게 유지
+        gcTime: Infinity, // 캐시를 영구적으로 유지
+    });
 
     return {
-        id: quizData.id,
-        title: quizData.title,
-        content: quizData.content,
+        id: quizData?.id ?? 0,
+        title: quizData?.title ?? '',
+        content: quizData?.content ?? '',
+        isPending,
+        isError,
     };
 };
