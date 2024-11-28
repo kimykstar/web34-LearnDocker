@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
 import { SubmitStatus } from '../../types/quiz';
+import { HttpStatusCode } from 'axios';
 
 type QuizButtonsProps = {
     quizNumber: number;
@@ -50,11 +51,15 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
             return;
         }
 
-        const isAccessable = await requestQuizAccessability(quizNumber + 1);
-        if (!isAccessable) {
+        const accessStatus = await requestQuizAccessability(quizNumber + 1);
+        if (!accessStatus) {
+            return;
+        }
+        if (accessStatus === HttpStatusCode.Forbidden) {
             showAlert('아직 이동할 수 없습니다.');
             return;
         }
+
         navigate(`/quiz/${quizNumber + 1}`);
     };
 

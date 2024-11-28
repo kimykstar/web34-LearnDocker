@@ -7,6 +7,7 @@ import {
     ForbiddenException,
     Logger,
     NotFoundException,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import {
@@ -78,7 +79,7 @@ export class BusinessExceptionsFilter extends LastExceptionFilter {
         }
 
         if (exception instanceof InvalidSessionException) {
-            super.catch(new ForbiddenException(exception), host);
+            super.catch(new UnauthorizedException(exception), host);
             return;
         }
 

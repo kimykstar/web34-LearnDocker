@@ -1,7 +1,7 @@
 import { Terminal } from '@xterm/xterm';
 import { Quiz, QuizResult } from '../types/quiz';
 import { Visualization } from '../types/visualization';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { NavigateFunction } from 'react-router-dom';
 import { CUSTOM_QUIZZES } from '../constant/quiz';
 import LoadingTerminal from '../utils/LoadingTerminal';
@@ -130,15 +130,20 @@ export const requestCommandResult = async (
 export const requestQuizAccessability = async (quizId: number) => {
     try {
         await axios.get(`/api/quiz/${quizId}/access`);
+        return HttpStatusCode.Ok;
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            if (error.response && error.response.status === 403) {
-                return false;
+        if (axios.isAxiosError(error) && error.response) {
+            if (
+                error.response.status === HttpStatusCode.Forbidden ||
+                error.response.status === HttpStatusCode.Unauthorized
+            ) {
+                return error.response.status;
             }
+        } else {
+            console.error('unknown error');
         }
-        throw error;
+        return null;
     }
-    return true;
 };
 
 export const requestReleaseSession = async (navigate: NavigateFunction) => {

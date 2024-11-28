@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { requestQuizAccessability } from '../../api/quiz';
+import { HttpStatusCode } from 'axios';
 
 type QuizPageWrapperProps = {
     children: (quizId: string) => React.ReactNode;
@@ -21,9 +22,18 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
                 return;
             }
 
-            const isAccessable = await requestQuizAccessability(quizNumber);
-            if (!isAccessable) {
+            const accessStatus = await requestQuizAccessability(quizNumber);
+
+            if (!accessStatus) {
+                return;
+            }
+            if (accessStatus === HttpStatusCode.Forbidden) {
                 showAlert('이전 퀴즈를 먼저 완료해주세요.');
+                navigate('/');
+                return;
+            }
+            if (accessStatus === HttpStatusCode.Unauthorized) {
+                showAlert('학습 시작 버튼을 먼저 눌러주세요.');
                 navigate('/');
                 return;
             }
