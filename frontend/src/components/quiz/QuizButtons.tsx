@@ -50,8 +50,8 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
             return;
         }
 
-        const isAccessable = await requestQuizAccessability(quizNumber + 1);
-        if (!isAccessable) {
+        const accessable = await requestQuizAccessability(quizNumber + 1);
+        if (accessable) {
             showAlert('아직 이동할 수 없습니다.');
             return;
         }

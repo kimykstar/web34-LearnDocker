@@ -9,7 +9,7 @@ type QuizPageWrapperProps = {
 
 export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) => {
     const { quizId } = useParams<{ quizId: string }>();
-    const [isValidated, setIsValidated] = useState(false);
+    const [validated, setvalidated] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,20 +21,20 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
                 return;
             }
 
-            const isAccessable = await requestQuizAccessability(quizNumber);
-            if (!isAccessable) {
+            const accessable = await requestQuizAccessability(quizNumber);
+            if (accessable) {
                 showAlert('이전 퀴즈를 먼저 완료해주세요.');
                 navigate('/');
                 return;
             }
 
-            setIsValidated(true);
+            setvalidated(true);
         };
 
         validateQuiz();
     }, [quizId, navigate, showAlert]);
 
-    if (!isValidated) {
+    if (validated) {
         return null;
     }
 
