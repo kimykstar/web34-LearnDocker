@@ -140,6 +140,7 @@ export class SandboxService {
                 ExtraHosts: ['learndocker.io:172.17.0.1']
             },
             Env: ['DOCKER_TLS_CERTDIR='],
+            Cmd: ['--tls=false'],
         };
         const { data } = await this.httpService.axiosRef.post(
             `${process.env.SANDBOX_URL}/containers/create`,
