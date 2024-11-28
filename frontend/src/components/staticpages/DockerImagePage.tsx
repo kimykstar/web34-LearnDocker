@@ -36,6 +36,15 @@ const WhatIsDockerImagePage = () => {
                         애플리케이션의 종속성을 설치하거나 코드를 추가하는 새로운 레이어들을 만들 수
                         있습니다.
                     </p>
+                    <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block text-xs'>
+                        <a
+                            href='https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/'
+                            rel='noopener noreferrer'
+                            target='_blank'
+                        >
+                            더 알아보기
+                        </a>
+                    </div>
                 </div>
             </div>
             <div className='flex-col w-full mt-12'>
