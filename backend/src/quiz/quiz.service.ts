@@ -26,15 +26,15 @@ export class QuizService {
 
         const quizzeData = [
             {
-                //TODO: pull 명령어나 이미지 명령어의 경우 앞에 registry를 붙여야 된다고 알려주기
                 id: 1,
                 title: 'Docker Image 가져오기',
                 content:
                     'Docker의 첫 걸음을 시작해볼까요?\n' +
-                    'Docker Hub에서 제공하는 hello-world 이미지를 가져와보세요.\n\n' +
+                    'learndocker.io에서 제공하는 hello-world 이미지를 가져와보세요.\n\n' +
                     '1. docker pull 명령어를 사용하여 hello-world 이미지를 다운로드하세요.\n' +
                     '2. 이미지가 성공적으로 다운로드되면 자동으로 로컬 시스템에 저장됩니다.\n\n' +
-                    '힌트: docker pull <이미지명> 형식으로 명령어를 작성하세요.',
+                    '힌트: docker pull <이미지명> 형식으로 명령어를 작성하세요.\n' + 
+                    '힌트: 특정 레지스트리에서 이미지를 가져올 때는 이미지명 앞에 <레지스트리 주소/>를 붙여주세요.',
             },
             {
                 id: 2,
@@ -42,7 +42,7 @@ export class QuizService {
                 content:
                     '로컬 시스템에 저장된 Docker 이미지들을 확인해볼까요?\n\n' +
                     '1. docker images 명령어를 사용하여 현재 시스템에 있는 모든 Docker 이미지를 조회하세요.\n' +
-                    '2. 명령어 실행 후 출력된 결과에서 hello-world 이미지의 Image ID 최소 앞 4자리를 입력하세요.\n\n' +
+                    '2. 명령어 실행 후 출력된 결과에서 learndocker.io/hello-world 이미지 ID를 앞 4자리 이상 입력하세요.\n\n' +
                     '힌트: 이미지 목록을 확인하는 명령어는 별도의 인자가 필요하지 않습니다.',
             },
             {
@@ -62,7 +62,6 @@ export class QuizService {
                     '1. docker create 명령어를 사용하여 hello-world 이미지로부터 컨테이너를 생성하세요.\n\n' +
                     '힌트: docker create <이미지명> 형식으로 명령어를 작성하세요.',
             },
-            //TODO: hello-world, hello-world2(가제) 이미지를 커스텀 해서 터미널에 정답이 나오게 하기
             {
                 id: 5,
                 title: 'Container 실행하기',
@@ -70,20 +69,20 @@ export class QuizService {
                     '생성된 컨테이너를 실행해보겠습니다.\n\n' +
                     '1. docker start 명령어를 사용하여 이전 단계에서 생성한 컨테이너를 실행하세요.\n' +
                     '2. 컨테이너 ID나 이름을 사용하여 실행할 수 있습니다.\n' +
-                    '3. 실행 후 터미널에 표시되는 "answer: " 다음에 나오는 값을 입력해주세요.\n\n' +
-                    '힌트: docker start <컨테이너ID> 형식으로 명령어를 작성하세요.\n' +
+                    '3. 실행 후 터미널에 표시되는 "Answer: " 다음에 나오는 값을 입력해주세요.\n\n' +
+                    '힌트: docker start -a <컨테이너ID> 형식으로 명령어를 작성하세요.\n' +
                     '힌트: 컨테이너ID 전부 적을 필요는 없습니다.',
             },
-            // TODO: hello-world2는 가제 수정 필요
             {
                 id: 6,
                 title: 'Container 생성 및 실행하기',
                 content:
                     '컨테이너의 생성과 실행을 한 번에 수행해봅시다.\n\n' +
-                    '1. docker run 명령어를 사용하여 hello-world2 이미지로 컨테이너를 생성하고 실행하세요.\n' +
+                    '1. docker run 명령어를 사용하여 joke 이미지로 컨테이너를 생성하고 실행하세요.\n' +
                     '2. 이 명령어는 create와 start를 연속으로 실행하는 것과 같은 효과입니다.\n' +
-                    '3. 실행 후 터미널에 표시되는 "answer: " 다음에 나오는 값을 입력해주세요.\n\n' +
-                    '힌트: docker run <이미지명> 형식으로 명령어를 작성하세요.',
+                    '3. 실행 후 터미널에 표시되는 문제를 보고 답을 입력해주세요.\n\n' +
+                    '힌트: docker run <이미지명> 형식으로 명령어를 작성하세요.\n' +
+                    '힌트: 이미지는 learndocker.io/joke를 사용하세요.',
             },
             {
                 id: 7,
@@ -91,7 +90,7 @@ export class QuizService {
                 content:
                     '실행 중이거나 중지된 모든 컨테이너를 확인해봅시다.\n\n' +
                     '1. docker ps -a 명령어를 사용하여 모든 컨테이너 목록을 확인하세요.\n' +
-                    '2. 출력된 결과에서 hello-world2 컨테이너의 ID 최소 앞 4자리를 입력하세요.\n\n' +
+                    '2. joke 이미지로 만든 컨테이너의 ID 최소 앞 4자리를 입력하세요.\n\n' +
                     '힌트: docker ps -a 명령어로 모든 컨테이너를 확인할 수 있습니다.',
             },
             {
