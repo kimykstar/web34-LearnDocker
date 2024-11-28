@@ -3,10 +3,16 @@ import XTerminal from './XTerminal';
 import useDockerVisualization from '../../hooks/useDockerVisualization';
 import { useHostStatus } from '../../hooks/useHostStatus';
 
-export const VisualizationNodes = (showAlert: (alertMessage: string) => void) => {
+type VisualizationNodesProps = {
+    eventSourceRef: React.MutableRefObject<EventSource | null>;
+    showAlert: (alertMessage: string) => void;
+};
+
+export const VisualizationNodes = ({ eventSourceRef, showAlert }: VisualizationNodesProps) => {
     const visualizationProps = useDockerVisualization();
     const hostStatus = useHostStatus({
         setInitVisualization: visualizationProps.setInitVisualization,
+        eventSourceRef,
     });
 
     return {
