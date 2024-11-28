@@ -15,7 +15,8 @@ type QuizPageProps = {
 
 export const QuizContent = ({ showAlert, quizId, eventSourceRef }: QuizContentProps) => {
     const quizNodes = QuizNodes({ showAlert, quizId });
-    const visualNodes = VisualizationNodes({ eventSourceRef });
+    
+    const visualNodes = VisualizationNodes({ eventSourceRef, showAlert });
 
     return (
         <div className='w-[calc(100vw-17rem)]'>

@@ -5,9 +5,10 @@ import { useHostStatus } from '../../hooks/useHostStatus';
 
 type VisualizationNodesProps = {
     eventSourceRef: React.MutableRefObject<EventSource | null>;
+    showAlert: (alertMessage: string) => void;
 };
 
-export const VisualizationNodes = ({ eventSourceRef }: VisualizationNodesProps) => {
+export const VisualizationNodes = ({ eventSourceRef, showAlert }: VisualizationNodesProps) => {
     const visualizationProps = useDockerVisualization();
     const hostStatus = useHostStatus({
         setInitVisualization: visualizationProps.setInitVisualization,
@@ -20,6 +21,7 @@ export const VisualizationNodes = ({ eventSourceRef }: VisualizationNodesProps) 
             <XTerminal
                 updateVisualizationData={visualizationProps.updateVisualizationData}
                 hostStatus={hostStatus}
+                showAlert={showAlert}
             />
         ),
     };

@@ -8,7 +8,10 @@ import {
 } from '../utils/terminalUtils';
 import { ENTER_KEY, BACKSPACE_KEY } from '../constant/xterm';
 
-export function useTerminal(updateVisualizationData: (command: string) => Promise<void>) {
+export function useTerminal(
+    updateVisualizationData: (command: string) => Promise<void>,
+    showAlert: (alertMessage: string) => void
+) {
     const currentLineRef = useRef<string>('');
     const blockingRef = useRef<boolean>(false);
 
@@ -27,7 +30,8 @@ export function useTerminal(updateVisualizationData: (command: string) => Promis
                     term,
                     currentLineRef.current.trim(),
                     handleCommandError,
-                    updateVisualizationData
+                    updateVisualizationData,
+                    showAlert
                 );
                 currentLineRef.current = '';
                 blockingRef.current = false;

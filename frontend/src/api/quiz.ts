@@ -45,8 +45,9 @@ export const requestVisualizationData = async (navigate: NavigateFunction) => {
 
 export const createHostContainer = async (navigate: NavigateFunction) => {
     try {
-        await axios.post(`/api/sandbox/start`);
-        return true;
+        const response = await axios.post(`/api/sandbox/start`);
+        const { endDate } = response.data;
+        return endDate;
     } catch (error) {
         return handleErrorResponse(error, navigate);
     }
@@ -102,7 +103,8 @@ export const requestHostStatus = async (navigate: NavigateFunction) => {
 export const requestCommandResult = async (
     command: string,
     term: Terminal,
-    customErrorCallback: (term: Terminal) => void
+    customErrorCallback: (term: Terminal) => void,
+    showAlert: (alertMessage: string) => void
 ) => {
     const loadingTerminal = new LoadingTerminal(term);
 
@@ -114,6 +116,9 @@ export const requestCommandResult = async (
     } catch (error) {
         loadingTerminal.spinnerStop();
         if (axios.isAxiosError(error)) {
+            if (error.response?.status === 429) {
+                showAlert('잠시후 다시 시도해주세요');
+            }
             customErrorCallback(term);
         } else {
             console.error('unknown error');

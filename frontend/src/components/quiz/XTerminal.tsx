@@ -9,12 +9,13 @@ import LoadingTerminal from '../../utils/LoadingTerminal';
 type XTerminalProps = {
     updateVisualizationData: (command: string) => Promise<void>;
     hostStatus: HostStatus;
+    showAlert: (alertMessage: string) => void;
 };
 
-const XTerminal = ({ updateVisualizationData, hostStatus }: XTerminalProps) => {
+const XTerminal = ({ updateVisualizationData, hostStatus, showAlert }: XTerminalProps) => {
     const terminalRef = useRef<HTMLDivElement>(null);
     const terminalInstanceRef = useRef<Terminal | null>(null);
-    const { handleKeyInput } = useTerminal(updateVisualizationData);
+    const { handleKeyInput } = useTerminal(updateVisualizationData, showAlert);
     const loadingRef = useRef<LoadingTerminal | null>(null);
 
     useEffect(() => {
