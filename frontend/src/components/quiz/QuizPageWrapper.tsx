@@ -10,7 +10,7 @@ type QuizPageWrapperProps = {
 
 export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) => {
     const { quizId } = useParams<{ quizId: string }>();
-    const [isValidated, setIsValidated] = useState(false);
+    const [validated, setvalidated] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,13 +38,13 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
                 return;
             }
 
-            setIsValidated(true);
+            setvalidated(true);
         };
 
         validateQuiz();
     }, [quizId, navigate, showAlert]);
 
-    if (!isValidated) {
+    if (validated) {
         return null;
     }
 
