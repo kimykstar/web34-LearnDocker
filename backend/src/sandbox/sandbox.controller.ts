@@ -12,6 +12,7 @@ import { RequestWithSession } from '../common/types/request';
 import { HOST_STATUS } from './constant';
 import { SessionAlreadyAssignedException } from 'src/common/exception/errors';
 import { getHashValueFromIP } from '../sandbox/utils';
+import { RequestGuard } from 'src/common/request/request.guard';
 
 @Controller('sandbox')
 export class SandboxController {
@@ -29,7 +30,7 @@ export class SandboxController {
     }
 
     @Post('command')
-    @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard, RequestGuard)
     processUserCommand(
         @Req() req: RequestWithSession,
         @Body('command', CommandValidationPipe) command: string
@@ -45,8 +46,10 @@ export class SandboxController {
         const hashedSessionID = getHashValueFromIP(ipAddress);
         try {
             this.authService.throwIfSessionIsValid(hashedSessionID, sessionId);
-            const newSessionId = await this.sandboxService.assignContainer(ipAddress);
-            res.cookie('sid', newSessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+            const sessionData = await this.sandboxService.assignContainer(ipAddress);
+            const startTime = sessionData?.startTime as Date;
+            res.cookie('sid', sessionData?.sessionId, { httpOnly: true, maxAge: SESSION_DURATION });
+            res.json({ endDate: new Date(startTime).getTime() + SESSION_DURATION });
         } catch (error) {
             if (error instanceof SessionAlreadyAssignedException) {
                 res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
@@ -88,7 +91,7 @@ export class SandboxController {
     }
 
     @Delete('release')
-    @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard, RequestGuard)
     releaseUserSession(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
         this.sandboxService.releaseUserSession(sessionId);

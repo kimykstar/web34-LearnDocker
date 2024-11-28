@@ -5,4 +5,5 @@ export interface UserSession {
     startTime: Date;
     renew: boolean;
     level: number;
+    lastRequest: Date;
 }

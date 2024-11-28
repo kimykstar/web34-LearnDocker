@@ -49,7 +49,8 @@ export const handleEnter = async (
     term: Terminal,
     command: string,
     handleCommandError: (term: Terminal) => void,
-    updateVisualization: (command: string) => Promise<void>
+    updateVisualization: (command: string) => Promise<void>,
+    showAlert: (alertMessage: string) => void
 ) => {
     if (!command) {
         term.write('\r\n~$ ');
@@ -62,7 +63,12 @@ export const handleEnter = async (
     }
 
     term.write('\r\n');
-    const commandResponse = await requestCommandResult(command, term, handleCommandError);
+    const commandResponse = await requestCommandResult(
+        command,
+        term,
+        handleCommandError,
+        showAlert
+    );
 
     if (commandResponse !== null) {
         term.write(commandResponse);

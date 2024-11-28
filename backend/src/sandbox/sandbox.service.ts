@@ -186,13 +186,14 @@ export class SandboxService {
             startTime: new Date(),
             // TODO: 현재 테스트를 위해 레벨을 임의로 조정중
             level: 5,
+            lastRequest: new Date(),
         });
 
         this.logger.log(
             `Container Assigned: ${containerId}\t Session: ${newSessionId} \t Port: ${containerPort}`
         );
 
-        return newSessionId;
+        return this.cacheService.get(newSessionId);
     }
 
     async deleteContainer(containerId: string) {
