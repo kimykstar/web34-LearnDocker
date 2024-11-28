@@ -44,7 +44,7 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
         validateQuiz();
     }, [quizId, navigate, showAlert]);
 
-    if (validated) {
+    if (!validated) {
         return null;
     }
 
