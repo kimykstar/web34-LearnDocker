@@ -9,10 +9,25 @@ type Props = {
 };
 
 export const QuizNodes = ({ showAlert, quizId }: Props) => {
-    const { title, content } = useQuizData(quizId);
-
+    const { title, content, isPending, isError } = useQuizData(quizId);
     const quizNumber = +quizId;
     const isCustomQuiz = CUSTOM_QUIZZES.includes(quizNumber);
+
+    if (isPending) {
+        return {
+            head: <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>로딩 중...</h1>,
+            description: <QuizDescription content={'퀴즈를 불러오는 중입니다...'} />,
+            submit: null,
+        };
+    }
+
+    if (isError) {
+        return {
+            head: <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>오류 발생</h1>,
+            description: <QuizDescription content={'퀴즈를 불러오는데 실패했습니다.'} />,
+            submit: null,
+        };
+    }
 
     return {
         head: <h1 className='font-bold text-3xl text-Dark-Blue mb-3'>{title}</h1>,
