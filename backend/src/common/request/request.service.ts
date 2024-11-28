@@ -11,14 +11,14 @@ export class RequestService {
     validRequestInterval(sessionId: string) {
         const sessionDatas = this.cacheService.get(sessionId) as UserSession;
         const prevReqTime = sessionDatas.lastRequest.getTime();
-        const currentReqTime = new Date().getTime();
-        const interval = currentReqTime - prevReqTime;
+        const currentReqTime = new Date();
+        const interval = currentReqTime.getTime() - prevReqTime;
         if (interval < LIMIT) {
             throw new RequestIntervalException();
         }
         this.cacheService.set(sessionId, {
             ...sessionDatas,
-            lastRequest: new Date(),
+            lastRequest: currentReqTime,
         });
         return true;
     }
