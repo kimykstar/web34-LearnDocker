@@ -48,9 +48,8 @@ export const handleBackspace = (term: Terminal, currentLine: string) => {
 export const handleEnter = async (
     term: Terminal,
     command: string,
-    handleCommandError: (term: Terminal) => void,
-    updateVisualization: (command: string) => Promise<void>,
-    showAlert: (alertMessage: string) => void
+    handleCommandError: (term: Terminal, statusCode: number) => void,
+    updateVisualization: (command: string) => Promise<void>
 ) => {
     if (!command) {
         term.write('\r\n~$ ');
@@ -63,12 +62,7 @@ export const handleEnter = async (
     }
 
     term.write('\r\n');
-    const commandResponse = await requestCommandResult(
-        command,
-        term,
-        handleCommandError,
-        showAlert
-    );
+    const commandResponse = await requestCommandResult(command, term, handleCommandError);
 
     if (commandResponse !== null) {
         term.write(commandResponse);
