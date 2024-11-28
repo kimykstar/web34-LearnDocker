@@ -137,7 +137,7 @@ export class SandboxService {
                         },
                     ],
                 },
-                ExtraHosts: ['learndocker.io:172.17.0.1']
+                ExtraHosts: ['learndocker.io:172.17.0.1'],
             },
             Env: ['DOCKER_TLS_CERTDIR='],
             Cmd: ['--tls=false'],
@@ -187,7 +187,7 @@ export class SandboxService {
             renew: false,
             startTime: new Date(),
             // TODO: 현재 테스트를 위해 레벨을 임의로 조정중
-            level: 5,
+            level: 1,
             lastRequest: new Date(),
         });
 

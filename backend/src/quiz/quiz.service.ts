@@ -33,7 +33,7 @@ export class QuizService {
                     'learndocker.io에서 제공하는 hello-world 이미지를 가져와보세요.\n\n' +
                     '1. docker pull 명령어를 사용하여 hello-world 이미지를 다운로드하세요.\n' +
                     '2. 이미지가 성공적으로 다운로드되면 자동으로 로컬 시스템에 저장됩니다.\n\n' +
-                    '힌트: docker pull <이미지명> 형식으로 명령어를 작성하세요.\n' + 
+                    '힌트: docker pull <이미지명> 형식으로 명령어를 작성하세요.\n' +
                     '힌트: 특정 레지스트리에서 이미지를 가져올 때는 이미지명 앞에 <레지스트리 주소/>를 붙여주세요.',
             },
             {
@@ -180,7 +180,7 @@ export class QuizService {
     }
 
     private async submitQuiz1(sessionId: string, containerPort: string, level: number) {
-        const validImages = ['hello-world'];
+        const validImages = ['learndocker.io/hello-world'];
         const images = await this.sandboxService.getUserImages(containerPort);
         const result = images.filter((image: Record<string, any>) =>
             validImages.includes(image.RepoTags[0]?.split(':')[0])
@@ -220,7 +220,7 @@ export class QuizService {
     }
 
     private async submitQuiz3(sessionId: string, containerPort: string, level: number) {
-        const validImages = ['hello-world'];
+        const validImages = ['learndocker.io/hello-world'];
         const images = await this.sandboxService.getUserImages(containerPort);
         const result = images.filter((image: Record<string, any>) =>
             validImages.includes(image.RepoTags[0]?.split(':')[0])
@@ -234,7 +234,7 @@ export class QuizService {
     }
 
     private async submitQuiz4(sessionId: string, containerPort: string, level: number) {
-        const validImage = ['hello-world'];
+        const validImage = ['learndocker.io/hello-world'];
         const containers = await this.sandboxService.getUserContainers(containerPort);
         const result = containers.filter((container: Record<string, any>) =>
             validImage.includes(container.Image)
@@ -248,9 +248,9 @@ export class QuizService {
     }
 
     private async submitQuiz5(sessionId: string, userAnswer: string | undefined, level: number) {
-        const answer = 'docker start';
+        const answer = '부스트캠프 웹모바일 9기 화이팅!';
 
-        if (userAnswer === answer) {
+        if (userAnswer?.trim() === answer) {
             this.updateLevel(sessionId, level, 6);
             return { quizResult: 'SUCCESS' };
         } else {
