@@ -143,10 +143,10 @@ export const requestQuizAccessability = async (quizId: number) => {
     }
 };
 
-export const requestReleaseSession = async (navigate: NavigateFunction) => {
+export const requestReleaseSession = async (navigate?: NavigateFunction) => {
     try {
         await axios.delete(`/api/sandbox/release`);
     } catch (error) {
-        return handleErrorResponse(error, navigate);
+        if (navigate) return handleErrorResponse(error, navigate);
     }
 };
