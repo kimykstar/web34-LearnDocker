@@ -7,7 +7,7 @@ import { QuizModule } from './quiz/quiz.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SandboxModule } from './sandbox/sandbox.module';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import {
     BusinessExceptionsFilter,
     HttpExceptionsFilter,
@@ -17,6 +17,8 @@ import { AuthModule } from './common/auth/auth.module';
 import { LoggerMiddleware } from './common/logger/middleware';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RequestModule } from './common/request/request.module';
+import { RequestInterceptor } from './common/request/request.interceptor';
+import { CacheModule } from './common/cache/cache.module';
 
 @Module({
     imports: [
@@ -41,6 +43,7 @@ import { RequestModule } from './common/request/request.module';
         AuthModule,
         RequestModule,
         ScheduleModule.forRoot(),
+        CacheModule,
     ],
     controllers: [AppController],
     providers: [
@@ -58,6 +61,10 @@ import { RequestModule } from './common/request/request.module';
             useClass: BusinessExceptionsFilter,
         },
         Logger,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: RequestInterceptor,
+        },
     ],
 })
 export class AppModule implements NestModule {
