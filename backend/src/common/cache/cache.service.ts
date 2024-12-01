@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserSession } from '../types/session';
-import { SESSION_DURATION } from '../constant';
+import { SESSION_DURATION, NO_INTERACTION_TIME_LIMIT } from '../constant';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { HttpService } from '@nestjs/axios';
 
@@ -32,12 +32,18 @@ export class CacheService {
 
     @Cron(CronExpression.EVERY_10_MINUTES)
     deleteExpiredSession() {
+        const currentTime = new Date();
         this.store.forEach(async (values, sessionId) => {
-            if (new Date(values.startTime).getTime() + SESSION_DURATION < new Date().getTime()) {
+            const startTime = new Date(values.startTime);
+            if (
+                startTime.getTime() + SESSION_DURATION < currentTime.getTime() ||
+                currentTime.getTime() > values.lastRequest.getTime() + NO_INTERACTION_TIME_LIMIT
+            ) {
                 const { containerId } = this.get(sessionId) as UserSession;
                 await this.httpService.axiosRef.delete(
                     `${process.env.SANDBOX_URL}/containers/${containerId}?force=true&v=true`
                 );
+
                 this.delete(sessionId);
             }
         });
