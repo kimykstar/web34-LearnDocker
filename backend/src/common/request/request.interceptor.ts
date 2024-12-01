@@ -8,7 +8,12 @@ export class RequestInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler) {
         const request = context.switchToHttp().getRequest();
         const sessionId = request.cookies['sid'];
-        if (sessionId) {
+        if (
+            !(
+                context.getClass().name === 'SandboxController' &&
+                context.getHandler().name === 'assignContainer'
+            )
+        ) {
             const sessionDatas = this.cacheService.get(sessionId) as UserSession;
             const currentTime = new Date();
             this.cacheService.set(sessionId, {
