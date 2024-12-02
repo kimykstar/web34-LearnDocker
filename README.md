@@ -120,8 +120,7 @@ sequenceDiagram
 
 ### 1. 사용자에 따른 서버 리소스 관리
 
-![image](https://github.com/user-attachments/assets/3d1d2115-54e0-45af-9ef8-3955f390f69b)
-
+![image](https://github.com/user-attachments/assets/d10ef950-e715-42e3-baad-bf57f57dfdf6)
 
 #### 주요 도전 과제
 
@@ -189,7 +188,7 @@ private 레지스트리 관련 개발 일지
 
 ### 4. 17초 지연 이슈 해결 과정 (로딩, SSE, tls=false)
 
-![image](https://github.com/user-attachments/assets/447cff3b-798f-4ee1-9324-8a409a047854)
+![image](https://github.com/user-attachments/assets/a0bf1554-1533-4968-9254-f8ecacb6c756)
 
 #### Wiki 개발 일지
 
