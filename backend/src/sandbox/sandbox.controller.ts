@@ -13,12 +13,14 @@ import { HOST_STATUS } from './constant';
 import { SessionAlreadyAssignedException } from 'src/common/exception/errors';
 import { getHashValueFromIP } from '../sandbox/utils';
 import { RequestGuard } from 'src/common/request/request.guard';
+import { CacheService } from 'src/common/cache/cache.service';
 
 @Controller('sandbox')
 export class SandboxController {
     constructor(
         private readonly sandboxService: SandboxService,
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
+        private readonly cacheService: CacheService
     ) {}
 
     @Get('elements')
@@ -52,10 +54,12 @@ export class SandboxController {
             res.json({ endDate: new Date(startTime).getTime() + SESSION_DURATION });
         } catch (error) {
             if (error instanceof SessionAlreadyAssignedException) {
+                const startTime = this.cacheService.get(hashedSessionID)?.startTime as Date;
                 res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
-                return;
+                res.json({ endDate: new Date(startTime).getTime() + SESSION_DURATION });
+            } else {
+                throw error;
             }
-            throw error;
         }
     }
 
