@@ -91,7 +91,7 @@ export class SandboxController {
     }
 
     @Delete('release')
-    @UseGuards(AuthGuard, RequestGuard)
+    @UseGuards(AuthGuard)
     releaseUserSession(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
         this.sandboxService.releaseUserSession(sessionId);
