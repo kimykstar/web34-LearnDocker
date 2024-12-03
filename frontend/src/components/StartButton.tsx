@@ -14,9 +14,11 @@ const StartButton = (props: StartButtonProps) => {
     const handleButtonClick = async () => {
         setLoading(true);
         const endDate = await createHostContainer(navigate);
+        const endDateTime = new Date(endDate).getTime();
         if (endDate) {
             setLoading(false);
-            setMaxAge(new Date(endDate).getTime());
+            setMaxAge(endDateTime);
+            window.sessionStorage.setItem('endDate', endDateTime.toString());
         }
     };
 

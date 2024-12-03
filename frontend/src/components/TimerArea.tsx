@@ -12,7 +12,7 @@ const TimerArea = ({ expirationTime, setMaxAge }: TimerAreaProps) => {
             <span className='w-full text-gray-400 text-sm flex justify-center align-middle'>
                 남은 학습시간
             </span>
-            <Timer expirationTime={expirationTime} />
+            <Timer expirationTime={expirationTime} setMaxAge={setMaxAge} />
             <StopButton setMaxAge={setMaxAge} />
         </div>
     );

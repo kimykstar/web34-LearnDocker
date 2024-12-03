@@ -14,16 +14,19 @@ const parseTime = (time: number) => {
 
 type TimerProps = {
     expirationTime: number;
+    setMaxAge: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const Timer = (props: TimerProps) => {
-    const expirationTime = props.expirationTime;
+    const { expirationTime, setMaxAge } = props;
     const [leftTime, setLeftTime] = useState(expirationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
         if (leftTime <= SECOND) {
             requestReleaseSession();
             clearInterval(timer);
+            setMaxAge(0);
+            window.sessionStorage.removeItem('endDate');
         }
         if (leftTime < 0) clearInterval(timer);
 
