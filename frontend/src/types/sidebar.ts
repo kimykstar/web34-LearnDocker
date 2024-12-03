@@ -3,5 +3,6 @@ export type SidebarSectionProps = {
     links: Array<{
         title: string;
         path: string;
+        type: string;
     }>;
 };

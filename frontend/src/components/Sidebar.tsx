@@ -6,28 +6,29 @@ import { SidebarSectionProps } from '../types/sidebar';
 import { requestExpirationTime } from '../api/timer';
 import { ExpirationTime } from '../types/timer';
 import TimerArea from './TimerArea';
+import PageType from './PageType';
 
 const links = [
-    { title: 'Home', path: '/' },
-    { title: 'Docker란?', path: '/what-is-docker' },
+    { title: 'Home', path: '/', type: 'education' },
+    { title: 'Docker란?', path: '/what-is-docker', type: 'education' },
 ];
 
 const dockerImageLinks = [
-    { title: 'Docker image란?', path: '/what-is-docker-image' },
-    { title: 'image 가져오기', path: '/quiz/1' },
-    { title: 'image 목록 확인하기', path: '/quiz/2' },
-    { title: 'image 삭제하기', path: '/quiz/3' },
+    { title: 'Docker image란?', path: '/what-is-docker-image', type: 'education' },
+    { title: 'image 가져오기', path: '/quiz/1', type: 'quiz' },
+    { title: 'image 목록 확인하기', path: '/quiz/2', type: 'quiz' },
+    { title: 'image 삭제하기', path: '/quiz/3', type: 'quiz' },
 ];
 
 const dockerContainerLinks = [
-    { title: 'Docker Container란?', path: '/what-is-docker-container' },
-    { title: 'Container의 생명주기', path: '/what-is-container-lifecycle' },
-    { title: 'Container 생성하기', path: '/quiz/4' },
-    { title: 'Container 실행하기', path: '/quiz/5' },
-    { title: 'Container 생성 및 실행하기', path: '/quiz/6' },
-    { title: 'Container 목록 확인하기', path: '/quiz/7' },
-    { title: 'Container 중지하기', path: '/quiz/8' },
-    { title: 'Container 삭제하기', path: '/quiz/9' },
+    { title: 'Docker Container란?', path: '/what-is-docker-container', type: 'education' },
+    { title: 'Container의 생명주기', path: '/what-is-container-lifecycle', type: 'education' },
+    { title: 'Container 생성하기', path: '/quiz/4', type: 'quiz' },
+    { title: 'Container 실행하기', path: '/quiz/5', type: 'quiz' },
+    { title: 'Container 생성 및 실행하기', path: '/quiz/6', type: 'quiz' },
+    { title: 'Container 목록 확인하기', path: '/quiz/7', type: 'quiz' },
+    { title: 'Container 중지하기', path: '/quiz/8', type: 'quiz' },
+    { title: 'Container 삭제하기', path: '/quiz/9', type: 'quiz' },
 ];
 
 const SidebarSection = ({ title, links }: SidebarSectionProps) => {
@@ -53,7 +54,10 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
                 <ul>
                     {links.map((link) => (
                         <li className='m-4 hover:text-Moby-Blue' key={link.path}>
-                            <Link to={link.path}>{link.title}</Link>
+                            <div className='flex justify-between'>
+                                <Link to={link.path}>{link.title}</Link>
+                                <PageType type={link.type} />
+                            </div>
                         </li>
                     ))}
                 </ul>
@@ -80,12 +84,13 @@ const Sidebar = () => {
         <nav className='fixed h-[calc(100vh-4rem)] w-[17rem] bg-gray-100 mt-16 flex flex-col justify-between'>
             <div className='flex-grow'>
                 {links.map((link) => (
-                    <p
-                        className='m-4 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue'
+                    <div
+                        className='flex m-4 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue  justify-between'
                         key={link.path}
                     >
                         <Link to={link.path}>{link.title}</Link>
-                    </p>
+                        <PageType type={link.type} />
+                    </div>
                 ))}
                 <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
