@@ -4,14 +4,23 @@ import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
 import { SubmitStatus } from '../../types/quiz';
 import { HttpStatusCode } from 'axios';
+import { SidebarProps, SidebarState } from '../../types/sidebar';
 
 type QuizButtonsProps = {
     quizNumber: number;
     answer: string;
     showAlert: (message: string) => void;
+    sidebarStates: SidebarProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
 };
 
-const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
+const QuizButtons = ({
+    quizNumber,
+    answer,
+    showAlert,
+    sidebarStates,
+    setSidebarStates,
+}: QuizButtonsProps) => {
     const [submitResult, setSubmitResult] = useState<SubmitStatus>('FAIL');
     const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
@@ -40,15 +49,27 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
         navigate(`/quiz/${quizNumber - 1}`);
     };
 
-    const handleNextButtonClick = async () => {
+    const handleNextButtonClick = async (type: string) => {
+        const { dockerImageStates, dockerContainerStates } = sidebarStates;
+        const nextQuizNum = Number(sessionStorage.getItem('quiz')) + 1;
         if (quizNumber > 8) {
             showAlert('마지막 문제입니다.');
             return;
         }
 
         if (quizNumber === 3) {
+            updateSidebarState(dockerImageStates);
             navigate('/what-is-docker-container');
             return;
+        }
+
+        if (type === 'modal' && 1 <= quizNumber && quizNumber <= 2) {
+            updateSidebarState(dockerImageStates);
+            sessionStorage.setItem('quiz', nextQuizNum.toString());
+        }
+        if (type === 'modal' && 4 <= quizNumber && quizNumber <= 8) {
+            updateSidebarState(dockerContainerStates);
+            sessionStorage.setItem('quiz', nextQuizNum.toString());
         }
 
         const accessStatus = await requestQuizAccessability(quizNumber + 1);
@@ -63,6 +84,17 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
         navigate(`/quiz/${quizNumber + 1}`);
     };
 
+    const updateSidebarState = (states: Array<SidebarState>) => {
+        // 해당 퀴즈 넘버의 State 중 solved가 false인 경우
+        states.forEach((state) => {
+            const currentQuizNum = Number(state.path.slice(-1));
+            if (state.pageType === 'quiz' && currentQuizNum === quizNumber) {
+                state.solved = true;
+            }
+        });
+        setSidebarStates({ ...sidebarStates });
+    };
+
     return (
         <section className='w-[85%] flex justify-end'>
             <button
@@ -73,7 +105,7 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
             </button>
             <button
                 className='text-lg text-white rounded-lg bg-sky-400 hover:bg-sky-500 py-2 px-4 m-4'
-                onClick={handleNextButtonClick}
+                onClick={() => handleNextButtonClick('next')}
             >
                 다음
             </button>
@@ -87,7 +119,7 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
                 openModal={openModal}
                 setOpenModal={setOpenModal}
                 submitResult={submitResult}
-                handleNextButtonClick={handleNextButtonClick}
+                handleNextButtonClick={() => handleNextButtonClick('modal')}
             ></QuizSubmitResultModal>
         </section>
     );

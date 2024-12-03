@@ -1,8 +1,16 @@
 export type SidebarSectionProps = {
     title: string;
-    links: Array<{
-        title: string;
-        path: string;
-        type: string;
-    }>;
+    links: SidebarState[];
+};
+
+export type SidebarProps = {
+    dockerImageStates: Array<SidebarState>;
+    dockerContainerStates: Array<SidebarState>;
+};
+
+export type SidebarState = {
+    title: string;
+    path: string;
+    pageType: string;
+    solved?: boolean;
 };

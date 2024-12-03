@@ -14,12 +14,15 @@ import { QuizPage } from './components/quiz/QuizPage';
 import { Alert } from 'flowbite-react';
 import { useAlert } from './hooks/useAlert';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SidebarProps } from './types/sidebar';
+import { useSidebar } from './hooks/useSidebar';
 
 const queryClient = new QueryClient();
 
 const App = () => {
     const { openAlert, message, showAlert } = useAlert();
     const eventSourceRef = useRef<EventSource | null>(null);
+    const { sidebarStates, setSidebarStates } = useSidebar();
 
     useEffect(() => {
         AOS.init({
@@ -31,6 +34,9 @@ const App = () => {
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
+        if (!sessionStorage.getItem('quiz')) {
+            sessionStorage.setItem('quiz', '1');
+        }
 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -50,7 +56,8 @@ const App = () => {
                 </Alert>
                 <Header />
                 <div className='flex font-pretendard'>
-                    <Sidebar />
+                    <Sidebar {...(sidebarStates as SidebarProps)} />
+
                     <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
                         <Routes>
                             <Route path='/' element={<LandingPage />} />
@@ -74,6 +81,8 @@ const App = () => {
                                     <QuizPage
                                         showAlert={showAlert}
                                         eventSourceRef={eventSourceRef}
+                                        sidebarStates={sidebarStates}
+                                        setSidebarStates={setSidebarStates}
                                     />
                                 }
                             />

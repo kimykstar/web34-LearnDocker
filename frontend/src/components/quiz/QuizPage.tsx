@@ -1,21 +1,37 @@
 import { QuizNodes } from './QuizNodes';
 import { VisualizationNodes } from './VisualizationNodes';
 import { QuizPageWrapper } from './QuizPageWrapper';
+import { SidebarProps } from '../../types/sidebar';
 
 type QuizContentProps = {
     showAlert: (message: string) => void;
     eventSourceRef: React.MutableRefObject<EventSource | null>;
     quizId: string;
+    sidebarStates: SidebarProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
 };
 
 type QuizPageProps = {
     showAlert: (message: string) => void;
     eventSourceRef: React.MutableRefObject<EventSource | null>;
+    sidebarStates: SidebarProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
 };
 
-export const QuizContent = ({ showAlert, quizId, eventSourceRef }: QuizContentProps) => {
-    const quizNodes = QuizNodes({ showAlert, quizId });
-    
+export const QuizContent = ({
+    showAlert,
+    quizId,
+    eventSourceRef,
+    sidebarStates,
+    setSidebarStates,
+}: QuizContentProps) => {
+    const quizNodes = QuizNodes({
+        showAlert,
+        quizId,
+        sidebarStates,
+        setSidebarStates,
+    });
+
     const visualNodes = VisualizationNodes({ eventSourceRef, showAlert });
 
     return (
@@ -31,7 +47,12 @@ export const QuizContent = ({ showAlert, quizId, eventSourceRef }: QuizContentPr
     );
 };
 
-export const QuizPage = ({ showAlert, eventSourceRef }: QuizPageProps) => {
+export const QuizPage = ({
+    showAlert,
+    eventSourceRef,
+    sidebarStates,
+    setSidebarStates,
+}: QuizPageProps) => {
     return (
         <QuizPageWrapper showAlert={showAlert}>
             {(quizId) => (
@@ -39,6 +60,8 @@ export const QuizPage = ({ showAlert, eventSourceRef }: QuizPageProps) => {
                     showAlert={showAlert}
                     quizId={quizId}
                     eventSourceRef={eventSourceRef}
+                    sidebarStates={sidebarStates}
+                    setSidebarStates={setSidebarStates}
                 />
             )}
         </QuizPageWrapper>
