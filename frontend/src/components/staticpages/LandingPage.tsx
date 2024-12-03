@@ -3,7 +3,7 @@ import { BookOpen, Plug, Terminal, TrendingUp, View } from 'lucide-react';
 const LandingPage = () => {
     return (
         <div className='w-full'>
-            <div className='bg-neutral-100'>
+            <div className='bg-neutral-100 rounded-lg'>
                 <div className='container mx-auto px-4 py-16'>
                     <div className='max-w-3xl'>
                         <h1 className='text-4xl font-bold mb-6'>
