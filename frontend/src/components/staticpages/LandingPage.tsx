@@ -1,4 +1,6 @@
-import { BookOpen, Plug, Terminal, TrendingUp, View } from 'lucide-react';
+import { BookOpen, CircleHelp, Plug, Terminal, TrendingUp, View } from 'lucide-react';
+import VisualizationGif from '../../assets/visualization-demo.gif';
+import QuizPageImage from '../../assets/quiz-page-red-box.png';
 import { ReactElement } from 'react';
 
 type LucideSvgIcon = typeof View;
@@ -17,8 +19,15 @@ const LandingPage = () => {
             <Banner />
 
             <FeatureIntro />
+            <hr />
 
             <StudyGuide />
+            <hr />
+
+            <QuizPageGuide />
+            <hr />
+
+            <VisualizationGuide />
         </div>
     );
 };
@@ -53,7 +62,7 @@ const FeatureIntro = () => (
                 Icon={TrendingUp}
             />
             <IntroCard
-                title={'통합된 학습 환경'}
+                title={'사용자별 도커 실습 환경 제공'}
                 description={
                     '실제 Docker 환경에서 직접 명령어를 실행하고 결과를 확인하세요. 별도의 설치나 설정 없이 바로 학습을 시작할 수 있습니다.'
                 }
@@ -127,7 +136,7 @@ const StudyGuide = () => (
                     <li className='text-gray-700'>
                         <strong>Image 목록 확인하기</strong>, <strong>Container 실행하기</strong>,{' '}
                         <strong>Container 생성 및 실행하기</strong>,
-                        <strong>Container 목록 확인하기</strong> 문제는 Input 창에 정답을 입력해야
+                        <strong>Container 목록 확인하기</strong> 문제는 답안란에 정답을 입력해야
                         합니다.
                     </li>
                     <li className='text-gray-700'>채점 버튼을 눌러 통과 여부를 확인하세요.</li>
@@ -137,6 +146,108 @@ const StudyGuide = () => (
         </div>
     </div>
 );
+
+const QuizPageGuide = () => {
+    const imageAlt = '번호가 매겨진 퀴즈 페이지의 요소';
+    return (
+        <div className='container mx-auto px-4 py-16'>
+            <h2 className='text-3xl mb-6'>퀴즈 페이지 가이드</h2>
+            <div className='flex flex-col lg:flex-row gap-8 items-start'>
+                <DetailedCard
+                    className='basis-2/5'
+                    title='페이지 요소 설명'
+                    subTitle='퀴즈 페이지에서 상호작용 가능한 요소를 확인하세요.'
+                    Icon={CircleHelp}
+                >
+                    <ol className='space-y-4 list-decimal list-inside'>
+                        <li className='text-gray-700'>
+                            Docker 학습을 돕는 <strong>문제</strong>입니다. 잘 읽고 문제와 관련된 docker 명령어를 명령창에 입력하세요.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>명령창</strong>입니다. docker 명령어를 입력하여 실행 결과를 확인할 수 있습니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>컨테이너 목록 영역</strong>입니다. docker 명령어를 입력할 때마다 컨테이너의 상태 변화를 확인할 수 있습니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>이미지 목록 영역</strong>입니다. pull 받은 이미지 목록을 확인할 수 있습니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>답안란</strong>입니다. 답안란이 존재하는 문제는 답을 직접 입력해야 채점이 가능합니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>채점 버튼</strong>입니다. 문제가 요구하는 docker 명령을 수행하거나, 답안란에 정답을 입력한 뒤에 채점 버튼을 눌러주세요.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>이전 버튼</strong>입니다. 이전 문제로 이동할 수 있습니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>다음 버튼</strong>입니다. 현재 문제를 통과한 뒤에 다음 문제로 이동할 수 있습니다.
+                        </li>
+                    </ol>
+                </DetailedCard>
+
+                <div className='basis-3/5'>
+                    <div className='bg-gray-100 rounded-xl overflow-hidden shadow-lg'>
+                        <img
+                            src={QuizPageImage}
+                            alt={imageAlt}
+                            className='w-full h-auto object-contain'
+                        />
+                        <div className='p-4 bg-white'>
+                            <p className='text-gray-600 text-center'>{imageAlt}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const VisualizationGuide = () => {
+    const imageAlt = '실시간 Docker 명령어 실행 및 상태 변화 시각화 예시';
+    return (
+        <div className='container mx-auto px-4 py-16'>
+            <h2 className='text-3xl mb-6'>실시간 시각화 가이드</h2>
+            <div className='flex flex-col lg:flex-row gap-8 items-start'>
+                <DetailedCard
+                    className='basis-2/5'
+                    title='명령어 실행 과정 시각화'
+                    subTitle='Docker 명령어를 입력할 때마다 실시간으로 컨테이너와 이미지의 상태 변화를 즉각적으로 확인할 수 있습니다.'
+                    Icon={View}
+                >
+                    <ol className='space-y-4 list-decimal list-inside'>
+                        <li className='text-gray-700'>
+                            <strong>docker</strong> 명령을 실행하여 상태 변화가 발생하면 화살표
+                            애니메이션이 등장합니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>docker pull</strong> 명령을 실행하면 Image Box가 추가됩니다.
+                        </li>
+                        <li className='text-gray-700'>
+                            <strong>docker run</strong> 명령을 실행하면 Container Box가 생성되며,
+                            Image와 Container의 색상은 동일합니다. Container의 실행 상태는 우측 상단
+                            Ping 색상으로 확인할 수 있습니다.
+                        </li>
+                    </ol>
+                </DetailedCard>
+
+                <div className='basis-3/5'>
+                    <div className='bg-gray-100 rounded-xl overflow-hidden shadow-lg'>
+                        <img
+                            src={VisualizationGif}
+                            alt={imageAlt}
+                            className='w-full h-auto object-contain'
+                        />
+                        <div className='p-4 bg-white'>
+                            <p className='text-gray-600 text-center'>{imageAlt}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const DetailedCard = ({ title, subTitle, Icon, children, className }: DetailedCardProps) => {
     return (
