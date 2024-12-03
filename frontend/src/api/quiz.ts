@@ -30,7 +30,8 @@ export const requestQuizData = async (quizNumber: string, navigate: NavigateFunc
         const response = await axios.get<Quiz>(`/api/quiz/${quizNumber}`);
         return response.data;
     } catch (error) {
-        return handleErrorResponse(error, navigate);
+        handleErrorResponse(error, navigate);
+        throw error;
     }
 };
 
