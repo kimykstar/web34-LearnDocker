@@ -25,10 +25,16 @@ const App = () => {
         AOS.init({
             duration: 500,
         });
-        window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             e.preventDefault();
             return '';
-        });
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     return (
