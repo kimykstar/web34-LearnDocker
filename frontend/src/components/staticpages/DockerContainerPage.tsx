@@ -124,18 +124,18 @@ const DockerContainerPage = () => {
                 <div className='flex-col mt-6' data-aos='zoom-in'>
                     <h2 className='text-2xl font-bold'>1. 컨테이너 생성</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker create [option] [Image ID | Image Name] [명령어]
-                        </span>
+                        </code>
                     </div>
                     <p className='block mt-2 ml-4'>
                         Image Name 혹은 Image ID에 해당하는 컨테이너를 생성합니다.
                         <br />
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>
-                                docker container create
-                            </i>{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker container create</i>
+                            </code>{' '}
                         </span>
                         <br />
                         <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block  text-xs'>
@@ -152,18 +152,18 @@ const DockerContainerPage = () => {
                 <div className='flex-col mt-6' data-aos='zoom-in'>
                     <h2 className='text-2xl font-bold'>2. 컨테이너 실행</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker start [Container Name | Container ID]
-                        </span>
+                        </code>
                     </div>
                     <p className='block mt-2 ml-4'>
                         Container Name 혹은 Container ID에 해당하는 컨테이너를 실행합니다.
                         <br />
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>
-                                docker container start
-                            </i>{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker container start</i>
+                            </code>{' '}
                         </span>
                         <br />
                         <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block  text-xs'>
@@ -180,9 +180,9 @@ const DockerContainerPage = () => {
                 <div className='flex-col mt-6' data-aos='zoom-in'>
                     <h2 className='text-2xl font-bold'>3. 컨테이너 생성 및 실행</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker run [option] [Image ID | Image Name]
-                        </span>
+                        </code>
                     </div>
                     <p className='block mt-2 ml-4'>
                         Container Name 혹은 Container ID에 해당하는 컨테이너를 생성 및 실행합니다.
@@ -193,7 +193,9 @@ const DockerContainerPage = () => {
                         </span>
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>docker container run</i>{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker container run</i>
+                            </code>{' '}
                         </span>
                         <br />
                         <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block  text-xs'>
@@ -210,18 +212,18 @@ const DockerContainerPage = () => {
                 <div className='flex-col mt-6' data-aos='fade-left'>
                     <h2 className='text-2xl font-bold'>4. 컨테이너 재실행</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker restart [options] [Container Name | Container ID]
-                        </span>
+                        </code>
                     </div>
                     <p className='block mt-2 ml-4'>
                         Running상태에 해당하는 특정 컨테이너를 재실행 합니다.
                         <br />
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>
-                                docker container restart
-                            </i>{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i> docker container restart</i>
+                            </code>{' '}
                         </span>
                         <br />
                         <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block text-xs'>
@@ -238,7 +240,7 @@ const DockerContainerPage = () => {
                 <div className='flex-col mt-6' data-aos='zoom-in'>
                     <h2 className='text-2xl font-bold'>5. 컨테이너 확인하기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>docker ps [option]</span>
+                        <code className='text-sm font-bold'>docker ps [option]</code>
                     </div>
                     <p className='block mt-2 ml-4'>
                         <span>로컬에 존재하는 컨테이너들의 목록을 확인합니다.</span>
@@ -247,7 +249,9 @@ const DockerContainerPage = () => {
                         </span>
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>docker container ls</i>{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i> docker contaner ls</i>
+                            </code>{' '}
                         </span>
                         <br />
                         <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block text-xs'>
@@ -264,16 +268,18 @@ const DockerContainerPage = () => {
                 <div className='flex-col mt-6' data-aos='zoom-in'>
                     <h2 className='text-2xl font-bold'>6. 컨테이너 삭제하기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker rm [Container Name | Container ID]
-                        </span>
+                        </code>
                     </div>
                     <p className='block mt-2 ml-4'>
                         Container Name 혹은 Container ID에 해당하는 컨테이너를 삭제합니다.
                         <br />
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>docker container rm</i>{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker container rm</i>
+                            </code>{' '}
                         </span>
                         <br />
                         <div className='border border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block text-xs'>

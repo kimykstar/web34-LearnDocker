@@ -53,9 +53,9 @@ const WhatIsDockerImagePage = () => {
                 <div className='flex-col mt-6'>
                     <h2 className='text-2xl font-bold'>1. 이미지 가져오기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker pull [Image ID | Image Name]
-                        </span>
+                        </code>
                     </div>
                     <p className='mt-2 ml-4'>
                         Docker Image를 Docker Registry로부터 가져와 local에 저장합니다.
@@ -64,21 +64,26 @@ const WhatIsDockerImagePage = () => {
                 <div className='flex-col mt-6'>
                     <h2 className='text-2xl font-bold'>2. 이미지 확인하기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>docker image ls</span>
+                        <code className='text-sm font-bold'>docker image ls</code>
                     </div>
                     <p className='mt-2 ml-4'>
                         Local에 저장된 Docker Image들의 목록을 한번에 확인할 수 있습니다.
                         <br />
                         <span className='text-sm'>
                             Aliases:{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>docker images</i> ,{' '}
-                            <i className='bg-gray-200 rounded-sm  pl-1 pr-2'>docker image list</i>
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker images</i>
+                            </code>{' '}
+                            ,{' '}
+                            <code className='bg-gray-200 rounded-sm  pl-1 pr-2'>
+                                <i>docker image list</i>
+                            </code>
                         </span>
                     </p>
                     <div className='rounded-md w-full border border-black p-4 mt-4'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker inspect [Image Name | Image ID]
-                        </span>
+                        </code>
                     </div>
                     <p className='mt-2 ml-4'>
                         Local에 저장된 Docker Image 중 특정 Image의 정보를 확인할 수 있습니다.
@@ -87,17 +92,22 @@ const WhatIsDockerImagePage = () => {
                 <div className='flex-col mt-6'>
                     <h2 className='text-2xl font-bold'>3. 이미지 삭제하기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
-                        <span className='text-sm font-bold'>
+                        <code className='text-sm font-bold'>
                             docker image rm [Image ID | Image Name]
-                        </span>
+                        </code>
                     </div>
                     <p className='mt-2 ml-4'>
                         Local에 저장된 특정 Docker Image를 삭제합니다.
                         <br />
                         <span className='text-sm'>
-                            Aliases: <i className='bg-gray-200 rounded-sm pl-1 pr-2'>docker rmi</i>{' '}
+                            Aliases:{' '}
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker rmi</i>
+                            </code>{' '}
                             ,{' '}
-                            <i className='bg-gray-200 rounded-sm pl-1 pr-2'>docker image remove</i>
+                            <code className='bg-gray-200 rounded-sm pl-1 pr-2'>
+                                <i>docker image remove</i>
+                            </code>
                         </span>
                     </p>
                 </div>
