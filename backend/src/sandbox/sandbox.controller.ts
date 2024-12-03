@@ -51,12 +51,12 @@ export class SandboxController {
             const sessionData = await this.sandboxService.assignContainer(ipAddress);
             const startTime = sessionData?.startTime as Date;
             res.cookie('sid', sessionData?.sessionId, { httpOnly: true, maxAge: SESSION_DURATION });
-            res.json({ endDate: new Date(startTime).getTime() + SESSION_DURATION });
+            return { endDate: new Date(startTime).getTime() + SESSION_DURATION };
         } catch (error) {
             if (error instanceof SessionAlreadyAssignedException) {
                 const startTime = this.cacheService.get(hashedSessionID)?.startTime as Date;
                 res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
-                res.json({ endDate: new Date(startTime).getTime() + SESSION_DURATION });
+                return { endDate: new Date(startTime).getTime() + SESSION_DURATION };
             } else {
                 throw error;
             }

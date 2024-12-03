@@ -14,7 +14,6 @@ import { QuizPage } from './components/quiz/QuizPage';
 import { Alert } from 'flowbite-react';
 import { useAlert } from './hooks/useAlert';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { requestReleaseSession } from './api/quiz';
 
 const queryClient = new QueryClient();
 
@@ -29,9 +28,6 @@ const App = () => {
         window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
             e.preventDefault();
             return '';
-        });
-        window.addEventListener('unload', () => {
-            requestReleaseSession();
         });
     }, []);
 
