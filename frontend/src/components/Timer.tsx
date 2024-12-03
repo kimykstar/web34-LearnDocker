@@ -15,10 +15,11 @@ const parseTime = (time: number) => {
 type TimerProps = {
     expirationTime: number;
     setMaxAge: React.Dispatch<React.SetStateAction<number>>;
+    setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Timer = (props: TimerProps) => {
-    const { expirationTime, setMaxAge } = props;
+    const { expirationTime, setMaxAge, setOpenTimerModal } = props;
     const [leftTime, setLeftTime] = useState(expirationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
@@ -28,6 +29,10 @@ export const Timer = (props: TimerProps) => {
             setMaxAge(0);
             window.sessionStorage.removeItem('endDate');
         }
+        if (10 * MINUTE <= leftTime && leftTime <= 10 * MINUTE + SECOND) {
+            setOpenTimerModal(true);
+        }
+
         if (leftTime < 0) clearInterval(timer);
 
         return () => {

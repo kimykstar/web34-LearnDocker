@@ -60,7 +60,11 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
     );
 };
 
-const Sidebar = () => {
+type SidebarProps = {
+    setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Sidebar = ({ setOpenTimerModal }: SidebarProps) => {
     const [maxAge, setMaxAge] = useState<number>(0);
     const endDate = window.sessionStorage.getItem('endDate');
     useEffect(() => {
@@ -82,7 +86,11 @@ const Sidebar = () => {
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
             </div>
             {maxAge ? (
-                <TimerArea expirationTime={maxAge} setMaxAge={setMaxAge} />
+                <TimerArea
+                    expirationTime={maxAge}
+                    setMaxAge={setMaxAge}
+                    setOpenTimerModal={setOpenTimerModal}
+                />
             ) : (
                 <StartButton setMaxAge={setMaxAge} />
             )}
