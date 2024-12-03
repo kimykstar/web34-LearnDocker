@@ -4,14 +4,14 @@ const DockerContainerPage = () => {
         <div className='w-full'>
             <div className='flex-col'>
                 <h1 className='text-3xl font-bold'>💡Docker Container란 무엇일까요?</h1>
-                <div className='flex justify-center' data-aos='zoom-in'>
+                <div className='flex justify-center' data-aos='fade-left'>
                     <img src={DockerContainer2} className='content-center'></img>
                 </div>
                 <div className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'>
                     <p className='text-black'>
                         <span className='text-lg font-bold'>컨테이너는 무엇인가요❓</span>
                         <br />
-                        <div className='mt-1 bg-gray-100 p-4 rounded-md' data-aos='zoom-in'>
+                        <div className='mt-1 bg-gray-100 p-4 rounded-md' data-aos='fade-left'>
                             컨테이너는{' '}
                             <span className='text-blue-800 font-bold'>
                                 이미지의 실행 가능한 인스턴스
@@ -22,7 +22,7 @@ const DockerContainerPage = () => {
                             <span className='p-1 text-white bg-blue-400 rounded-md'>
                                 생성(Create)
                             </span>
-                            ,
+                            ,{' '}
                             <span className='p-1 text-white bg-blue-400 rounded-md'>
                                 시작(Start)
                             </span>
@@ -34,7 +34,7 @@ const DockerContainerPage = () => {
                             <span className='p-1 text-white bg-blue-400 rounded-md'>
                                 이동(Move)
                             </span>
-                            ,
+                            ,{' '}
                             <span className='p-1 text-white bg-blue-400 rounded-md'>
                                 삭제(Remove)
                             </span>
@@ -43,7 +43,7 @@ const DockerContainerPage = () => {
                         <br />
                         <span className='text-lg font-bold'>컨테이너의 활용 방법❓</span>
                         <br />
-                        <div className='bg-gray-100 p-4 rounded-md' data-aos='zoom-in'>
+                        <div className='bg-gray-100 p-4 rounded-md' data-aos='fade-left'>
                             <span className='block font-bold mt-2 text-blue-800'>
                                 1. 컨테이너의 네트워크 연결
                             </span>
@@ -107,7 +107,7 @@ const DockerContainerPage = () => {
                     <h1 className='text-3xl font-bold'>Docker Container명령어</h1>
                     <div
                         className='border ml-3 border-slate-600 p-1 rounded-md text-Moby-Blue mt-2 inline-block text-xs'
-                        data-aos='zoom-in'
+                        data-aos='fade-lef'
                     >
                         <a
                             href='https://docs.docker.com/reference/cli/docker/container/'
@@ -121,7 +121,7 @@ const DockerContainerPage = () => {
                 <span className='block mt-2'>
                     Docker에서 Container를 조작하는 명령에 대해서 알아봅시다!
                 </span>
-                <div className='flex-col mt-6' data-aos='zoom-in'>
+                <div className='flex-col mt-6' data-aos='fade-left'>
                     <h2 className='text-2xl font-bold'>1. 컨테이너 생성</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
                         <code className='text-sm font-bold'>
@@ -149,7 +149,7 @@ const DockerContainerPage = () => {
                         </div>
                     </p>
                 </div>
-                <div className='flex-col mt-6' data-aos='zoom-in'>
+                <div className='flex-col mt-6' data-aos='fade-left'>
                     <h2 className='text-2xl font-bold'>2. 컨테이너 실행</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
                         <code className='text-sm font-bold'>
@@ -177,7 +177,7 @@ const DockerContainerPage = () => {
                         </div>
                     </p>
                 </div>
-                <div className='flex-col mt-6' data-aos='zoom-in'>
+                <div className='flex-col mt-6' data-aos='fade-left'>
                     <h2 className='text-2xl font-bold'>3. 컨테이너 생성 및 실행</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
                         <code className='text-sm font-bold'>
@@ -237,7 +237,7 @@ const DockerContainerPage = () => {
                         </div>
                     </p>
                 </div>
-                <div className='flex-col mt-6' data-aos='zoom-in'>
+                <div className='flex-col mt-6' data-aos='fade-left'>
                     <h2 className='text-2xl font-bold'>5. 컨테이너 확인하기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
                         <code className='text-sm font-bold'>docker ps [option]</code>
@@ -265,7 +265,7 @@ const DockerContainerPage = () => {
                         </div>
                     </p>
                 </div>
-                <div className='flex-col mt-6' data-aos='zoom-in'>
+                <div className='flex-col mt-6' data-aos='fade-left'>
                     <h2 className='text-2xl font-bold'>6. 컨테이너 삭제하기</h2>
                     <div className='rounded-md w-full border border-black p-4 mt-2'>
                         <code className='text-sm font-bold'>
