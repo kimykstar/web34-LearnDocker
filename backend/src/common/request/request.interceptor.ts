@@ -12,12 +12,12 @@ export class RequestInterceptor implements NestInterceptor {
             context.getClass().name !== 'SandboxController' ||
             context.getHandler().name !== 'assignContainer'
         ) {
-          const sessionDatas = this.cacheService.get(sessionId) as UserSession;
-          const currentTime = new Date();
-          this.cacheService.set(sessionId, {
-              ...sessionDatas,
-              lastRequest: currentTime,
-          });
+            const sessionDatas = this.cacheService.get(sessionId) as UserSession;
+            const currentTime = new Date();
+            this.cacheService.set(sessionId, {
+                ...sessionDatas,
+                lastRequest: currentTime,
+            });
         }
         return next.handle();
     }
