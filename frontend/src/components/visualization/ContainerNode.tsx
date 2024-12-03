@@ -38,10 +38,10 @@ const ContainerNode = ({
                 <span className='text-sm'>{label}</span>
                 <Icon size={64} />
             </div>
-            <div className='flex flex-col overflow-auto h-full'>
+            <div className='flex flex-col h-full'>
                 {containerData?.map((element) => (
                     <div
-                        className='relative border-4 rounded m-1 text-xs'
+                        className='relative border-4 rounded m-1 text-[10px] min-w-[4rem] max-w-[8rem]'
                         style={{
                             borderColor: element.color,
                         }}
@@ -57,7 +57,7 @@ const ContainerNode = ({
                                 ></span>
                             </>
                         )}
-                        {element.name}
+                        <div className='truncate'>{element.name}</div>
                     </div>
                 ))}
             </div>
