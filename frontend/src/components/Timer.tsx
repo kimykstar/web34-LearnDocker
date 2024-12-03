@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HOUR, MINUTE, SECOND } from '../constant/timer';
+import { requestReleaseSession } from '../api/quiz';
 
 const parseTime = (time: number) => {
     const hour = Math.floor(time / HOUR);
@@ -20,6 +21,10 @@ export const Timer = (props: TimerProps) => {
     const [leftTime, setLeftTime] = useState(expirationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
+        if (leftTime <= SECOND) {
+            requestReleaseSession();
+            clearInterval(timer);
+        }
         if (leftTime < 0) clearInterval(timer);
 
         return () => {
