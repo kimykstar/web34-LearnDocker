@@ -13,12 +13,14 @@ import { HOST_STATUS } from './constant';
 import { SessionAlreadyAssignedException } from 'src/common/exception/errors';
 import { getHashValueFromIP } from '../sandbox/utils';
 import { RequestGuard } from 'src/common/request/request.guard';
+import { CacheService } from 'src/common/cache/cache.service';
 
 @Controller('sandbox')
 export class SandboxController {
     constructor(
         private readonly sandboxService: SandboxService,
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
+        private readonly cacheService: CacheService
     ) {}
 
     @Get('elements')
@@ -49,13 +51,15 @@ export class SandboxController {
             const sessionData = await this.sandboxService.assignContainer(ipAddress);
             const startTime = sessionData?.startTime as Date;
             res.cookie('sid', sessionData?.sessionId, { httpOnly: true, maxAge: SESSION_DURATION });
-            res.json({ endDate: new Date(startTime).getTime() + SESSION_DURATION });
+            return { endDate: new Date(startTime).getTime() + SESSION_DURATION };
         } catch (error) {
             if (error instanceof SessionAlreadyAssignedException) {
+                const startTime = this.cacheService.get(hashedSessionID)?.startTime as Date;
                 res.cookie('sid', hashedSessionID, { httpOnly: true, maxAge: SESSION_DURATION });
-                return;
+                return { endDate: new Date(startTime).getTime() + SESSION_DURATION };
+            } else {
+                throw error;
             }
-            throw error;
         }
     }
 
@@ -91,7 +95,7 @@ export class SandboxController {
     }
 
     @Delete('release')
-    @UseGuards(AuthGuard, RequestGuard)
+    @UseGuards(AuthGuard)
     releaseUserSession(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const sessionId = req.cookies['sid'];
         this.sandboxService.releaseUserSession(sessionId);
