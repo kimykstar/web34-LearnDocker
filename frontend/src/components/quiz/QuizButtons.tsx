@@ -4,15 +4,15 @@ import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
 import { SubmitStatus } from '../../types/quiz';
 import { HttpStatusCode } from 'axios';
-import { SidebarProps } from '../../types/sidebar';
+import { SidebarElementsProps } from '../../types/sidebar';
 import { updateSidebarState } from '../../utils/sidebarUtils';
 
 type QuizButtonsProps = {
     quizNumber: number;
     answer: string;
     showAlert: (message: string) => void;
-    sidebarStates: SidebarProps;
-    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
 const QuizButtons = ({
@@ -61,6 +61,7 @@ const QuizButtons = ({
 
         if (quizNumber === 3) {
             updateSidebarState(dockerImageStates, quizNumber);
+            setSidebarStates({ ...sidebarStates });
             navigate('/what-is-docker-container');
             return;
         }
@@ -87,16 +88,6 @@ const QuizButtons = ({
 
         navigate(`/quiz/${quizNumber + 1}`);
     };
-
-    // const updateSidebarState = (states: Array<SidebarState>) => {
-    //     states.forEach((state) => {
-    //         const currentQuizNum = Number(state.path.slice(-1));
-    //         if (state.pageType === 'quiz' && currentQuizNum === quizNumber) {
-    //             state.solved = true;
-    //         }
-    //     });
-    //     setSidebarStates({ ...sidebarStates });
-    // };
 
     return (
         <section className='w-[85%] flex justify-end'>

@@ -8,7 +8,7 @@ type ImagePopoverProps = {
 const ImagePopover = ({ image }: ImagePopoverProps) => {
     const { id, name } = image;
     const filteredId = id.slice(7);
-    console.log(filteredId);
+
     return (
         <ul className='p-2 bg-gray-50 rounded-lg shadow-md border border-gray-200'>
             <li className='mb-2'>
