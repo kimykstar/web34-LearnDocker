@@ -8,15 +8,19 @@ type QuizPageWrapperProps = {
     showAlert: (message: string) => void;
 };
 
+type userValidationState = {
+    start: boolean;
+    level: number;
+};
+
 export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) => {
     const { quizId } = useParams<{ quizId: string }>();
-    const [validated, setvalidated] = useState(false);
+    const quizNumber = Number(quizId);
+    const [validated, setvalidated] = useState<userValidationState>({ start: false, level: 0 });
     const navigate = useNavigate();
 
     useEffect(() => {
         const validateQuiz = async () => {
-            const quizNumber = Number(quizId);
-
             if (Number.isNaN(quizNumber) || quizNumber < 1 || quizNumber > 10) {
                 navigate('/error/404');
                 return;
@@ -38,13 +42,15 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
                 return;
             }
 
-            setvalidated(true);
+            if (validated.level < quizNumber) {
+                setvalidated({ start: true, level: quizNumber });
+            }
         };
 
         validateQuiz();
-    }, [quizId, navigate, showAlert]);
+    }, [quizNumber, navigate, showAlert]);
 
-    if (!validated) {
+    if (validated.start === false || validated.level < quizNumber) {
         return null;
     }
 
