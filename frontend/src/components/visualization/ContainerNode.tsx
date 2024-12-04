@@ -5,8 +5,8 @@ import {
     Container,
 } from '../../types/visualization';
 import { Popover } from 'flowbite-react';
-import ContainerToolTip from '../tooltips/ContainerToolTip';
-import ImageToolTip from '../tooltips/ImageToolTip';
+import ContainerToolTip from '../popover/ContainerPopover';
+import ImageToolTip from '../popover/ImagePopover';
 
 const STATUS_COLORS = {
     [DOCKER_CONTAINER_STATUS.EXITED]: 'bg-Stopped-Status-Color',
