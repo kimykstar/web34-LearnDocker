@@ -4,7 +4,8 @@ import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
 import { SubmitStatus } from '../../types/quiz';
 import { HttpStatusCode } from 'axios';
-import { SidebarProps, SidebarState } from '../../types/sidebar';
+import { SidebarProps } from '../../types/sidebar';
+import { updateSidebarState } from '../../utils/sidebarUtils';
 
 type QuizButtonsProps = {
     quizNumber: number;
@@ -59,17 +60,19 @@ const QuizButtons = ({
         }
 
         if (quizNumber === 3) {
-            updateSidebarState(dockerImageStates);
+            updateSidebarState(dockerImageStates, quizNumber);
             navigate('/what-is-docker-container');
             return;
         }
 
         if (type === 'modal' && 1 <= quizNumber && quizNumber <= 3) {
-            updateSidebarState(dockerImageStates);
+            updateSidebarState(dockerImageStates, quizNumber);
+            setSidebarStates({ ...sidebarStates });
             sessionStorage.setItem('quiz', nextQuizNum.toString());
         }
         if (type === 'modal' && 4 <= quizNumber && quizNumber <= 10) {
-            updateSidebarState(dockerContainerStates);
+            updateSidebarState(dockerContainerStates, quizNumber);
+            setSidebarStates({ ...sidebarStates });
             sessionStorage.setItem('quiz', nextQuizNum.toString());
         }
 
@@ -85,16 +88,15 @@ const QuizButtons = ({
         navigate(`/quiz/${quizNumber + 1}`);
     };
 
-    const updateSidebarState = (states: Array<SidebarState>) => {
-        // 해당 퀴즈 넘버의 State 중 solved가 false인 경우
-        states.forEach((state) => {
-            const currentQuizNum = Number(state.path.slice(-1));
-            if (state.pageType === 'quiz' && currentQuizNum === quizNumber) {
-                state.solved = true;
-            }
-        });
-        setSidebarStates({ ...sidebarStates });
-    };
+    // const updateSidebarState = (states: Array<SidebarState>) => {
+    //     states.forEach((state) => {
+    //         const currentQuizNum = Number(state.path.slice(-1));
+    //         if (state.pageType === 'quiz' && currentQuizNum === quizNumber) {
+    //             state.solved = true;
+    //         }
+    //     });
+    //     setSidebarStates({ ...sidebarStates });
+    // };
 
     return (
         <section className='w-[85%] flex justify-end'>

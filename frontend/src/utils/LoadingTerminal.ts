@@ -5,8 +5,8 @@ export default class LoadingTerminal {
     private spinnerFrames: string[];
     private hostSpinnerFrames: string[];
     private currentFrame: number;
-    private loadingInterval: number;
-    private loadingTimeout: number;
+    private loadingInterval: number | NodeJS.Timeout;
+    private loadingTimeout: number | NodeJS.Timeout;
 
     constructor(term: Terminal) {
         this.term = term;
