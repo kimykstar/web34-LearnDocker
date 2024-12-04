@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import QuizButtons from './QuizButtons';
 import QuizInputBox from './QuizInputBox';
-import { SidebarProps } from '../../types/sidebar';
+import { SidebarElementsProps } from '../../types/sidebar';
 
 type QuizSubmitAreaProps = {
     quizNumber: number;
     showInput: boolean;
     showAlert: (message: string) => void;
-    sidebarStates: SidebarProps;
-    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
 export const QuizSubmitArea = ({

@@ -3,7 +3,7 @@ export type SidebarSectionProps = {
     links: SidebarState[];
 };
 
-export type SidebarProps = {
+export type SidebarElementsProps = {
     dockerImageStates: Array<SidebarState>;
     dockerContainerStates: Array<SidebarState>;
 };

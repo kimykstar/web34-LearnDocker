@@ -2,13 +2,13 @@ import { useQuizData } from '../../hooks/useQuizData';
 import { CUSTOM_QUIZZES } from '../../constant/quiz';
 import QuizDescription from './QuizDescription';
 import { QuizSubmitArea } from './QuizSubmitArea';
-import { SidebarProps } from '../../types/sidebar';
+import { SidebarElementsProps } from '../../types/sidebar';
 
 type Props = {
     showAlert: (message: string) => void;
     quizId: string;
-    sidebarStates: SidebarProps;
-    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
 export const QuizNodes = ({ showAlert, quizId, sidebarStates, setSidebarStates }: Props) => {

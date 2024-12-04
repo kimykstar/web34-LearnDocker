@@ -1,21 +1,21 @@
 import { QuizNodes } from './QuizNodes';
 import { VisualizationNodes } from './VisualizationNodes';
 import { QuizPageWrapper } from './QuizPageWrapper';
-import { SidebarProps } from '../../types/sidebar';
+import { SidebarElementsProps } from '../../types/sidebar';
 
 type QuizContentProps = {
     showAlert: (message: string) => void;
     eventSourceRef: React.MutableRefObject<EventSource | null>;
     quizId: string;
-    sidebarStates: SidebarProps;
-    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
 type QuizPageProps = {
     showAlert: (message: string) => void;
     eventSourceRef: React.MutableRefObject<EventSource | null>;
-    sidebarStates: SidebarProps;
-    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarProps>>;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
 export const QuizContent = ({
