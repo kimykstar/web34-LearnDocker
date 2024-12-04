@@ -3,8 +3,6 @@ import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
 import { Link } from 'react-router-dom';
 import { SidebarSectionProps } from '../types/sidebar';
-import { requestExpirationTime } from '../api/timer';
-import { ExpirationTime } from '../types/timer';
 import TimerArea from './TimerArea';
 
 const links = [
@@ -63,22 +61,16 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
     );
 };
 
-const Sidebar = ({
-    startButtonRef,
-}: {
+type SidebarProps = {
+    setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
     startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
-}) => {
+};
+
+const Sidebar = ({ setOpenTimerModal, startButtonRef }: SidebarProps) => {
     const [maxAge, setMaxAge] = useState<number>(0);
+    const endDate = window.sessionStorage.getItem('endDate');
     useEffect(() => {
-        const fetchTime = async () => {
-            const data = await requestExpirationTime();
-            if (Object.keys(data).includes('endDate')) {
-                const expirationData = data as ExpirationTime;
-                const maxAge = new Date(expirationData.endDate).getTime();
-                setMaxAge(maxAge);
-            }
-        };
-        fetchTime();
+        setMaxAge(Number(endDate));
     }, []);
 
     return (
@@ -96,7 +88,11 @@ const Sidebar = ({
                 <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
             </div>
             {maxAge ? (
-                <TimerArea expirationTime={maxAge} setMaxAge={setMaxAge} />
+                <TimerArea
+                    expirationTime={maxAge}
+                    setMaxAge={setMaxAge}
+                    setOpenTimerModal={setOpenTimerModal}
+                />
             ) : (
                 <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
             )}

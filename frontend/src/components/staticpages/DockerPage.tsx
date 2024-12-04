@@ -2,12 +2,12 @@ import architecture from '../../assets/docker-architecture.webp';
 const WhatIsDockerPage = () => {
     return (
         <>
-            <h1 className='text-3xl font-bold' data-aos='zoom-in'>
+            <h1 className='text-3xl font-bold' data-aos='fade-left'>
                 Docker란 무엇일까요?
             </h1>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <p className='text-lg'>
                     Docker는{' '}
@@ -28,12 +28,12 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
 
-            <h2 className='text-2xl font-bold mt-12' data-aos='zoom-in'>
+            <h2 className='text-2xl font-bold mt-12' data-aos='fade-left'>
                 Docker는 어떻게 사용할 수 있나요?
             </h2>
             <div
                 className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <h3 className='text-xl font-bold'>빠르고 일관된 애플리케이션을 제공하고 싶을때</h3>
                 <p>
@@ -50,7 +50,7 @@ const WhatIsDockerPage = () => {
             </div>
             <div
                 className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <h3 className='text-xl font-bold'>반응형 배포 및 확장을 하고 싶을때</h3>
                 <p>
@@ -71,7 +71,7 @@ const WhatIsDockerPage = () => {
             </div>
             <div
                 className='flex-auto bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <h3 className='text-xl font-bold'>
                     동일한 하드웨어에서 더 많은 작업을 수행 및 실행하고 싶을때
@@ -88,15 +88,15 @@ const WhatIsDockerPage = () => {
                 </p>
             </div>
 
-            <h2 className='text-2xl font-bold mt-12' data-aos='zoom-in'>
+            <h2 className='text-2xl font-bold mt-12' data-aos='fade-left'>
                 Docker의 Architecture
             </h2>
-            <img className='mt-4' src={architecture} data-aos='zoom-in'></img>
+            <img className='mt-4' src={architecture} data-aos='fade-left'></img>
 
             <h3 className='text-2xl font-bold mt-12'>도커 데몬(Docker Daemon)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <p>
                     <span className='font-bold'>도커 데몬</span>은 Docker API요청에 대해서
@@ -109,7 +109,7 @@ const WhatIsDockerPage = () => {
             <h3 className='text-2xl font-bold mt-12'>도커 클라이언트(Docker Client)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <p>
                     <span className='font-bold'>도커 클라이언트</span>는 많은 Docker 사용자가
@@ -124,7 +124,7 @@ const WhatIsDockerPage = () => {
             <h3 className='text-2xl font-bold mt-12'>도커 레지스트리(Docker Registries)</h3>
             <div
                 className='bg-Moby-Blue mt-4 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <p>
                     <span className='font-bold'>도커 레지스트리</span>는 Docker Image들을 저장하고
@@ -143,7 +143,7 @@ const WhatIsDockerPage = () => {
             <h3 className='text-2xl font-bold mt-12'>도커 오브젝트(Docker Objects)</h3>
             <div
                 className='bg-Moby-Blue mt-4 mb-12 bg-opacity-15 rounded-lg shadow-md p-2'
-                data-aos='zoom-in'
+                data-aos='fade-left'
             >
                 <p>
                     Docker 사용자는 Docker Object들을 생성 및 사용할 수 있습니다. <br />
