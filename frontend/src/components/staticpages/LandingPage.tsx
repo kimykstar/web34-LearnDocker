@@ -2,6 +2,7 @@ import { BookOpen, CircleHelp, Plug, Terminal, TrendingUp, View } from 'lucide-r
 import VisualizationGif from '../../assets/visualization-demo.gif';
 import QuizPageImage from '../../assets/quiz-page-red-box.png';
 import { ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type LucideSvgIcon = typeof View;
 type IntroCardProps = { title: string; description: string; Icon: LucideSvgIcon };
@@ -13,10 +14,14 @@ type DetailedCardProps = {
     className?: string;
 };
 
-const LandingPage = () => {
+const LandingPage = ({
+    startButtonRef,
+}: {
+    startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
+}) => {
     return (
         <div className='w-full'>
-            <Banner />
+            <Banner startButtonRef={startButtonRef} />
 
             <FeatureIntro />
             <hr />
@@ -32,23 +37,37 @@ const LandingPage = () => {
     );
 };
 
-const Banner = () => (
-    <div className='bg-neutral-100 rounded-lg'>
-        <div className='container mx-auto px-4 py-16'>
-            <div className='max-w-3xl'>
-                <h1 className='text-4xl font-bold mb-6'>Docker를 쉽고 재미있게 배워보세요!</h1>
-                <p className='text-xl mb-8'>
-                    실전 같은 환경에서 직접 실습하며 Docker의 개념과 사용법을 익혀보세요.
-                    <br />
-                    단계별 학습과 실시간 시각화로 더욱 효과적인 학습 경험을 제공합니다.
-                </p>
-                <button className='bg-Moby-Blue text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors'>
-                    지금 시작하기
-                </button>
+const Banner = ({
+    startButtonRef,
+}: {
+    startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
+}) => {
+    const navigate = useNavigate();
+
+    return (
+        <div className='bg-neutral-100 rounded-lg'>
+            <div className='container mx-auto px-4 py-16'>
+                <div className='max-w-3xl'>
+                    <h1 className='text-4xl font-bold mb-6'>Docker를 쉽고 재미있게 배워보세요!</h1>
+                    <p className='text-xl mb-8'>
+                        실전 같은 환경에서 직접 실습하며 Docker의 개념과 사용법을 익혀보세요.
+                        <br />
+                        단계별 학습과 실시간 시각화로 더욱 효과적인 학습 경험을 제공합니다.
+                    </p>
+                    <button
+                        className='bg-Moby-Blue text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors'
+                        onClick={() => {
+                            startButtonRef.current?.click();
+                            navigate('/what-is-docker');
+                        }}
+                    >
+                        지금 시작하기
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 const FeatureIntro = () => (
     <div className='container mx-auto px-4 py-16'>
@@ -161,28 +180,35 @@ const QuizPageGuide = () => {
                 >
                     <ol className='space-y-4 list-decimal list-inside'>
                         <li className='text-gray-700'>
-                            Docker 학습을 돕는 <strong>문제</strong>입니다. 잘 읽고 문제와 관련된 docker 명령어를 명령창에 입력하세요.
+                            Docker 학습을 돕는 <strong>문제</strong>입니다. 잘 읽고 문제와 관련된
+                            docker 명령어를 명령창에 입력하세요.
                         </li>
                         <li className='text-gray-700'>
-                            <strong>명령창</strong>입니다. docker 명령어를 입력하여 실행 결과를 확인할 수 있습니다.
+                            <strong>명령창</strong>입니다. docker 명령어를 입력하여 실행 결과를
+                            확인할 수 있습니다.
                         </li>
                         <li className='text-gray-700'>
-                            <strong>컨테이너 목록 영역</strong>입니다. docker 명령어를 입력할 때마다 컨테이너의 상태 변화를 확인할 수 있습니다.
+                            <strong>컨테이너 목록 영역</strong>입니다. docker 명령어를 입력할 때마다
+                            컨테이너의 상태 변화를 확인할 수 있습니다.
                         </li>
                         <li className='text-gray-700'>
-                            <strong>이미지 목록 영역</strong>입니다. pull 받은 이미지 목록을 확인할 수 있습니다.
+                            <strong>이미지 목록 영역</strong>입니다. pull 받은 이미지 목록을 확인할
+                            수 있습니다.
                         </li>
                         <li className='text-gray-700'>
-                            <strong>답안란</strong>입니다. 답안란이 존재하는 문제는 답을 직접 입력해야 채점이 가능합니다.
+                            <strong>답안란</strong>입니다. 답안란이 존재하는 문제는 답을 직접
+                            입력해야 채점이 가능합니다.
                         </li>
                         <li className='text-gray-700'>
-                            <strong>채점 버튼</strong>입니다. 문제가 요구하는 docker 명령을 수행하거나, 답안란에 정답을 입력한 뒤에 채점 버튼을 눌러주세요.
+                            <strong>채점 버튼</strong>입니다. 문제가 요구하는 docker 명령을
+                            수행하거나, 답안란에 정답을 입력한 뒤에 채점 버튼을 눌러주세요.
                         </li>
                         <li className='text-gray-700'>
                             <strong>이전 버튼</strong>입니다. 이전 문제로 이동할 수 있습니다.
                         </li>
                         <li className='text-gray-700'>
-                            <strong>다음 버튼</strong>입니다. 현재 문제를 통과한 뒤에 다음 문제로 이동할 수 있습니다.
+                            <strong>다음 버튼</strong>입니다. 현재 문제를 통과한 뒤에 다음 문제로
+                            이동할 수 있습니다.
                         </li>
                     </ol>
                 </DetailedCard>
