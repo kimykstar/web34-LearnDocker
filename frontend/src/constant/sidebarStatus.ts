@@ -25,7 +25,8 @@ export const dockerContainerInitStates: SidebarState[] = [
     { title: 'Container 생성하기', path: '/quiz/4', pageType: 'quiz', solved: false },
     { title: 'Container 실행하기', path: '/quiz/5', pageType: 'quiz', solved: false },
     { title: 'Container 생성 및 실행하기', path: '/quiz/6', pageType: 'quiz', solved: false },
-    { title: 'Container 목록 확인하기', path: '/quiz/7', pageType: 'quiz', solved: false },
-    { title: 'Container 중지하기', path: '/quiz/8', pageType: 'quiz', solved: false },
-    { title: 'Container 삭제하기', path: '/quiz/9', pageType: 'quiz', solved: false },
+    { title: 'Container 로그 확인하기', path: '/quiz/7', pageType: 'quiz', solved: false },
+    { title: 'Container 목록 확인하기', path: '/quiz/8', pageType: 'quiz', solved: false },
+    { title: 'Container 중지하기', path: '/quiz/9', pageType: 'quiz', solved: false },
+    { title: 'Container 삭제하기', path: '/quiz/10', pageType: 'quiz', solved: false },
 ];
