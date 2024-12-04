@@ -62,7 +62,11 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
     );
 };
 
-const Sidebar = () => {
+const Sidebar = ({
+    startButtonRef,
+}: {
+    startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
+}) => {
     const [maxAge, setMaxAge] = useState<number>(0);
     useEffect(() => {
         const fetchTime = async () => {
@@ -93,7 +97,7 @@ const Sidebar = () => {
             {maxAge ? (
                 <TimerArea expirationTime={maxAge} setMaxAge={setMaxAge} />
             ) : (
-                <StartButton setMaxAge={setMaxAge} />
+                <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
             )}
         </nav>
     );
