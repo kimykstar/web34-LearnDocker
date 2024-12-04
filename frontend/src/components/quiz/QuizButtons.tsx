@@ -64,22 +64,22 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
     };
 
     return (
-        <section className='w-[85%] flex justify-end'>
+        <section className='flex justify-end gap-6 mb-6'>
             <button
-                className='text-lg text-white rounded-lg bg-gray-300 hover:bg-gray-400 py-2 px-4 my-4 mx-1'
+                className='text-lg text-white rounded-lg bg-gray-300 hover:bg-gray-400 py-2 px-4'
                 onClick={handlePrevButtonClick}
             >
                 이전
             </button>
             <button
-                className='text-lg text-white rounded-lg bg-sky-400 hover:bg-sky-500 py-2 px-4 m-4'
+                className='text-lg text-white rounded-lg bg-sky-400 hover:bg-sky-500 py-2 px-4'
                 onClick={handleNextButtonClick}
             >
                 다음
             </button>
             <button
                 onClick={handleSubmitButtonClick}
-                className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4 m-4'
+                className='text-xl text-white rounded-lg bg-Moby-Blue hover:bg-blue-800 py-2 px-4'
             >
                 채점하기
             </button>

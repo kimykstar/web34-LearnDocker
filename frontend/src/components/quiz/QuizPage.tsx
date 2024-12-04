@@ -15,19 +15,23 @@ type QuizPageProps = {
 
 export const QuizContent = ({ showAlert, quizId, eventSourceRef }: QuizContentProps) => {
     const quizNodes = QuizNodes({ showAlert, quizId });
-    
+
     const visualNodes = VisualizationNodes({ eventSourceRef, showAlert });
 
     return (
-        <div className='w-[calc(100vw-17rem)]'>
+        <>
             {quizNodes.head}
-            <section className='flex h-1/2'>
-                {quizNodes.description}
-                {visualNodes.visualization}
-            </section>
-            {visualNodes.terminal}
-            {quizNodes.submit}
-        </div>
+            <div className='flex flex-col gap-3 h-[calc(100vh-10rem)] justify-between'>
+                <div className='flex gap-3 flex-1'>
+                    {quizNodes.description}
+                    {visualNodes.visualization}
+                </div>
+                <div className='flex flex-col gap-3 flex-1'>
+                    {visualNodes.terminal}
+                    {quizNodes.submit}
+                </div>
+            </div>
+        </>
     );
 };
 
