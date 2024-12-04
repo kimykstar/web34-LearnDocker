@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
-import { SidebarSectionProps, SidebarProps } from '../types/sidebar';
-import { requestExpirationTime } from '../api/timer';
-import { ExpirationTime } from '../types/timer';
+import { SidebarSectionProps, SidebarState } from '../types/sidebar';
 import TimerArea from './TimerArea';
 import PageInfoArea from './PageInfoArea';
 import { Check } from 'lucide-react';
@@ -56,19 +54,23 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
     );
 };
 
-const Sidebar = ({ dockerImageStates, dockerContainerStates }: SidebarProps) => {
-    const [maxAge, setMaxAge] = useState<number>(0);
+type SidebarProps = {
+    dockerImageStates: Array<SidebarState>;
+    dockerContainerStates: Array<SidebarState>;
+    setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
+    startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
+};
 
+const Sidebar = ({
+    setOpenTimerModal,
+    startButtonRef,
+    dockerImageStates,
+    dockerContainerStates,
+}: SidebarProps) => {
+    const [maxAge, setMaxAge] = useState<number>(0);
+    const endDate = window.sessionStorage.getItem('endDate');
     useEffect(() => {
-        const fetchTime = async () => {
-            const data = await requestExpirationTime();
-            if (Object.keys(data).includes('endDate')) {
-                const expirationData = data as ExpirationTime;
-                const maxAge = new Date(expirationData.endDate).getTime();
-                setMaxAge(maxAge);
-            }
-        };
-        fetchTime();
+        setMaxAge(Number(endDate));
     }, []);
 
     return (
@@ -89,9 +91,13 @@ const Sidebar = ({ dockerImageStates, dockerContainerStates }: SidebarProps) => 
                 <SidebarSection title='Docker Container 학습' links={dockerContainerStates} />
             </div>
             {maxAge ? (
-                <TimerArea expirationTime={maxAge} setMaxAge={setMaxAge} />
+                <TimerArea
+                    expirationTime={maxAge}
+                    setMaxAge={setMaxAge}
+                    setOpenTimerModal={setOpenTimerModal}
+                />
             ) : (
-                <StartButton setMaxAge={setMaxAge} />
+                <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
             )}
         </nav>
     );

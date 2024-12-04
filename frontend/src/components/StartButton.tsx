@@ -4,20 +4,23 @@ import { createHostContainer } from '../api/quiz';
 import { LoaderCircle } from 'lucide-react';
 type StartButtonProps = {
     setMaxAge: React.Dispatch<React.SetStateAction<number>>;
+    startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
 };
 
 const StartButton = (props: StartButtonProps) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const { setMaxAge } = props;
+    const { setMaxAge, startButtonRef } = props;
 
     const handleButtonClick = async () => {
         setLoading(true);
         const endDate = await createHostContainer(navigate);
+        const endDateTime = new Date(endDate).getTime();
         if (endDate) {
             setLoading(false);
-            setMaxAge(new Date(endDate).getTime());
+            setMaxAge(endDateTime);
             sessionStorage.setItem('quiz', '1');
+            window.sessionStorage.setItem('endDate', endDateTime.toString());
         }
     };
 
@@ -27,6 +30,7 @@ const StartButton = (props: StartButtonProps) => {
                 className='w-full text-white text-xl flex items-center justify-center gap-2 disabled:opacity-70'
                 onClick={handleButtonClick}
                 disabled={loading}
+                ref={startButtonRef}
             >
                 {loading ? (
                     <>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HOUR, MINUTE, SECOND } from '../constant/timer';
+import { requestReleaseSession } from '../api/quiz';
 
 const parseTime = (time: number) => {
     const hour = Math.floor(time / HOUR);
@@ -13,13 +14,25 @@ const parseTime = (time: number) => {
 
 type TimerProps = {
     expirationTime: number;
+    setMaxAge: React.Dispatch<React.SetStateAction<number>>;
+    setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Timer = (props: TimerProps) => {
-    const expirationTime = props.expirationTime;
+    const { expirationTime, setMaxAge, setOpenTimerModal } = props;
     const [leftTime, setLeftTime] = useState(expirationTime - new Date().getTime());
     useEffect(() => {
         const timer = setInterval(() => setLeftTime(leftTime - SECOND), SECOND);
+        if (leftTime <= SECOND) {
+            requestReleaseSession();
+            clearInterval(timer);
+            setMaxAge(0);
+            window.sessionStorage.removeItem('endDate');
+        }
+        if (10 * MINUTE <= leftTime && leftTime <= 10 * MINUTE + SECOND) {
+            setOpenTimerModal(true);
+        }
+
         if (leftTime < 0) clearInterval(timer);
 
         return () => {

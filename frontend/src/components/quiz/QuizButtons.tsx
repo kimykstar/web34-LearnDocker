@@ -51,8 +51,9 @@ const QuizButtons = ({
 
     const handleNextButtonClick = async (type: string) => {
         const { dockerImageStates, dockerContainerStates } = sidebarStates;
+
         const nextQuizNum = Number(sessionStorage.getItem('quiz')) + 1;
-        if (quizNumber > 8) {
+        if (quizNumber > 9) {
             showAlert('마지막 문제입니다.');
             return;
         }
@@ -67,7 +68,7 @@ const QuizButtons = ({
             updateSidebarState(dockerImageStates);
             sessionStorage.setItem('quiz', nextQuizNum.toString());
         }
-        if (type === 'modal' && 4 <= quizNumber && quizNumber <= 8) {
+        if (type === 'modal' && 4 <= quizNumber && quizNumber <= 10) {
             updateSidebarState(dockerContainerStates);
             sessionStorage.setItem('quiz', nextQuizNum.toString());
         }

@@ -10,6 +10,7 @@ describe('CommandValidationPipe', () => {
             providers: [CommandValidationPipe],
         }).compile();
         pipe = module.get<CommandValidationPipe>(CommandValidationPipe);
+        process.env.JOKE_IMAGE_ID = 'e970cf9c277f';
     });
 
     it.each([
@@ -42,5 +43,30 @@ describe('CommandValidationPipe', () => {
         'docker rm hello-world',
     ])('Valid user command test', (command: string) => {
         expect(pipe.transform(command)).toEqual(command);
+    });
+
+    describe('Joke Image ID tests', () => {
+        it.each([
+            'docker run -d learndocker.io/joke',
+            'docker run --detach learndocker.io/joke',
+            'docker run -d -p 8080 e',
+            'docker run -d e97',
+            'docker run --detach -p 8080 e970cf9c277f',
+            'docker run -d e970',
+        ])('Valid joke image command test with detach option', (command: string) => {
+            expect(pipe.transform(command)).toEqual(command);
+        });
+
+        it.each([
+            'docker run learndocker.io/joke',
+            'docker run e',
+            'docker run e97',
+            'docker run -p 8080 e970cf9c277f',
+            'docker run e970',
+        ])('Invalid joke image command test without detach option', (command: string) => {
+            expect(() => {
+                pipe.transform(command);
+            }).toThrow(BadRequestException);
+        });
     });
 });

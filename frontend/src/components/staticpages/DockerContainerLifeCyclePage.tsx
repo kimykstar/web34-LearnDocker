@@ -7,7 +7,7 @@ const DockerContainerLifeCyclePage = () => {
             <img
                 src={lifeCylceImage}
                 className='mt-4'
-                data-aos='zoom-in'
+                data-aos='fade-left'
                 alt='container lifecycle'
             ></img>
             <div className='mt-10'>

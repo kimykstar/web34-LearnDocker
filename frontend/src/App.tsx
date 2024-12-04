@@ -9,13 +9,13 @@ import ErrorPage from './components/ErrorPage';
 import { Routes, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QuizPage } from './components/quiz/QuizPage';
 import { Alert } from 'flowbite-react';
 import { useAlert } from './hooks/useAlert';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SidebarProps } from './types/sidebar';
 import { useSidebar } from './hooks/useSidebar';
+import { TimerModal } from './components/modals/TimerModal';
 
 const queryClient = new QueryClient();
 
@@ -23,6 +23,9 @@ const App = () => {
     const { openAlert, message, showAlert } = useAlert();
     const eventSourceRef = useRef<EventSource | null>(null);
     const { sidebarStates, setSidebarStates } = useSidebar();
+    const [openTimerModal, setOpenTimerModal] = useState(false);
+    const startButtonRef = useRef<HTMLButtonElement | null>(null);
+    const { dockerImageStates, dockerContainerStates } = sidebarStates;
 
     useEffect(() => {
         AOS.init({
@@ -53,11 +56,18 @@ const App = () => {
                 </Alert>
                 <Header />
                 <div className='flex font-pretendard'>
-                    <Sidebar {...(sidebarStates as SidebarProps)} />
-
+                    <Sidebar
+                        startButtonRef={startButtonRef}
+                        setOpenTimerModal={setOpenTimerModal}
+                        dockerImageStates={dockerImageStates}
+                        dockerContainerStates={dockerContainerStates}
+                    />
                     <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
                         <Routes>
-                            <Route path='/' element={<LandingPage />} />
+                            <Route
+                                path='/'
+                                element={<LandingPage startButtonRef={startButtonRef} />}
+                            />
 
                             <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
                             <Route
@@ -88,6 +98,7 @@ const App = () => {
                     </div>
                 </div>
             </div>
+            <TimerModal openTimerModal={openTimerModal} setOpenTimerModal={setOpenTimerModal} />
         </QueryClientProvider>
     );
 };
