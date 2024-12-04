@@ -10,7 +10,7 @@ const QuizInputBox = ({ answer, setAnswer }: QuizInputBoxProps) => {
     return (
         <div className='flex justify-end'>
             <input
-                className='h-9 rounded-lg border border-gray-300 outline-none bg-gray-50'
+                className='h-9 w-72 rounded-lg border border-gray-300 outline-none bg-gray-50'
                 type='text'
                 onChange={handleChange}
                 value={answer}
