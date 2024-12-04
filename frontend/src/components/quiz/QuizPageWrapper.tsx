@@ -17,7 +17,7 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
         const validateQuiz = async () => {
             const quizNumber = Number(quizId);
 
-            if (Number.isNaN(quizNumber) || quizNumber < 1 || quizNumber > 9) {
+            if (Number.isNaN(quizNumber) || quizNumber < 1 || quizNumber > 10) {
                 navigate('/error/404');
                 return;
             }

@@ -22,6 +22,7 @@ const App = () => {
     const { openAlert, message, showAlert } = useAlert();
     const eventSourceRef = useRef<EventSource | null>(null);
     const [openTimerModal, setOpenTimerModal] = useState(false);
+    const startButtonRef = useRef<HTMLButtonElement | null>(null);
 
     useEffect(() => {
         AOS.init({
@@ -52,10 +53,16 @@ const App = () => {
                 </Alert>
                 <Header />
                 <div className='flex font-pretendard'>
-                    <Sidebar setOpenTimerModal={setOpenTimerModal} />
+                    <Sidebar
+                        startButtonRef={startButtonRef}
+                        setOpenTimerModal={setOpenTimerModal}
+                    />
                     <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
                         <Routes>
-                            <Route path='/' element={<LandingPage />} />
+                            <Route
+                                path='/'
+                                element={<LandingPage startButtonRef={startButtonRef} />}
+                            />
 
                             <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
                             <Route

@@ -23,9 +23,10 @@ const dockerContainerLinks = [
     { title: 'Container 생성하기', path: '/quiz/4' },
     { title: 'Container 실행하기', path: '/quiz/5' },
     { title: 'Container 생성 및 실행하기', path: '/quiz/6' },
-    { title: 'Container 목록 확인하기', path: '/quiz/7' },
-    { title: 'Container 중지하기', path: '/quiz/8' },
-    { title: 'Container 삭제하기', path: '/quiz/9' },
+    { title: 'Container 로그 확인하기', path: '/quiz/7' },
+    { title: 'Container 목록 확인하기', path: '/quiz/8' },
+    { title: 'Container 중지하기', path: '/quiz/9' },
+    { title: 'Container 삭제하기', path: '/quiz/10' },
 ];
 
 const SidebarSection = ({ title, links }: SidebarSectionProps) => {
@@ -62,9 +63,10 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 
 type SidebarProps = {
     setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
+    startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
 };
 
-const Sidebar = ({ setOpenTimerModal }: SidebarProps) => {
+const Sidebar = ({ setOpenTimerModal, startButtonRef }: SidebarProps) => {
     const [maxAge, setMaxAge] = useState<number>(0);
     const endDate = window.sessionStorage.getItem('endDate');
     useEffect(() => {
@@ -92,7 +94,7 @@ const Sidebar = ({ setOpenTimerModal }: SidebarProps) => {
                     setOpenTimerModal={setOpenTimerModal}
                 />
             ) : (
-                <StartButton setMaxAge={setMaxAge} />
+                <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
             )}
         </nav>
     );
