@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const QuizNodes = ({ showAlert, quizId }: Props) => {
-    const { title, content, isPending: pending, isError: error } = useQuizData(quizId);
+    const { title, content, hint, isPending: pending, isError: error } = useQuizData(quizId);
     const quizNumber = +quizId;
     const customQuiz = CUSTOM_QUIZZES.includes(quizNumber);
 
@@ -31,7 +31,7 @@ export const QuizNodes = ({ showAlert, quizId }: Props) => {
 
     return {
         head: <h1 className='font-bold text-3xl text-Dark-Blue pb-3 h-12'>{title}</h1>,
-        description: <QuizDescription content={content} />,
+        description: <QuizDescription content={content} hint={hint} />,
         submit: (
             <QuizSubmitArea quizNumber={quizNumber} showInput={customQuiz} showAlert={showAlert} />
         ),
