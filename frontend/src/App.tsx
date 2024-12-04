@@ -34,9 +34,6 @@ const App = () => {
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
-        if (!sessionStorage.getItem('quiz')) {
-            sessionStorage.setItem('quiz', '1');
-        }
 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);

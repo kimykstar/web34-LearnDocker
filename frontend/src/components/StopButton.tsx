@@ -11,6 +11,7 @@ const StopButton = ({ setMaxAge }: StopButtonProps) => {
     const handleStopButtonClick = async () => {
         await requestReleaseSession(navigate);
         setMaxAge(0);
+        sessionStorage.removeItem('quiz');
         navigate('/');
     };
 
