@@ -26,7 +26,7 @@ export const QuizContent = ({ showAlert, quizId, eventSourceRef }: QuizContentPr
                     {quizNodes.description}
                     {visualNodes.visualization}
                 </div>
-                <div className='flex flex-col gap-3 flex-1'>
+                <div className='flex flex-col 2xl:flex-row gap-3 2xl:gap-5 flex-1'>
                     {visualNodes.terminal}
                     {quizNodes.submit}
                 </div>
