@@ -20,7 +20,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 
     return (
         <>
-            <div className='m-4 flex items-center  border-b-2 border-gray-400 text-xl'>
+            <div className='mx-4 mt-2 flex items-center  border-b-2 border-gray-400 text-xl'>
                 <p>{title}</p>
                 <button onClick={toggleDropdown}>
                     <img
@@ -34,7 +34,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
                 <ul>
                     {links.map((link) => {
                         return (
-                            <li className='m-4 hover:text-Moby-Blue' key={link.path}>
+                            <li className='mx-4 mt-2 hover:text-Moby-Blue' key={link.path}>
                                 <div className='flex justify-between'>
                                     <PageInfoArea
                                         path={link.path}
@@ -45,6 +45,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
                                         <Check className='ml-1 text-green-500' />
                                     )}
                                 </div>
+                                <hr className='mt-1' />
                             </li>
                         );
                     })}
@@ -80,7 +81,7 @@ const Sidebar = ({
                     const { path, title, pageType } = link;
                     return (
                         <div
-                            className='flex m-4 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue  justify-between'
+                            className='flex mx-4 mt-2 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue  justify-between'
                             key={path}
                         >
                             <PageInfoArea path={path} title={title} pageType={pageType} />
@@ -90,15 +91,17 @@ const Sidebar = ({
                 <SidebarSection title='Docker Image 학습' links={dockerImageStates} />
                 <SidebarSection title='Docker Container 학습' links={dockerContainerStates} />
             </div>
-            {maxAge ? (
-                <TimerArea
-                    expirationTime={maxAge}
-                    setMaxAge={setMaxAge}
-                    setOpenTimerModal={setOpenTimerModal}
-                />
-            ) : (
-                <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
-            )}
+            <div className='sticky bottom-0'>
+                {maxAge ? (
+                    <TimerArea
+                        expirationTime={maxAge}
+                        setMaxAge={setMaxAge}
+                        setOpenTimerModal={setOpenTimerModal}
+                    />
+                ) : (
+                    <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
+                )}
+            </div>
         </nav>
     );
 };
