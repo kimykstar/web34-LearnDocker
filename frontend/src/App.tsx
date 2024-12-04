@@ -87,6 +87,7 @@ const App = () => {
                                 }
                             />
                             <Route path='/error/:id' element={<ErrorPage />} />
+                            <Route path='*' element={<ErrorPage />} />
                         </Routes>
                     </div>
                 </div>
