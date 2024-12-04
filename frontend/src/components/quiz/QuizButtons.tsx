@@ -41,7 +41,7 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
     };
 
     const handleNextButtonClick = async () => {
-        if (quizNumber > 8) {
+        if (quizNumber > 9) {
             showAlert('마지막 문제입니다.');
             return;
         }

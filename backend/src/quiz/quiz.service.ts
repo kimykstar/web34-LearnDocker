@@ -33,7 +33,7 @@ export class QuizService {
                     'learndocker.io에서 제공하는 hello-world 이미지를 가져와보세요.\n\n' +
                     '1. docker pull 명령어를 사용하여 hello-world 이미지를 다운로드하세요.\n' +
                     '2. 이미지가 성공적으로 다운로드되면 자동으로 로컬 시스템에 저장됩니다.\n\n' +
-                    '힌트: docker pull <이미지명> 형식으로 명령어를 작성하세요.\n' +
+                    '힌트: docker pull <learndocker.io/이미지명> 형식으로 명령어를 작성하세요.\n' +
                     '힌트: 특정 레지스트리에서 이미지를 가져올 때는 이미지명 앞에 <레지스트리 주소/>를 붙여주세요.',
             },
             {
@@ -50,17 +50,17 @@ export class QuizService {
                 title: 'Docker Image 삭제하기',
                 content:
                     '더 이상 필요하지 않은 Docker 이미지를 삭제하는 방법을 알아봅시다.\n\n' +
-                    '1. docker rmi 명령어를 사용하여 hello-world 이미지를 삭제하세요.\n' +
+                    '1. docker rmi 명령어를 사용하여 learndocker.io/hello-world 이미지를 삭제하세요.\n' +
                     '2. 삭제 후 docker images 명령어로 이미지가 정상적으로 삭제되었는지 확인하세요.\n\n' +
-                    '힌트: docker rmi <이미지명> 형식으로 명령어를 작성하세요.',
+                    '힌트: docker rmi <learndocker.io/이미지명 | IMAGE ID> 형식으로 명령어를 작성하세요.',
             },
             {
                 id: 4,
                 title: 'Container 생성하기',
                 content:
                     'Docker 이미지를 기반으로 컨테이너를 생성해봅시다.\n\n' +
-                    '1. docker create 명령어를 사용하여 hello-world 이미지로부터 컨테이너를 생성하세요.\n\n' +
-                    '힌트: docker create <이미지명> 형식으로 명령어를 작성하세요.',
+                    '1. docker create 명령어를 사용하여 learndocker.io/hello-world 이미지로부터 컨테이너를 생성하세요.\n\n' +
+                    '힌트: docker create <learndocker.io/이미지명> 형식으로 명령어를 작성하세요.',
             },
             {
                 id: 5,
@@ -71,6 +71,7 @@ export class QuizService {
                     '2. 컨테이너 ID나 이름을 사용하여 실행할 수 있습니다.\n' +
                     '3. 실행 후 터미널에 표시되는 "Answer: " 다음에 나오는 값을 입력해주세요.\n\n' +
                     '힌트: docker start -a <컨테이너ID> 형식으로 명령어를 작성하세요.\n' +
+                    '힌트: docker ps -a 명령어로 모든 컨테이너를 확인할 수 있습니다.\n' +
                     '힌트: 컨테이너ID 전부 적을 필요는 없습니다.',
             },
             {
@@ -78,14 +79,25 @@ export class QuizService {
                 title: 'Container 생성 및 실행하기',
                 content:
                     '컨테이너의 생성과 실행을 한 번에 수행해봅시다.\n\n' +
-                    '1. docker run 명령어를 사용하여 joke 이미지로 컨테이너를 생성하고 실행하세요.\n' +
-                    '2. 이 명령어는 create와 start를 연속으로 실행하는 것과 같은 효과입니다.\n' +
-                    '3. 실행 후 터미널에 표시되는 문제를 보고 답을 입력해주세요.\n\n' +
-                    '힌트: docker run <이미지명> 형식으로 명령어를 작성하세요.\n' +
+                    '1. docker run 명령어를 사용하여 learndocker.io/joke 이미지로 컨테이너를 생성하고 실행하세요.\n' +
+                    '2. 단 detach 모드로 실행해야 합니다.\n' +
+                    '3. 이 명령어는 create와 start를 연속으로 실행하는 것과 같은 효과입니다.\n' +
+                    '4. 실행 후 터미널에 표시되는 문제를 보고 답을 입력해주세요.\n\n' +
+                    '힌트: docker run --detach <이미지명 | IMAGE ID> 형식으로 명령어를 작성하세요.\n' +
                     '힌트: 이미지는 learndocker.io/joke를 사용하세요.',
             },
             {
                 id: 7,
+                title: 'Container 로그 확인하기',
+                content:
+                    'detach로 실행 된 container 로그를 확인해보겠습니다.\n\n' +
+                    '1. docker ps -a 명령어를 사용하여 모든 컨테이너 목록을 확인하세요.\n' +
+                    '2. learndocker.io/joke 컨테이너의 로그를 확인하세요\n' +
+                    '3. 실행 후 터미널에 표시되는 문제를 보고 한글로 답을 입력해주세요.\n\n' +
+                    '힌트: docker logs <CONTAINER ID | NAMES>을 사용하세요',
+            },
+            {
+                id: 8,
                 title: 'Container 목록 확인하기',
                 content:
                     '실행 중이거나 중지된 모든 컨테이너를 확인해봅시다.\n\n' +
@@ -94,7 +106,7 @@ export class QuizService {
                     '힌트: docker ps -a 명령어로 모든 컨테이너를 확인할 수 있습니다.',
             },
             {
-                id: 8,
+                id: 9,
                 title: 'Container 중지하기',
                 content:
                     '실행 중인 컨테이너를 중지해보겠습니다.\n\n' +
@@ -104,7 +116,7 @@ export class QuizService {
                     '힌트: 컨테이너ID 전부 적을 필요는 없습니다.',
             },
             {
-                id: 9,
+                id: 10,
                 title: 'Container 삭제하기',
                 content:
                     '더 이상 필요하지 않은 컨테이너를 삭제해봅시다.\n\n' +
@@ -163,17 +175,20 @@ export class QuizService {
                 //컨테이너 실행하기
                 return this.submitQuiz5(sessionId, userAnswer, level);
             case 6:
-                //컨테이너 생성및 실행하기
-                return this.submitQuiz6(sessionId, userAnswer, level);
+                //컨테이너 생성 및 실행하기
+                return this.submitQuiz6(sessionId, containerPort, level);
             case 7:
-                //컨테이너 목록 확인하기
-                return this.submitQuiz7(sessionId, containerPort, userAnswer, level);
+                //컨테이너 로그 확인하기
+                return this.submitQuiz7(sessionId, userAnswer, level);
             case 8:
-                //컨테이너 중지하기
-                return this.submitQuiz8(sessionId, containerPort, level);
+                //컨테이너 목록 확인하기
+                return this.submitQuiz8(sessionId, containerPort, userAnswer, level);
             case 9:
-                //컨테이너 삭제하기
+                //컨테이너 중지하기
                 return this.submitQuiz9(sessionId, containerPort, level);
+            case 10:
+                //컨테이너 삭제하기
+                return this.submitQuiz10(sessionId, containerPort, level);
             default:
                 throw new MethodNotAllowedException(`${quizId}번 퀴즈는 아직 채점할 수 없습니다.`);
         }
@@ -258,11 +273,18 @@ export class QuizService {
         }
     }
 
-    private async submitQuiz6(sessionId: string, userAnswer: string | undefined, level: number) {
-        // TODO: 커스텀 이미지 만들고 answer 수정해야함
-        const answer = 'hello-world';
+    private async submitQuiz6(sessionId: string, containerPort: string, level: number) {
+        const validImage = ['learndocker.io/joke'];
+        const containers = await this.sandboxService.getUserContainers(containerPort);
+        if (containers.length === 0) {
+            return { quizResult: 'FAIL' };
+        }
 
-        if (userAnswer === answer) {
+        const result = containers.some((container: Record<string, any>) => {
+            return container.State === 'running' && validImage.includes(container.Image);
+        });
+
+        if (result) {
             this.updateLevel(sessionId, level, 7);
             return { quizResult: 'SUCCESS' };
         } else {
@@ -270,7 +292,18 @@ export class QuizService {
         }
     }
 
-    private async submitQuiz7(
+    private async submitQuiz7(sessionId: string, userAnswer: string | undefined, level: number) {
+        const answer = '스페이스바';
+
+        if (userAnswer?.trim() === answer) {
+            this.updateLevel(sessionId, level, 8);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz8(
         sessionId: string,
         containerPort: string,
         userAnswer: string | undefined,
@@ -286,23 +319,6 @@ export class QuizService {
         );
 
         if (result.length > 0) {
-            this.updateLevel(sessionId, level, 8);
-            return { quizResult: 'SUCCESS' };
-        } else {
-            return { quizResult: 'FAIL' };
-        }
-    }
-
-    private async submitQuiz8(sessionId: string, containerPort: string, level: number) {
-        const containers = await this.sandboxService.getUserContainers(containerPort);
-        if (containers.length === 0) {
-            return { quizResult: 'FAIL' };
-        }
-
-        const result = containers.every(
-            (container: Record<string, any>) => container.State === 'exited'
-        );
-        if (result) {
             this.updateLevel(sessionId, level, 9);
             return { quizResult: 'SUCCESS' };
         } else {
@@ -312,9 +328,26 @@ export class QuizService {
 
     private async submitQuiz9(sessionId: string, containerPort: string, level: number) {
         const containers = await this.sandboxService.getUserContainers(containerPort);
+        if (containers.length === 0) {
+            return { quizResult: 'FAIL' };
+        }
+
+        const result = containers.every(
+            (container: Record<string, any>) => container.State === 'exited'
+        );
+        if (result) {
+            this.updateLevel(sessionId, level, 10);
+            return { quizResult: 'SUCCESS' };
+        } else {
+            return { quizResult: 'FAIL' };
+        }
+    }
+
+    private async submitQuiz10(sessionId: string, containerPort: string, level: number) {
+        const containers = await this.sandboxService.getUserContainers(containerPort);
 
         if (containers.length === 0) {
-            this.updateLevel(sessionId, level, 10);
+            this.updateLevel(sessionId, level, 11);
             return { quizResult: 'SUCCESS' };
         } else {
             return { quizResult: 'FAIL' };
