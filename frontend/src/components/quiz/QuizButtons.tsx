@@ -64,7 +64,7 @@ const QuizButtons = ({
             return;
         }
 
-        if (type === 'modal' && 1 <= quizNumber && quizNumber <= 2) {
+        if (type === 'modal' && 1 <= quizNumber && quizNumber <= 3) {
             updateSidebarState(dockerImageStates);
             sessionStorage.setItem('quiz', nextQuizNum.toString());
         }
