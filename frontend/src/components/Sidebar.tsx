@@ -25,9 +25,10 @@ const dockerContainerLinks = [
     { title: 'Container 생성하기', path: '/quiz/4' },
     { title: 'Container 실행하기', path: '/quiz/5' },
     { title: 'Container 생성 및 실행하기', path: '/quiz/6' },
-    { title: 'Container 목록 확인하기', path: '/quiz/7' },
-    { title: 'Container 중지하기', path: '/quiz/8' },
-    { title: 'Container 삭제하기', path: '/quiz/9' },
+    { title: 'Container 로그 확인하기', path: '/quiz/7' },
+    { title: 'Container 목록 확인하기', path: '/quiz/8' },
+    { title: 'Container 중지하기', path: '/quiz/9' },
+    { title: 'Container 삭제하기', path: '/quiz/10' },
 ];
 
 const SidebarSection = ({ title, links }: SidebarSectionProps) => {
