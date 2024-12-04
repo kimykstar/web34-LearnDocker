@@ -280,7 +280,7 @@ export class QuizService {
             return { quizResult: 'FAIL' };
         }
 
-        const result = containers.every((container: Record<string, any>) => {
+        const result = containers.some((container: Record<string, any>) => {
             return container.State === 'running' && validImage.includes(container.Image);
         });
 
