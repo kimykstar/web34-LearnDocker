@@ -6,7 +6,7 @@ import { requestExpirationTime } from '../api/timer';
 import { ExpirationTime } from '../types/timer';
 import TimerArea from './TimerArea';
 import PageInfoArea from './PageInfoArea';
-import PageType from './PageType';
+import { Check } from 'lucide-react';
 
 const links = [
     { title: 'Home', path: '/', pageType: 'education' },
@@ -42,9 +42,10 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
                                         path={link.path}
                                         title={link.title}
                                         pageType={link.pageType}
-                                        solved={link.solved ? link.solved : undefined}
                                     />
-                                    <PageType pageType={link.pageType} />
+                                    {link.pageType === 'quiz' && link.solved && (
+                                        <Check className='ml-1 text-green-500' />
+                                    )}
                                 </div>
                             </li>
                         );
@@ -81,7 +82,6 @@ const Sidebar = ({ dockerImageStates, dockerContainerStates }: SidebarProps) => 
                             key={path}
                         >
                             <PageInfoArea path={path} title={title} pageType={pageType} />
-                            <PageType pageType={pageType} />
                         </div>
                     );
                 })}

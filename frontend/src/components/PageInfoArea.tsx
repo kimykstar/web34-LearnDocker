@@ -1,17 +1,16 @@
-import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PageType from './PageType';
 
 type PageInfoAreaProps = {
     pageType: string;
-    solved?: boolean;
     path: string;
     title: string;
 };
-const PageInfoArea = ({ pageType, solved, path, title }: PageInfoAreaProps) => {
+const PageInfoArea = ({ pageType, path, title }: PageInfoAreaProps) => {
     return (
         <div className='flex'>
+            <PageType pageType={pageType} />
             <Link to={path}>{title}</Link>
-            {pageType === 'quiz' && solved && <Check className='ml-1 text-green-500' />}
         </div>
     );
 };
