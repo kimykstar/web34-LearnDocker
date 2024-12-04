@@ -46,7 +46,7 @@ const Banner = ({
 
     return (
         <div className='bg-neutral-100 rounded-lg'>
-            <div className='container mx-auto px-4 py-16'>
+            <div className='container mx-auto px-10 py-16'>
                 <div className='max-w-3xl'>
                     <h1 className='text-4xl font-bold mb-6'>Docker를 쉽고 재미있게 배워보세요!</h1>
                     <p className='text-xl mb-8'>
