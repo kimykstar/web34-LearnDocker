@@ -8,9 +8,9 @@ const QuizInputBox = ({ answer, setAnswer }: QuizInputBoxProps) => {
         setAnswer(e.target.value);
     };
     return (
-        <div className='w-[85%] flex justify-end'>
+        <div className='flex justify-end'>
             <input
-                className='w-60 h-8 rounded-lg border border-gray-300 mt-4 outline-none ml-1'
+                className='h-9 w-72 rounded-lg border border-gray-300 outline-none bg-gray-50'
                 type='text'
                 onChange={handleChange}
                 value={answer}

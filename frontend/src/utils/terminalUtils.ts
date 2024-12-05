@@ -23,12 +23,12 @@ export function createTerminal(container: HTMLElement): {
     terminal.loadAddon(fitAddon);
 
     terminal.open(container);
-    fitAddon.fit();
 
     const handleResize = () => {
-        fitAddon.fit();
         terminal.resize(terminal.cols, 20);
+        fitAddon.fit();
     };
+    handleResize();
 
     window.addEventListener('resize', handleResize);
 

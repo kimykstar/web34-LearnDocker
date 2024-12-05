@@ -12,9 +12,9 @@ export const QuizSubmitArea = ({ quizNumber, showInput, showAlert }: QuizSubmitA
     const [answer, setAnswer] = useState('');
 
     return (
-        <>
+        <div className='flex flex-col gap-3 flex-none'>
             {showInput && <QuizInputBox answer={answer} setAnswer={setAnswer} />}
             <QuizButtons quizNumber={quizNumber} answer={answer} showAlert={showAlert} />
-        </>
+        </div>
     );
 };

@@ -35,7 +35,7 @@ const DockerVisualization = ({
 
     return (
         <div
-            className='grid w-[50%] border rounded-lg border-gray-300 my-4 ml-1'
+            className='grid w-[55%] border rounded-lg border-gray-300'
             style={{
                 gridTemplateColumns: '1fr 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr',
                 gridTemplateRows: 'repeat(5, 1fr)',

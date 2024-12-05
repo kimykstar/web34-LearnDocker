@@ -57,7 +57,7 @@ const App = () => {
                         startButtonRef={startButtonRef}
                         setOpenTimerModal={setOpenTimerModal}
                     />
-                    <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
+                    <div className='ml-[17rem] mt-16 px-12 py-6 w-full h-[calc(100vh-4rem)] z-0 overflow-y-auto'>
                         <Routes>
                             <Route
                                 path='/'
