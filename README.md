@@ -38,16 +38,21 @@ Play with Docker는 안전한 환경을 제공하지만 체계적인 학습 커�
 
 ## 🎯 실시간 시각화
 > 사용자는 자신의 명령어가 컨테이너와 이미지에 어떤 영향을 미치는지 실시간으로 볼 수 있습니다.
-> 
-![시각화_예시_05](https://github.com/user-attachments/assets/21a3784c-f866-4109-a051-d5144e2344de)
+>
+![최종_시각화_03](https://github.com/user-attachments/assets/b7e34106-4f71-4974-8ce2-1790e63e1581)
+
 
 ## 🔄 퀴즈 풀이
 > 사용자는 주어진 문제를 읽고 도커 명령어를 입력하여 문제를 풀고 채점할 수 있습니다.
 >
+![최종_시각화_04](https://github.com/user-attachments/assets/fa8a079b-6e81-45f8-ab87-dda7af3d5c3b)
 
 # 🤔기술적 도전
 
 ## docker 실행 가능한 격리된 환경 제공
+
+![image](https://github.com/user-attachments/assets/ca1cd109-f573-4be4-938d-02bc25ecac34)
+출처) https://speakerdeck.com/kakao/github-actions-runner-bildeu-siljeon-jeogyonggi?slide=37
 
 사용자에게 격리된 환경을 효율적으로 제공하기 위해 컨테이너 기술을 사용하고자 하였으나, Docker 컨테이너 안에서 Docker를 실행시키는 목적을 달성시키는 명확히 더 나은 해결책이 없었습니다.
 
@@ -57,6 +62,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 > 
 
 ## 악의적인 명령어 필터링
+
+![image](https://github.com/user-attachments/assets/98e86f77-b86f-4c97-854f-283ee151f72f)
 
 컨테이너 내부에서 호스트에 접근이 가능한 DinD 방식의 특성으로 인해 발생하는 보안 위험성을 막아야 합니다. `docker run -v /:/host ubuntu cat /host/etc/passwd` 와 같은 방식으로 호스트 환경에 접근이 가능합니다.
 
@@ -96,6 +103,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 > 
 
 ## 악성 docker image 다운로드 제한
+
+![image](https://github.com/user-attachments/assets/521a6c3d-20c7-4053-b640-ea83040f8995)
 
 외부에서 가져온 악의적인 실행 파일로 컨테이너를 탈출하거나 서버 리소스를 과하게 사용하는 일을 막아야 합니다. 개인이 만든 퍼블릭 레지스트리에서 이미지를 다운로드하는 것을 막지 못하고 있었습니다.
 
