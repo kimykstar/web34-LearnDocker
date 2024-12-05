@@ -19,6 +19,7 @@ const StartButton = (props: StartButtonProps) => {
         if (endDate) {
             setLoading(false);
             setMaxAge(endDateTime);
+            sessionStorage.setItem('quiz', '1');
             window.sessionStorage.setItem('endDate', endDateTime.toString());
         }
     };

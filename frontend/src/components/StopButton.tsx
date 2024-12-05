@@ -12,7 +12,9 @@ const StopButton = ({ setMaxAge }: StopButtonProps) => {
         await requestReleaseSession(navigate);
         window.sessionStorage.removeItem('endDate');
         setMaxAge(0);
+        sessionStorage.removeItem('quiz');
         navigate('/');
+        window.location.reload();
     };
 
     return (

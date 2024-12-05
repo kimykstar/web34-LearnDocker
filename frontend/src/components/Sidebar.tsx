@@ -1,32 +1,14 @@
 import { useState, useEffect } from 'react';
 import dropDownImage from '../assets/dropDown.svg';
 import StartButton from './StartButton';
-import { Link } from 'react-router-dom';
-import { SidebarSectionProps } from '../types/sidebar';
+import { SidebarSectionProps, SidebarState } from '../types/sidebar';
 import TimerArea from './TimerArea';
+import PageInfoArea from './PageInfoArea';
+import { Check } from 'lucide-react';
 
 const links = [
-    { title: 'Home', path: '/' },
-    { title: 'Docker란?', path: '/what-is-docker' },
-];
-
-const dockerImageLinks = [
-    { title: 'Docker image란?', path: '/what-is-docker-image' },
-    { title: 'image 가져오기', path: '/quiz/1' },
-    { title: 'image 목록 확인하기', path: '/quiz/2' },
-    { title: 'image 삭제하기', path: '/quiz/3' },
-];
-
-const dockerContainerLinks = [
-    { title: 'Docker Container란?', path: '/what-is-docker-container' },
-    { title: 'Container의 생명주기', path: '/what-is-container-lifecycle' },
-    { title: 'Container 생성하기', path: '/quiz/4' },
-    { title: 'Container 실행하기', path: '/quiz/5' },
-    { title: 'Container 생성 및 실행하기', path: '/quiz/6' },
-    { title: 'Container 로그 확인하기', path: '/quiz/7' },
-    { title: 'Container 목록 확인하기', path: '/quiz/8' },
-    { title: 'Container 중지하기', path: '/quiz/9' },
-    { title: 'Container 삭제하기', path: '/quiz/10' },
+    { title: 'Home', path: '/', pageType: 'education' },
+    { title: 'Docker란?', path: '/what-is-docker', pageType: 'education' },
 ];
 
 const SidebarSection = ({ title, links }: SidebarSectionProps) => {
@@ -38,7 +20,7 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 
     return (
         <>
-            <div className='m-4 flex items-center  border-b-2 border-gray-400 text-xl'>
+            <div className='mx-4 mt-2 flex items-center  border-b-2 border-gray-400 text-xl'>
                 <p>{title}</p>
                 <button onClick={toggleDropdown}>
                     <img
@@ -50,11 +32,23 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
             </div>
             {isOpen && (
                 <ul>
-                    {links.map((link) => (
-                        <li className='m-4 hover:text-Moby-Blue' key={link.path}>
-                            <Link to={link.path}>{link.title}</Link>
-                        </li>
-                    ))}
+                    {links.map((link) => {
+                        return (
+                            <li className='mx-4 mt-2 hover:text-Moby-Blue' key={link.path}>
+                                <div className='flex justify-between'>
+                                    <PageInfoArea
+                                        path={link.path}
+                                        title={link.title}
+                                        pageType={link.pageType}
+                                    />
+                                    {link.pageType === 'quiz' && link.solved && (
+                                        <Check className='ml-1 text-green-500' />
+                                    )}
+                                </div>
+                                <hr className='mt-1' />
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </>
@@ -62,11 +56,18 @@ const SidebarSection = ({ title, links }: SidebarSectionProps) => {
 };
 
 type SidebarProps = {
+    dockerImageStates: Array<SidebarState>;
+    dockerContainerStates: Array<SidebarState>;
     setOpenTimerModal: React.Dispatch<React.SetStateAction<boolean>>;
     startButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
 };
 
-const Sidebar = ({ setOpenTimerModal, startButtonRef }: SidebarProps) => {
+const Sidebar = ({
+    setOpenTimerModal,
+    startButtonRef,
+    dockerImageStates,
+    dockerContainerStates,
+}: SidebarProps) => {
     const [maxAge, setMaxAge] = useState<number>(0);
     const endDate = window.sessionStorage.getItem('endDate');
     useEffect(() => {
@@ -76,26 +77,31 @@ const Sidebar = ({ setOpenTimerModal, startButtonRef }: SidebarProps) => {
     return (
         <nav className='fixed h-[calc(100vh-4rem)] w-[17rem] bg-gray-100 mt-16 flex flex-col justify-between'>
             <div className='flex-grow'>
-                {links.map((link) => (
-                    <p
-                        className='m-4 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue'
-                        key={link.path}
-                    >
-                        <Link to={link.path}>{link.title}</Link>
-                    </p>
-                ))}
-                <SidebarSection title='Docker Image 학습' links={dockerImageLinks} />
-                <SidebarSection title='Docker Container 학습' links={dockerContainerLinks} />
+                {links.map((link) => {
+                    const { path, title, pageType } = link;
+                    return (
+                        <div
+                            className='flex mx-4 mt-2 pb-2 border-b-2 border-gray-400 text-xl hover:text-Moby-Blue  justify-between'
+                            key={path}
+                        >
+                            <PageInfoArea path={path} title={title} pageType={pageType} />
+                        </div>
+                    );
+                })}
+                <SidebarSection title='Docker Image 학습' links={dockerImageStates} />
+                <SidebarSection title='Docker Container 학습' links={dockerContainerStates} />
             </div>
-            {maxAge ? (
-                <TimerArea
-                    expirationTime={maxAge}
-                    setMaxAge={setMaxAge}
-                    setOpenTimerModal={setOpenTimerModal}
-                />
-            ) : (
-                <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
-            )}
+            <div className='sticky bottom-0'>
+                {maxAge ? (
+                    <TimerArea
+                        expirationTime={maxAge}
+                        setMaxAge={setMaxAge}
+                        setOpenTimerModal={setOpenTimerModal}
+                    />
+                ) : (
+                    <StartButton startButtonRef={startButtonRef} setMaxAge={setMaxAge} />
+                )}
+            </div>
         </nav>
     );
 };

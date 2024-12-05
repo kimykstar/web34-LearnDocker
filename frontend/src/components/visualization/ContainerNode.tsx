@@ -4,6 +4,9 @@ import {
     Image,
     Container,
 } from '../../types/visualization';
+import { Popover } from 'flowbite-react';
+import ContainerToolTip from '../popover/ContainerPopover';
+import ImageToolTip from '../popover/ImagePopover';
 
 const STATUS_COLORS = {
     [DOCKER_CONTAINER_STATUS.EXITED]: 'bg-Stopped-Status-Color',
@@ -40,25 +43,36 @@ const ContainerNode = ({
             </div>
             <div className='flex flex-col h-full'>
                 {containerData?.map((element) => (
-                    <div
-                        className='relative border-4 rounded m-1 text-[10px] min-w-[4rem] max-w-[8rem]'
-                        style={{
-                            borderColor: element.color,
-                        }}
+                    <Popover
+                        trigger='hover'
+                        content={
+                            isContainer(element) ? (
+                                <ContainerToolTip container={element} />
+                            ) : (
+                                <ImageToolTip image={element} />
+                            )
+                        }
                         key={element.id}
                     >
-                        {isContainer(element) && (
-                            <>
-                                <span
-                                    className={`absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full ${STATUS_COLORS[element.status]} opacity-75 animate-ping`}
-                                ></span>
-                                <span
-                                    className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
-                                ></span>
-                            </>
-                        )}
-                        <div className='truncate'>{element.name}</div>
-                    </div>
+                        <div
+                            className='relative border-4 rounded m-1 text-[10px] min-w-[4rem] max-w-[8rem]'
+                            style={{
+                                borderColor: element.color,
+                            }}
+                        >
+                            {isContainer(element) && (
+                                <>
+                                    <span
+                                        className={`absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full ${STATUS_COLORS[element.status]} opacity-75 animate-ping`}
+                                    ></span>
+                                    <span
+                                        className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
+                                    ></span>
+                                </>
+                            )}
+                            <div className='truncate'>{element.name}</div>
+                        </div>
+                    </Popover>
                 ))}
             </div>
         </div>

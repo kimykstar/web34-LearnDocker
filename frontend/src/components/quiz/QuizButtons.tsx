@@ -4,14 +4,24 @@ import { requestQuizAccessability, requestSubmitResult } from '../../api/quiz';
 import { QuizSubmitResultModal } from '../modals/QuizSubmitResultModal';
 import { SubmitStatus } from '../../types/quiz';
 import { HttpStatusCode } from 'axios';
+import { SidebarElementsProps } from '../../types/sidebar';
+import { updateSidebarState } from '../../utils/sidebarUtils';
 
 type QuizButtonsProps = {
     quizNumber: number;
     answer: string;
     showAlert: (message: string) => void;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
-const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
+const QuizButtons = ({
+    quizNumber,
+    answer,
+    showAlert,
+    sidebarStates,
+    setSidebarStates,
+}: QuizButtonsProps) => {
     const [submitResult, setSubmitResult] = useState<SubmitStatus>('FAIL');
     const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
@@ -40,7 +50,21 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
         navigate(`/quiz/${quizNumber - 1}`);
     };
 
-    const handleNextButtonClick = async () => {
+    const handleNextButtonClick = async (type: string) => {
+        const { dockerImageStates, dockerContainerStates } = sidebarStates;
+        const nextQuizNum = Number(sessionStorage.getItem('quiz')) + 1;
+
+        if (type === 'modal' && 1 <= quizNumber && quizNumber <= 3) {
+            updateSidebarState(dockerImageStates, quizNumber);
+            setSidebarStates({ ...sidebarStates });
+            sessionStorage.setItem('quiz', nextQuizNum.toString());
+        }
+        if (type === 'modal' && 4 <= quizNumber && quizNumber <= 10) {
+            updateSidebarState(dockerContainerStates, quizNumber);
+            setSidebarStates({ ...sidebarStates });
+            sessionStorage.setItem('quiz', nextQuizNum.toString());
+        }
+
         if (quizNumber > 9) {
             showAlert('마지막 문제입니다.');
             return;
@@ -74,7 +98,7 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
                 </button>
                 <button
                     className='text-lg text-white rounded-lg bg-sky-400 hover:bg-sky-500 py-2 px-4'
-                    onClick={handleNextButtonClick}
+                    onClick={() => handleNextButtonClick('next')}
                 >
                     다음
                 </button>
@@ -88,7 +112,7 @@ const QuizButtons = ({ quizNumber, answer, showAlert }: QuizButtonsProps) => {
                     openModal={openModal}
                     setOpenModal={setOpenModal}
                     submitResult={submitResult}
-                    handleNextButtonClick={handleNextButtonClick}
+                    handleNextButtonClick={() => handleNextButtonClick('modal')}
                 ></QuizSubmitResultModal>
             </section>
         </div>

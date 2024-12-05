@@ -14,14 +14,17 @@ import { QuizPage } from './components/quiz/QuizPage';
 import { Alert } from 'flowbite-react';
 import { useAlert } from './hooks/useAlert';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useSidebar } from './hooks/useSidebar';
 import { TimerModal } from './components/modals/TimerModal';
 
 const queryClient = new QueryClient();
 
 const App = () => {
     const { openAlert, message, showAlert } = useAlert();
+    const { sidebarStates, setSidebarStates } = useSidebar();
     const [openTimerModal, setOpenTimerModal] = useState(false);
     const startButtonRef = useRef<HTMLButtonElement | null>(null);
+    const { dockerImageStates, dockerContainerStates } = sidebarStates;
 
     useEffect(() => {
         AOS.init({
@@ -55,6 +58,8 @@ const App = () => {
                     <Sidebar
                         startButtonRef={startButtonRef}
                         setOpenTimerModal={setOpenTimerModal}
+                        dockerImageStates={dockerImageStates}
+                        dockerContainerStates={dockerContainerStates}
                     />
                     <div className='ml-[17rem] mt-16 px-12 py-6 w-full h-[calc(100vh-4rem)] z-0 overflow-y-auto'>
                         <Routes>
@@ -78,7 +83,13 @@ const App = () => {
                             />
                             <Route
                                 path='/quiz/:quizId'
-                                element={<QuizPage showAlert={showAlert} />}
+                                element={
+                                    <QuizPage
+                                        showAlert={showAlert}
+                                        sidebarStates={sidebarStates}
+                                        setSidebarStates={setSidebarStates}
+                                    />
+                                }
                             />
                             <Route path='/error/:id' element={<ErrorPage />} />
                             <Route path='*' element={<ErrorPage />} />

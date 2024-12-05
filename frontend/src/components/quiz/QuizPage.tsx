@@ -1,18 +1,33 @@
 import { QuizNodes } from './QuizNodes';
 import { VisualizationNodes } from './VisualizationNodes';
 import { QuizPageWrapper } from './QuizPageWrapper';
+import { SidebarElementsProps } from '../../types/sidebar';
 
 type QuizContentProps = {
     showAlert: (message: string) => void;
     quizId: string;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
 type QuizPageProps = {
     showAlert: (message: string) => void;
+    sidebarStates: SidebarElementsProps;
+    setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
 
-export const QuizContent = ({ showAlert, quizId }: QuizContentProps) => {
-    const quizNodes = QuizNodes({ showAlert, quizId });
+export const QuizContent = ({
+    showAlert,
+    quizId,
+    sidebarStates,
+    setSidebarStates,
+}: QuizContentProps) => {
+    const quizNodes = QuizNodes({
+        showAlert,
+        quizId,
+        sidebarStates,
+        setSidebarStates,
+    });
 
     const visualNodes = VisualizationNodes({ showAlert });
 
@@ -33,10 +48,17 @@ export const QuizContent = ({ showAlert, quizId }: QuizContentProps) => {
     );
 };
 
-export const QuizPage = ({ showAlert }: QuizPageProps) => {
+export const QuizPage = ({ showAlert, sidebarStates, setSidebarStates }: QuizPageProps) => {
     return (
         <QuizPageWrapper showAlert={showAlert}>
-            {(quizId) => <QuizContent showAlert={showAlert} quizId={quizId} />}
+            {(quizId) => (
+                <QuizContent
+                    showAlert={showAlert}
+                    quizId={quizId}
+                    sidebarStates={sidebarStates}
+                    setSidebarStates={setSidebarStates}
+                />
+            )}
         </QuizPageWrapper>
     );
 };
