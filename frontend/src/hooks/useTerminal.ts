@@ -17,11 +17,11 @@ export function useTerminal(
     const blockingRef = useRef<boolean>(false);
     const tooManyRequestRef = useRef<boolean>(false);
 
-    const handleCommandError = (term: Terminal, statusCode: number) => {
+    const handleCommandError = (term: Terminal, statusCode: number, errorMessage: string) => {
         if (!term) return;
         if (statusCode === HttpStatusCode.TooManyRequests) {
             showAlert('잠시후 다시 시도해주세요');
-            
+
             tooManyRequestRef.current = true;
             setTimeout(() => {
                 tooManyRequestRef.current = false;
@@ -29,7 +29,9 @@ export function useTerminal(
 
             return;
         }
-        term.write('\x1b[91m허용되지 않은 명령어 입니다.\x1b[0m\r\n');
+
+        const message = errorMessage || '허용되지 않은 명령어 입니다.';
+        term.write(`\x1b[91m${message}\x1b[0m\r\n`);
     };
 
     const handleKeyInput = async (term: Terminal, key: string) => {
