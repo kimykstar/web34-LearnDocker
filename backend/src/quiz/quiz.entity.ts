@@ -10,4 +10,7 @@ export class Quiz {
 
     @Column('varchar', { length: 500 })
     content: string;
+
+    @Column('varchar', { length: 500, nullable: true })
+    hint?: string;
 }

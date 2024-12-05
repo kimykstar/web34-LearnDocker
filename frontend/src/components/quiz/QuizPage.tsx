@@ -17,15 +17,19 @@ export const QuizContent = ({ showAlert, quizId }: QuizContentProps) => {
     const visualNodes = VisualizationNodes({ showAlert });
 
     return (
-        <div className='w-[calc(100vw-17rem)]'>
+        <>
             {quizNodes.head}
-            <section className='flex h-1/2'>
-                {quizNodes.description}
-                {visualNodes.visualization}
-            </section>
-            {visualNodes.terminal}
-            {quizNodes.submit}
-        </div>
+            <div className='flex flex-col gap-3 h-[calc(100vh-10rem)] justify-between'>
+                <div className='flex gap-3 flex-1'>
+                    {quizNodes.description}
+                    {visualNodes.visualization}
+                </div>
+                <div className='flex flex-col 2xl:flex-row gap-3 2xl:gap-5 flex-1'>
+                    {visualNodes.terminal}
+                    {quizNodes.submit}
+                </div>
+            </div>
+        </>
     );
 };
 

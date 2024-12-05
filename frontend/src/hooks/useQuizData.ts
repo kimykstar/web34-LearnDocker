@@ -20,6 +20,7 @@ export const useQuizData = (quizId: string) => {
         id: quizData?.id ?? 0,
         title: quizData?.title ?? '',
         content: quizData?.content ?? '',
+        hint: quizData?.hint ?? '',
         isPending,
         isError,
     };
