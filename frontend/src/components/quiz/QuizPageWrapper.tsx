@@ -4,19 +4,17 @@ import { requestQuizAccessability } from '../../api/quiz';
 import { HttpStatusCode } from 'axios';
 
 type QuizPageWrapperProps = {
-    children: (quizId: string) => React.ReactNode;
+    children: (
+        quizId: string,
+        setUserLevel: React.Dispatch<React.SetStateAction<number>>
+    ) => React.ReactNode;
     showAlert: (message: string) => void;
-};
-
-type userValidationState = {
-    start: boolean;
-    level: number;
 };
 
 export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) => {
     const { quizId } = useParams<{ quizId: string }>();
     const quizNumber = Number(quizId);
-    const [validated, setvalidated] = useState<userValidationState>({ start: false, level: 0 });
+    const [userLevel, setUserLevel] = useState<number>(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,17 +40,17 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
                 return;
             }
 
-            if (validated.level < quizNumber) {
-                setvalidated({ start: true, level: quizNumber });
+            if (userLevel < quizNumber) {
+                setUserLevel(quizNumber);
             }
         };
 
         validateQuiz();
     }, [quizNumber, navigate, showAlert]);
 
-    if (validated.start === false || validated.level < quizNumber) {
+    if (userLevel < quizNumber) {
         return null;
     }
 
-    return <div className='h-[calc(100vh-7rem)]'>{children(quizId as string)}</div>;
+    return <div className='h-[calc(100vh-7rem)]'>{children(quizId as string, setUserLevel)}</div>;
 };

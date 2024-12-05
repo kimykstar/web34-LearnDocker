@@ -62,7 +62,7 @@ export class SandboxService {
         return containerData.reduce<Array<Container>>((containerReducer, container) => {
             containerReducer.push({
                 id: container.Id,
-                name: container.Names[0],
+                name: container.Names[0].split('/')[1],
                 image: container.Image,
                 status: container.State,
             });

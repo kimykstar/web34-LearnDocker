@@ -9,6 +9,7 @@ type QuizSubmitAreaProps = {
     showAlert: (message: string) => void;
     sidebarStates: SidebarElementsProps;
     setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
+    setUserLevel: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const QuizSubmitArea = ({
@@ -17,6 +18,7 @@ export const QuizSubmitArea = ({
     showAlert,
     sidebarStates,
     setSidebarStates,
+    setUserLevel,
 }: QuizSubmitAreaProps) => {
     const [answer, setAnswer] = useState('');
 
@@ -29,6 +31,7 @@ export const QuizSubmitArea = ({
                 showAlert={showAlert}
                 sidebarStates={sidebarStates}
                 setSidebarStates={setSidebarStates}
+                setUserLevel={setUserLevel}
             />
         </div>
     );

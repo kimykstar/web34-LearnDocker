@@ -8,6 +8,7 @@ type QuizContentProps = {
     quizId: string;
     sidebarStates: SidebarElementsProps;
     setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
+    setUserLevel: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type QuizPageProps = {
@@ -21,12 +22,14 @@ export const QuizContent = ({
     quizId,
     sidebarStates,
     setSidebarStates,
+    setUserLevel,
 }: QuizContentProps) => {
     const quizNodes = QuizNodes({
         showAlert,
         quizId,
         sidebarStates,
         setSidebarStates,
+        setUserLevel,
     });
 
     const visualNodes = VisualizationNodes({ showAlert });
@@ -51,12 +54,13 @@ export const QuizContent = ({
 export const QuizPage = ({ showAlert, sidebarStates, setSidebarStates }: QuizPageProps) => {
     return (
         <QuizPageWrapper showAlert={showAlert}>
-            {(quizId) => (
+            {(quizId, setUserLevel) => (
                 <QuizContent
                     showAlert={showAlert}
                     quizId={quizId}
                     sidebarStates={sidebarStates}
                     setSidebarStates={setSidebarStates}
+                    setUserLevel={setUserLevel}
                 />
             )}
         </QuizPageWrapper>
