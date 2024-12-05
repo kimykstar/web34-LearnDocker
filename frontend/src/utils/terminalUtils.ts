@@ -12,8 +12,7 @@ export function createTerminal(container: HTMLElement): {
         cursorBlink: true,
         fontFamily: '"Noto Sans Mono", "Noto Sans KR", courier-new, courier, monospace',
         fontSize: 14,
-        rows: 20,
-        cols: 40,
+        rows: 13,
         fontWeight: '300',
     });
 
@@ -27,7 +26,7 @@ export function createTerminal(container: HTMLElement): {
     terminal.open(container);
 
     const handleResize = () => {
-        terminal.resize(40, 20);
+        terminal.resize(4, 13);
         fitAddon.fit();
     };
 
