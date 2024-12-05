@@ -21,7 +21,6 @@ const queryClient = new QueryClient();
 
 const App = () => {
     const { openAlert, message, showAlert } = useAlert();
-    const eventSourceRef = useRef<EventSource | null>(null);
     const { sidebarStates, setSidebarStates } = useSidebar();
     const [openTimerModal, setOpenTimerModal] = useState(false);
     const startButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -62,7 +61,7 @@ const App = () => {
                         dockerImageStates={dockerImageStates}
                         dockerContainerStates={dockerContainerStates}
                     />
-                    <div className='ml-[17rem] mt-16 flex-row p-5 w-full z-0'>
+                    <div className='ml-[17rem] mt-16 px-12 py-6 w-full h-[calc(100vh-4rem)] z-0 overflow-y-auto'>
                         <Routes>
                             <Route
                                 path='/'
@@ -87,13 +86,13 @@ const App = () => {
                                 element={
                                     <QuizPage
                                         showAlert={showAlert}
-                                        eventSourceRef={eventSourceRef}
                                         sidebarStates={sidebarStates}
                                         setSidebarStates={setSidebarStates}
                                     />
                                 }
                             />
                             <Route path='/error/:id' element={<ErrorPage />} />
+                            <Route path='*' element={<ErrorPage />} />
                         </Routes>
                     </div>
                 </div>

@@ -1,13 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import {
-    parseStringToJson,
-    filterContainerInfo,
-    filterImageInfo,
-    getHashValueFromIP,
-} from './utils';
+import { getHashValueFromIP } from './utils';
 import { requestDockerCommand } from './exec.api';
-import { Container, ContainerData, Image, ImageData } from './types/elements';
+import { Container, Image } from './types/elements';
 import { CacheService } from '../common/cache/cache.service';
 import { formatAxiosError } from '../common/exception/axios-formatter';
 import { isAxiosError } from 'axios';
@@ -23,44 +18,13 @@ export class SandboxService {
         private readonly cacheService: CacheService
     ) {}
 
-    async getUserContainerImages(containerId: string) {
-        const containers = await requestDockerCommand(this.httpService, containerId, [
-            'docker',
-            'ps',
-            '-a',
-            '--format',
-            'json',
-        ]);
-        const images = await requestDockerCommand(this.httpService, containerId, [
-            'docker',
-            'images',
-            '--format',
-            'json',
-        ]);
-        return { containers: this.parseContainers(containers), images: this.parseImages(images) };
-    }
-
-    parseContainers(containers: string | object) {
-        if (typeof containers === 'object') containers = JSON.stringify(containers);
-        const containerList = parseStringToJson(containers) as ContainerData[];
-        return filterContainerInfo(containerList);
-    }
-
-    parseImages(images: string | object) {
-        if (typeof images === 'object') images = JSON.stringify(images);
-        const imageList = parseStringToJson(images) as ImageData[];
-        return filterImageInfo(imageList);
-    }
-
-    // TODO: ECONNREFUSED 에러 처리
-    async getUserContainerImagesV2(containerPort: string) {
-        // TODO: 임시로 시연을 위해 try-catch로 해결
+    async getUserContainerImages(containerPort: string) {
         try {
             const imageResponse = await this.getUserImages(containerPort);
-            const images = this.parseImagesV2(imageResponse);
+            const images = this.parseImages(imageResponse);
 
             const containerResponse = await this.getUserContainers(containerPort);
-            const containers = this.parseContainersV2(containerResponse);
+            const containers = this.parseContainers(containerResponse);
             return { images, containers };
         } catch (error) {
             if (isAxiosError(error)) {
@@ -84,7 +48,7 @@ export class SandboxService {
         return response.data;
     }
 
-    parseImagesV2(imageData: Array<Record<string, any>>) {
+    parseImages(imageData: Array<Record<string, any>>) {
         return imageData.reduce<Array<Image>>((imageReducer, image) => {
             imageReducer.push({
                 id: image.Id,
@@ -94,7 +58,7 @@ export class SandboxService {
         }, []);
     }
 
-    parseContainersV2(containerData: Array<Record<string, any>>) {
+    parseContainers(containerData: Array<Record<string, any>>) {
         return containerData.reduce<Array<Container>>((containerReducer, container) => {
             containerReducer.push({
                 id: container.Id,
@@ -186,7 +150,6 @@ export class SandboxService {
             containerPort,
             renew: false,
             startTime: new Date(),
-            // TODO: 현재 테스트를 위해 레벨을 임의로 조정중
             level: 1,
             lastRequest: new Date(),
         });

@@ -104,7 +104,7 @@ export const requestHostStatus = async (navigate: NavigateFunction) => {
 export const requestCommandResult = async (
     command: string,
     term: Terminal,
-    customErrorCallback: (term: Terminal, statusCode: number) => void
+    customErrorCallback: (term: Terminal, statusCode: number, errorMessage: string) => void
 ) => {
     const loadingTerminal = new LoadingTerminal(term);
 
@@ -117,7 +117,7 @@ export const requestCommandResult = async (
         loadingTerminal.spinnerStop();
         if (axios.isAxiosError(error)) {
             const statusCode = error.response?.status || 500;
-            customErrorCallback(term, statusCode);
+            customErrorCallback(term, statusCode, error.response?.data.message);
         } else {
             console.error('unknown error');
         }

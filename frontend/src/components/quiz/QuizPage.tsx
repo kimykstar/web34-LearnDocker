@@ -5,7 +5,6 @@ import { SidebarElementsProps } from '../../types/sidebar';
 
 type QuizContentProps = {
     showAlert: (message: string) => void;
-    eventSourceRef: React.MutableRefObject<EventSource | null>;
     quizId: string;
     sidebarStates: SidebarElementsProps;
     setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
@@ -13,7 +12,6 @@ type QuizContentProps = {
 
 type QuizPageProps = {
     showAlert: (message: string) => void;
-    eventSourceRef: React.MutableRefObject<EventSource | null>;
     sidebarStates: SidebarElementsProps;
     setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
 };
@@ -21,7 +19,6 @@ type QuizPageProps = {
 export const QuizContent = ({
     showAlert,
     quizId,
-    eventSourceRef,
     sidebarStates,
     setSidebarStates,
 }: QuizContentProps) => {
@@ -32,34 +29,32 @@ export const QuizContent = ({
         setSidebarStates,
     });
 
-    const visualNodes = VisualizationNodes({ eventSourceRef, showAlert });
+    const visualNodes = VisualizationNodes({ showAlert });
 
     return (
-        <div className='w-[calc(100vw-17rem)]'>
+        <>
             {quizNodes.head}
-            <section className='flex h-1/2'>
-                {quizNodes.description}
-                {visualNodes.visualization}
-            </section>
-            {visualNodes.terminal}
-            {quizNodes.submit}
-        </div>
+            <div className='flex flex-col gap-3 h-[calc(100vh-10rem)] justify-between'>
+                <div className='flex gap-3 flex-1'>
+                    {quizNodes.description}
+                    {visualNodes.visualization}
+                </div>
+                <div className='flex flex-col 2xl:flex-row gap-3 2xl:gap-5 flex-1'>
+                    {visualNodes.terminal}
+                    {quizNodes.submit}
+                </div>
+            </div>
+        </>
     );
 };
 
-export const QuizPage = ({
-    showAlert,
-    eventSourceRef,
-    sidebarStates,
-    setSidebarStates,
-}: QuizPageProps) => {
+export const QuizPage = ({ showAlert, sidebarStates, setSidebarStates }: QuizPageProps) => {
     return (
         <QuizPageWrapper showAlert={showAlert}>
             {(quizId) => (
                 <QuizContent
                     showAlert={showAlert}
                     quizId={quizId}
-                    eventSourceRef={eventSourceRef}
                     sidebarStates={sidebarStates}
                     setSidebarStates={setSidebarStates}
                 />
