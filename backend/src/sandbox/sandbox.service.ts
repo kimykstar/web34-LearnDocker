@@ -117,7 +117,6 @@ export class SandboxService {
         const { data } = await this.httpService.axiosRef.get(
             `${process.env.SANDBOX_URL}/containers/${containerId}/json`
         );
-        // TODO: 포트 정보가 없는 경우에 대한 처리
         return data.NetworkSettings.Ports['2375/tcp'][0].HostPort;
     }
 

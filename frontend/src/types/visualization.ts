@@ -15,7 +15,6 @@ export type Container = {
     id: string;
     name: string;
     image: string;
-    // TODO: status는 나중에 type으로 지정해도 좋을 듯(백엔드랑 협의 필요)
     status: string;
     color?: string;
 };
@@ -37,13 +36,11 @@ export type ContainerNodeProps = {
     icon: LucideIcon;
     gridColumn: number;
     gridRow: number;
-    // TODO: containers undefined는 컨테이너 시각화 완료하면 삭제해야함
     containerData: Image[] | Container[] | undefined;
 };
 
 export type DockerVisualizationProps = {
     animationState: AnimationState;
-    // TODO: containers undefined는 컨테이너 시각화 완료하면 삭제해야함
     elements: Visualization;
     dockerOperation: DockerOperation | undefined;
     onAnimationComplete: () => void;
