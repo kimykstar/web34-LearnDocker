@@ -11,14 +11,10 @@ const PageInfoArea = ({ pageType, path, title }: PageInfoAreaProps) => {
     const quizNum = Number(path.split('/').slice(-1));
     const currentQuizNum = Number(sessionStorage.getItem('quiz'));
 
-    const canResolve = () => {
-        return pageType === 'quiz' && quizNum > currentQuizNum;
-    };
-
     return (
         <div className='flex'>
             <PageType pageType={pageType} />
-            {canResolve() ? (
+            {pageType === 'quiz' && quizNum > currentQuizNum ? (
                 <Tooltip
                     content={
                         currentQuizNum === 0
