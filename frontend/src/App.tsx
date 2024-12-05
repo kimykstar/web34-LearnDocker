@@ -20,7 +20,6 @@ const queryClient = new QueryClient();
 
 const App = () => {
     const { openAlert, message, showAlert } = useAlert();
-    const eventSourceRef = useRef<EventSource | null>(null);
     const [openTimerModal, setOpenTimerModal] = useState(false);
     const startButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -79,14 +78,10 @@ const App = () => {
                             />
                             <Route
                                 path='/quiz/:quizId'
-                                element={
-                                    <QuizPage
-                                        showAlert={showAlert}
-                                        eventSourceRef={eventSourceRef}
-                                    />
-                                }
+                                element={<QuizPage showAlert={showAlert} />}
                             />
                             <Route path='/error/:id' element={<ErrorPage />} />
+                            <Route path='*' element={<ErrorPage />} />
                         </Routes>
                     </div>
                 </div>

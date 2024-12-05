@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 
 const ErrorPage = () => {
     const { id } = useParams();
-    const statusCode = id ? parseInt(id) : null;
+    const statusCode = id ? parseInt(id) : 404;
 
     const errorMessages: Record<number, string> = {
         403: 'Forbidden',
@@ -15,7 +15,7 @@ const ErrorPage = () => {
 
     return (
         <div className='w-full flex flex-col items-center justify-start font-pretendard'>
-            <h1 className='font-bold text-5xl text-gray-950'>{id}</h1>
+            <h1 className='font-bold text-5xl text-gray-950'>{statusCode}</h1>
             <p className='font-medium text-2xl text-gray-700'>{message}</p>
         </div>
     );
