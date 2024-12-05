@@ -16,9 +16,9 @@ import { useAlert } from './hooks/useAlert';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSidebar } from './hooks/useSidebar';
 import { TimerModal } from './components/modals/TimerModal';
+import { handleBeforeUnload } from './handlers/handler';
 
 const queryClient = new QueryClient();
-
 const App = () => {
     const { openAlert, message, showAlert } = useAlert();
     const { sidebarStates, setSidebarStates } = useSidebar();
@@ -30,10 +30,6 @@ const App = () => {
         AOS.init({
             duration: 500,
         });
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            e.preventDefault();
-            return '';
-        };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
 
