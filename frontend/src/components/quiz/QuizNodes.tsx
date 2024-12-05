@@ -9,9 +9,16 @@ type Props = {
     quizId: string;
     sidebarStates: SidebarElementsProps;
     setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
+    setUserLevel: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const QuizNodes = ({ showAlert, quizId, sidebarStates, setSidebarStates }: Props) => {
+export const QuizNodes = ({
+    showAlert,
+    quizId,
+    sidebarStates,
+    setSidebarStates,
+    setUserLevel,
+}: Props) => {
     const { title, content, hint, isPending: pending, isError: error } = useQuizData(quizId);
     const quizNumber = +quizId;
     const customQuiz = CUSTOM_QUIZZES.includes(quizNumber);
@@ -42,6 +49,7 @@ export const QuizNodes = ({ showAlert, quizId, sidebarStates, setSidebarStates }
                 showAlert={showAlert}
                 sidebarStates={sidebarStates}
                 setSidebarStates={setSidebarStates}
+                setUserLevel={setUserLevel}
             />
         ),
     };

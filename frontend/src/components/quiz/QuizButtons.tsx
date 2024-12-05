@@ -13,6 +13,7 @@ type QuizButtonsProps = {
     showAlert: (message: string) => void;
     sidebarStates: SidebarElementsProps;
     setSidebarStates: React.Dispatch<React.SetStateAction<SidebarElementsProps>>;
+    setUserLevel: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const QuizButtons = ({
@@ -21,12 +22,16 @@ const QuizButtons = ({
     showAlert,
     sidebarStates,
     setSidebarStates,
+    setUserLevel,
 }: QuizButtonsProps) => {
     const [submitResult, setSubmitResult] = useState<SubmitStatus>('FAIL');
     const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmitButtonClick = async () => {
+        const { dockerImageStates, dockerContainerStates } = sidebarStates;
+        const nextQuizNum = Number(sessionStorage.getItem('quiz')) + 1;
+
         const submitResponse = await requestSubmitResult(quizNumber, answer, navigate);
         if (submitResponse == null) {
             return;
@@ -34,6 +39,21 @@ const QuizButtons = ({
 
         setSubmitResult(submitResponse.quizResult);
         setOpenModal(true);
+
+        if (submitResponse.quizResult === 'SUCCESS') {
+            setUserLevel(quizNumber + 1);
+
+            if (1 <= quizNumber && quizNumber <= 3) {
+                updateSidebarState(dockerImageStates, quizNumber);
+                setSidebarStates({ ...sidebarStates });
+                sessionStorage.setItem('quiz', nextQuizNum.toString());
+            }
+            if (4 <= quizNumber && quizNumber <= 10) {
+                updateSidebarState(dockerContainerStates, quizNumber);
+                setSidebarStates({ ...sidebarStates });
+                sessionStorage.setItem('quiz', nextQuizNum.toString());
+            }
+        }
     };
 
     const handlePrevButtonClick = async () => {
@@ -50,21 +70,7 @@ const QuizButtons = ({
         navigate(`/quiz/${quizNumber - 1}`);
     };
 
-    const handleNextButtonClick = async (type: string) => {
-        const { dockerImageStates, dockerContainerStates } = sidebarStates;
-        const nextQuizNum = Number(sessionStorage.getItem('quiz')) + 1;
-
-        if (type === 'modal' && 1 <= quizNumber && quizNumber <= 3) {
-            updateSidebarState(dockerImageStates, quizNumber);
-            setSidebarStates({ ...sidebarStates });
-            sessionStorage.setItem('quiz', nextQuizNum.toString());
-        }
-        if (type === 'modal' && 4 <= quizNumber && quizNumber <= 10) {
-            updateSidebarState(dockerContainerStates, quizNumber);
-            setSidebarStates({ ...sidebarStates });
-            sessionStorage.setItem('quiz', nextQuizNum.toString());
-        }
-
+    const handleNextButtonClick = async () => {
         if (quizNumber > 9) {
             showAlert('마지막 문제입니다.');
             return;
@@ -98,7 +104,7 @@ const QuizButtons = ({
                 </button>
                 <button
                     className='text-lg text-white rounded-lg bg-sky-400 hover:bg-sky-500 py-2 px-4'
-                    onClick={() => handleNextButtonClick('next')}
+                    onClick={handleNextButtonClick}
                 >
                     다음
                 </button>
@@ -112,7 +118,7 @@ const QuizButtons = ({
                     openModal={openModal}
                     setOpenModal={setOpenModal}
                     submitResult={submitResult}
-                    handleNextButtonClick={() => handleNextButtonClick('modal')}
+                    handleNextButtonClick={handleNextButtonClick}
                 ></QuizSubmitResultModal>
             </section>
         </div>
