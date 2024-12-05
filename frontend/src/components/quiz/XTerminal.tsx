@@ -23,7 +23,7 @@ const XTerminal = ({ updateVisualizationData, hostStatus, showAlert }: XTerminal
     useEffect(() => {
         if (!terminalRef.current) return;
 
-        const { terminal, clipboardProvider } = createTerminal(terminalRef.current);
+        const { terminal, clipboardProvider, fitAddon } = createTerminal(terminalRef.current);
         terminalInstanceRef.current = terminal;
         loadingRef.current = new LoadingTerminal(terminal);
         clipboardProviderRef.current = clipboardProvider;
@@ -34,6 +34,7 @@ const XTerminal = ({ updateVisualizationData, hostStatus, showAlert }: XTerminal
         } else {
             terminal.write('~$ ');
         }
+        fitAddon.fit();
 
         return () => terminal.dispose();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +63,7 @@ const XTerminal = ({ updateVisualizationData, hostStatus, showAlert }: XTerminal
     }, [hostStatus]);
 
     return (
-        <div className='border rounded-lg border-black bg-black flex-1'>
+        <div className='border rounded-lg border-black bg-black flex-1 min-w-0'>
             <div ref={terminalRef} className='p-2 custom-terminal h-full' />
         </div>
     );

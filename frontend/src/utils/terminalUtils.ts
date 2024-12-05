@@ -6,12 +6,14 @@ import { requestCommandResult } from '../api/quiz';
 export function createTerminal(container: HTMLElement): {
     terminal: Terminal;
     clipboardProvider: BrowserClipboardProvider;
+    fitAddon: FitAddon;
 } {
     const terminal = new Terminal({
         cursorBlink: true,
         fontFamily: '"Noto Sans Mono", "Noto Sans KR", courier-new, courier, monospace',
         fontSize: 14,
         rows: 20,
+        cols: 40,
         fontWeight: '300',
     });
 
@@ -25,10 +27,9 @@ export function createTerminal(container: HTMLElement): {
     terminal.open(container);
 
     const handleResize = () => {
-        terminal.resize(terminal.cols, 20);
+        terminal.resize(40, 20);
         fitAddon.fit();
     };
-    handleResize();
 
     window.addEventListener('resize', handleResize);
 
@@ -39,7 +40,7 @@ export function createTerminal(container: HTMLElement): {
         originalDispose();
     };
 
-    return { terminal, clipboardProvider };
+    return { terminal, clipboardProvider, fitAddon };
 }
 
 const handleClear = (term: Terminal) => {

@@ -52,5 +52,5 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
         return null;
     }
 
-    return <>{children(quizId as string, setUserLevel)}</>;
+    return <div className='h-[calc(100vh-7rem)]'>{children(quizId as string, setUserLevel)}</div>;
 };

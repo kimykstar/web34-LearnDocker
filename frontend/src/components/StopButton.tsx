@@ -1,5 +1,6 @@
 import { requestReleaseSession } from '../api/quiz';
 import { useNavigate } from 'react-router-dom';
+import { handleBeforeUnload } from '../handlers/handler';
 
 type StopButtonProps = {
     setMaxAge: React.Dispatch<React.SetStateAction<number>>;
@@ -9,6 +10,7 @@ const StopButton = ({ setMaxAge }: StopButtonProps) => {
     const navigate = useNavigate();
 
     const handleStopButtonClick = async () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
         await requestReleaseSession(navigate);
         window.sessionStorage.removeItem('endDate');
         setMaxAge(0);

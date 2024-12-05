@@ -5,8 +5,8 @@ import {
     Container,
 } from '../../types/visualization';
 import { Popover } from 'flowbite-react';
-import ContainerToolTip from '../popover/ContainerPopover';
-import ImageToolTip from '../popover/ImagePopover';
+import ContainerPopover from '../popover/ContainerPopover';
+import ImagePopover from '../popover/ImagePopover';
 
 const STATUS_COLORS = {
     [DOCKER_CONTAINER_STATUS.EXITED]: 'bg-Stopped-Status-Color',
@@ -47,9 +47,9 @@ const ContainerNode = ({
                         trigger='hover'
                         content={
                             isContainer(element) ? (
-                                <ContainerToolTip container={element} />
+                                <ContainerPopover container={element} />
                             ) : (
-                                <ImageToolTip image={element} />
+                                <ImagePopover image={element} />
                             )
                         }
                         key={element.id}
@@ -60,7 +60,7 @@ const ContainerNode = ({
                                 borderColor: element.color,
                             }}
                         >
-                            {isContainer(element) && (
+                            {isContainer(element) ? (
                                 <>
                                     <span
                                         className={`absolute -top-1 -right-1  inline-flex h-2 w-2 rounded-full ${STATUS_COLORS[element.status]} opacity-75 animate-ping`}
@@ -68,9 +68,12 @@ const ContainerNode = ({
                                     <span
                                         className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
                                     ></span>
+
+                                    <div className='truncate'>{element.name}</div>
                                 </>
+                            ) : (
+                                <div className='truncate'>{element.name}</div>
                             )}
-                            <div className='truncate'>{element.name}</div>
                         </div>
                     </Popover>
                 ))}
