@@ -41,7 +41,12 @@ const QuizButtons = ({
         setOpenModal(true);
 
         if (submitResponse.quizResult === 'SUCCESS') {
-            setUserLevel(quizNumber + 1);
+            setUserLevel((prev) => {
+                if (prev < quizNumber + 1) {
+                    return quizNumber + 1;
+                }
+                return prev;
+            });
 
             if (1 <= quizNumber && quizNumber <= 3) {
                 updateSidebarState(dockerImageStates, quizNumber);
