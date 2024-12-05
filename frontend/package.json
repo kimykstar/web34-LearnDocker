@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.61.5",
     "@types/aos": "^3.0.7",
+    "@xterm/addon-clipboard": "^0.1.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
     "aos": "^2.3.4",

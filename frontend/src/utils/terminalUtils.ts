@@ -1,8 +1,12 @@
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
+import { BrowserClipboardProvider, ClipboardAddon } from '@xterm/addon-clipboard';
 import { requestCommandResult } from '../api/quiz';
 
-export function createTerminal(container: HTMLElement): Terminal {
+export function createTerminal(container: HTMLElement): {
+    terminal: Terminal;
+    clipboardProvider: BrowserClipboardProvider;
+} {
     const terminal = new Terminal({
         cursorBlink: true,
         fontFamily: '"Noto Sans Mono", "Noto Sans KR", courier-new, courier, monospace',
@@ -11,8 +15,13 @@ export function createTerminal(container: HTMLElement): Terminal {
         fontWeight: '300',
     });
 
+    const clipboardProvider = new BrowserClipboardProvider();
+    const clipboardAddon = new ClipboardAddon(clipboardProvider);
     const fitAddon = new FitAddon();
+
+    terminal.loadAddon(clipboardAddon);
     terminal.loadAddon(fitAddon);
+
     terminal.open(container);
     fitAddon.fit();
 
@@ -26,10 +35,11 @@ export function createTerminal(container: HTMLElement): Terminal {
     const originalDispose = terminal.dispose.bind(terminal);
     terminal.dispose = () => {
         window.removeEventListener('resize', handleResize);
+        clipboardAddon.dispose();
         originalDispose();
     };
 
-    return terminal;
+    return { terminal, clipboardProvider };
 }
 
 const handleClear = (term: Terminal) => {
@@ -48,7 +58,7 @@ export const handleBackspace = (term: Terminal, currentLine: string) => {
 export const handleEnter = async (
     term: Terminal,
     command: string,
-    handleCommandError: (term: Terminal, statusCode: number) => void,
+    handleCommandError: (term: Terminal, statusCode: number, errorMessage: string) => void,
     updateVisualization: (command: string) => Promise<void>
 ) => {
     if (!command) {
