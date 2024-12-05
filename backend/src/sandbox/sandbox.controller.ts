@@ -24,8 +24,7 @@ export class SandboxController {
     @UseGuards(AuthGuard)
     getUserContainersImages(@Req() req: RequestWithSession) {
         const { containerPort } = req.session;
-        // return this.sandboxService.getUserContainerImages(containerId);
-        return this.sandboxService.getUserContainerImagesV2(containerPort);
+        return this.sandboxService.getUserContainerImages(containerPort);
     }
 
     @Post('command')
