@@ -81,9 +81,10 @@ export class QuizService {
                 content:
                     '생성된 컨테이너를 실행해보겠습니다.\n\n' +
                     '1. docker start 명령어를 사용하여 이전 단계에서 생성한 컨테이너를 실행하세요.\n' +
-                    '2. 컨테이너 ID나 이름을 사용하여 실행할 수 있습니다.\n' +
-                    '3. 실행 후 터미널에 표시되는 "Answer: " 다음에 나오는 값을 입력해주세요.\n' +
-                    '4. 답안란은 페이지 우측 하단에 있습니다.\n',
+                    '2. 단 attach 모드로 실행해야 합니다.\n' +
+                    '3. 컨테이너 ID나 이름을 사용하여 실행할 수 있습니다.\n' +
+                    '4. 실행 후 터미널에 표시되는 "Answer: " 다음에 나오는 값을 입력해주세요.\n' +
+                    '5. 답안란은 페이지 우측 하단에 있습니다.\n',
                 hint: `<ul class="list-disc list-inside">
   <li>docker start -a <컨테이너ID> 형식으로 명령어를 작성하세요.</li>
   <li>docker ps -a 명령어로 모든 컨테이너를 확인할 수 있습니다.</li>
@@ -246,8 +247,6 @@ export class QuizService {
         userAnswer: string | undefined,
         level: number
     ) {
-        // TODO: 로컬레지스트리 사용시 이미지ID 동일한지 확인 필요
-        // 동일하면 로직 수정 필요
         if (!userAnswer || userAnswer.length < 4) {
             return { quizResult: 'FAIL' };
         }
