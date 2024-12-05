@@ -99,11 +99,9 @@ export class QuizService {
                     '1. docker run 명령어를 사용하여 learndocker.io/joke 이미지로 컨테이너를 생성하고 실행하세요.\n' +
                     '2. 단 detach 모드로 실행해야 합니다.\n' +
                     '3. 이 명령어는 create와 start를 연속으로 실행하는 것과 같은 효과입니다.\n' +
-                    '4. 실행 후 터미널에 표시되는 문제를 보고 답을 입력해주세요.\n' +
-                    '5. 답안란은 페이지 우측 하단에 있습니다.\n',
+                    '4. 실행 후 터미널에 표시되는 문제를 보고 답을 입력해주세요.\n',
                 hint: `<ul class="list-disc list-inside">
   <li>docker run --detach <이미지명 | IMAGE ID> 형식으로 명령어를 작성하세요.</li>
-  <li>이미지는 learndocker.io/joke를 사용하세요.</li>
 </ul>
                 `,
             },
@@ -114,7 +112,7 @@ export class QuizService {
                     'detach로 실행 된 container 로그를 확인해보겠습니다.\n\n' +
                     '1. docker ps -a 명령어를 사용하여 모든 컨테이너 목록을 확인하세요.\n' +
                     '2. learndocker.io/joke 컨테이너의 로그를 확인하세요\n' +
-                    '3. 실행 후 터미널에 표시되는 문제를 보고 한글로 답을 입력해주세요.\n' +
+                    '3. 실행 후 터미널에 표시되는 문제를 보고, 띄어쓰기 없이 한글로 답을 입력해주세요.\n' +
                     '4. 답안란은 페이지 우측 하단에 있습니다.\n',
                 hint: `<ul class="list-disc list-inside">
   <li>docker logs <CONTAINER ID | NAMES>을 사용하세요.</li>
