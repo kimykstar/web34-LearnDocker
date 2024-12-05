@@ -1,6 +1,7 @@
 import { Visualization } from '../types/visualization';
 import { COLORS } from '../constant/visualization';
 import { DOCKER_OPERATIONS } from '../types/visualization';
+import { IMAGEID_PREFIX_INDEX } from '../constant/visualization';
 
 export const setColorToElements = (prevElements: Visualization, newElements: Visualization) => {
     const initImages = updateImageColors(prevElements, newElements);
@@ -50,7 +51,10 @@ export const updateContainerColors = (prevElements: Visualization, newElements: 
 
 const compareImageId = (imageId: string, containerImage: string) => {
     const containerImageLen = containerImage.length;
-    return imageId.slice(7, 7 + containerImageLen) === containerImage;
+    return (
+        imageId.slice(IMAGEID_PREFIX_INDEX, IMAGEID_PREFIX_INDEX + containerImageLen) ===
+        containerImage
+    );
 };
 
 const isChangedContainerStatus = (prevElements: Visualization, newElements: Visualization) => {

@@ -20,9 +20,9 @@ const ContainerPopover = ({ container }: ContainerPopoverProps) => {
             </li>
             <li className='mb-2'>
                 <div className='text-xs font-semibold text-gray-500 mb-1'>Name</div>
-                <Tooltip trigger='hover' content={name}>
+                <Tooltip trigger='hover' content={name.slice(1)}>
                     <div className='w-[200px] truncate overflow-hidden text-ellipsis whitespace-nowrap text-sm p-2 bg-white border border-gray-300 rounded-md'>
-                        {name}
+                        {name.slice(1)}
                     </div>
                 </Tooltip>
             </li>
