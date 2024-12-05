@@ -13,7 +13,7 @@ export const useSidebar = () => {
     ) => {
         updateSidebarState(imageStates, quizNum - 1);
 
-        if (4 <= quizNum && quizNum <= 10) {
+        if (4 <= quizNum) {
             updateSidebarState(containerStates, quizNum - 1);
         }
         return {

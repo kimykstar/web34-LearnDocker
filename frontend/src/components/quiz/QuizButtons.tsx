@@ -30,7 +30,8 @@ const QuizButtons = ({
 
     const handleSubmitButtonClick = async () => {
         const { dockerImageStates, dockerContainerStates } = sidebarStates;
-        const nextQuizNum = Number(sessionStorage.getItem('quiz')) + 1;
+        const currentQuizNum = Number(sessionStorage.getItem('quiz'));
+        const nextQuizNum = currentQuizNum + 1;
 
         const submitResponse = await requestSubmitResult(quizNumber, answer, navigate);
         if (submitResponse == null) {
@@ -48,12 +49,12 @@ const QuizButtons = ({
                 return prev;
             });
 
-            if (1 <= quizNumber && quizNumber <= 3) {
+            if (currentQuizNum === quizNumber && 1 <= quizNumber && quizNumber <= 3) {
                 updateSidebarState(dockerImageStates, quizNumber);
                 setSidebarStates({ ...sidebarStates });
                 sessionStorage.setItem('quiz', nextQuizNum.toString());
             }
-            if (4 <= quizNumber && quizNumber <= 10) {
+            if (currentQuizNum === quizNumber && 4 <= quizNumber && quizNumber <= 10) {
                 updateSidebarState(dockerContainerStates, quizNumber);
                 setSidebarStates({ ...sidebarStates });
                 sessionStorage.setItem('quiz', nextQuizNum.toString());
