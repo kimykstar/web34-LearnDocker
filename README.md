@@ -115,7 +115,7 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 
 ## 상호작용이 없는 사용자의 리소스 정리
 
-![image](https://github.com/user-attachments/assets/0496fc1d-58e8-4d7d-b267-73d3917fa181)
+![image](https://github.com/user-attachments/assets/0a2c60fb-6e36-4336-9b5d-b142382ded99)
 
 각각의 사용자에게는 도커 컨테이너를 하나씩 할당합니다. 사용자가 컨테이너를 할당받고, 학습 종료버튼을 누르지 않고(세션 종료 및 컨테이너 해제) 탭을 닫아버린다면, 도커 컨테이너는 세션 만료시간이 될 때까지 서버의 리소스를 점유하게 됩니다.
 
@@ -126,7 +126,7 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 
 ## 만료된 세션에 대한 서버 리소스 정리
 
-![image](https://github.com/user-attachments/assets/67ba0908-7152-47aa-b9c2-602e968d0d65)
+![image](https://github.com/user-attachments/assets/98f77df5-f27e-458b-8ab1-e7ef6dbaa893)
 
 세션 테이블에 저장된 사용자의 세션 정보들 중 만료된 세션을 해제하고, 세션에 해당하는 도커 컨테이너를 삭제해야 합니다. 
 
