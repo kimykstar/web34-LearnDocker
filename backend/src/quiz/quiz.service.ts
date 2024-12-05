@@ -281,10 +281,10 @@ export class QuizService {
     }
 
     private async submitQuiz4(sessionId: string, containerPort: string, level: number) {
-        const validImage = ['learndocker.io/hello-world'];
+        const validCommand = '/hello';
         const containers = await this.sandboxService.getUserContainers(containerPort);
         const result = containers.filter((container: Record<string, any>) =>
-            validImage.includes(container.Image)
+            container.Command.includes(validCommand)
         );
         if (result.length > 0) {
             this.updateLevel(sessionId, level, 5);
@@ -306,14 +306,14 @@ export class QuizService {
     }
 
     private async submitQuiz6(sessionId: string, containerPort: string, level: number) {
-        const validImage = ['learndocker.io/joke'];
+        const validCommand = '/joke';
         const containers = await this.sandboxService.getUserContainers(containerPort);
         if (containers.length === 0) {
             return { quizResult: 'FAIL' };
         }
 
         const result = containers.some((container: Record<string, any>) => {
-            return container.State === 'running' && validImage.includes(container.Image);
+            return container.State === 'running' && container.Command.includes(validCommand);
         });
 
         if (result) {
