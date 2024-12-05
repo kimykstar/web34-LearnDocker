@@ -39,13 +39,18 @@ export const updateContainerColors = (prevElements: Visualization, newElements: 
     const { containers } = newElements;
     return containers.map((container) => {
         const image = coloredImages.find((image) => {
-            return image.name === container.image;
+            return compareImageId(image.id, container.image) || image.name === container.image;
         });
         return {
             ...container,
             color: image?.color,
         };
     });
+};
+
+const compareImageId = (imageId: string, containerImage: string) => {
+    const containerImageLen = containerImage.length;
+    return imageId.slice(7, 7 + containerImageLen) === containerImage;
 };
 
 const isChangedContainerStatus = (prevElements: Visualization, newElements: Visualization) => {
