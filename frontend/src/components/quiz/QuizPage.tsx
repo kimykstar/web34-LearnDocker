@@ -42,10 +42,8 @@ export const QuizContent = ({
                     {quizNodes.description}
                     {visualNodes.visualization}
                 </div>
-                <div className='flex flex-col gap-3 flex-1 flex-wrap'>
-                    {visualNodes.terminal}
-                    {quizNodes.submit}
-                </div>
+                <div className='flex flex-col gap-3 flex-1 flex-wrap'>{visualNodes.terminal}</div>
+                {quizNodes.submit}
             </div>
         </>
     );
