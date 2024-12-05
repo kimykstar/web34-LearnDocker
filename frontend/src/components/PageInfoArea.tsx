@@ -8,18 +8,17 @@ type PageInfoAreaProps = {
     title: string;
 };
 const PageInfoArea = ({ pageType, path, title }: PageInfoAreaProps) => {
-    const quizNum = Number(path.slice(-1));
+    const quizNum = Number(path.split('/').slice(-1));
     const currentQuizNum = Number(sessionStorage.getItem('quiz'));
 
     const canResolve = () => {
-        return pageType === 'quiz' && quizNum <= currentQuizNum;
+        return pageType === 'quiz' && quizNum > currentQuizNum;
     };
+
     return (
         <div className='flex'>
             <PageType pageType={pageType} />
             {canResolve() ? (
-                <Link to={path}>{title}</Link>
-            ) : (
                 <Tooltip
                     content={
                         currentQuizNum === 0
@@ -32,6 +31,8 @@ const PageInfoArea = ({ pageType, path, title }: PageInfoAreaProps) => {
                         {title}
                     </Link>
                 </Tooltip>
+            ) : (
+                <Link to={path}>{title}</Link>
             )}
         </div>
     );
