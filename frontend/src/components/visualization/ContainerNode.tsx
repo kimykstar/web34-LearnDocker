@@ -69,7 +69,7 @@ const ContainerNode = ({
                                         className={`absolute -top-1 -right-1 inline-flex rounded-full h-2 w-2 ${STATUS_COLORS[element.status]}`}
                                     ></span>
 
-                                    <div className='truncate'>{element.name.slice(1)}</div>
+                                    <div className='truncate'>{element.name}</div>
                                 </>
                             ) : (
                                 <div className='truncate'>{element.name}</div>
