@@ -54,5 +54,5 @@ export const QuizPageWrapper = ({ children, showAlert }: QuizPageWrapperProps) =
         return null;
     }
 
-    return <div className='h-[calc(100vh-4rem)]'>{children(quizId as string)}</div>;
+    return <div className='h-[calc(100vh-7rem)]'>{children(quizId as string)}</div>;
 };

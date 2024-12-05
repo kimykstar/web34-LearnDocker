@@ -61,7 +61,7 @@ const App = () => {
                         dockerImageStates={dockerImageStates}
                         dockerContainerStates={dockerContainerStates}
                     />
-                    <div className='ml-[17rem] mt-16 px-12 py-6 w-full z-0'>
+                    <div className='ml-[17rem] mt-16 px-12 py-6 w-[calc(100vw-17rem)] overflow-y-auto z-0'>
                         <Routes>
                             <Route
                                 path='/'
