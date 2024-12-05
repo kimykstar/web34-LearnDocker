@@ -38,16 +38,21 @@ Play with Docker는 안전한 환경을 제공하지만 체계적인 학습 커�
 
 ## 🎯 실시간 시각화
 > 사용자는 자신의 명령어가 컨테이너와 이미지에 어떤 영향을 미치는지 실시간으로 볼 수 있습니다.
-> 
-![시각화_예시_05](https://github.com/user-attachments/assets/21a3784c-f866-4109-a051-d5144e2344de)
+>
+![최종_시각화_03](https://github.com/user-attachments/assets/b7e34106-4f71-4974-8ce2-1790e63e1581)
+
 
 ## 🔄 퀴즈 풀이
 > 사용자는 주어진 문제를 읽고 도커 명령어를 입력하여 문제를 풀고 채점할 수 있습니다.
 >
+![최종_시각화_04](https://github.com/user-attachments/assets/fa8a079b-6e81-45f8-ab87-dda7af3d5c3b)
 
 # 🤔기술적 도전
 
 ## docker 실행 가능한 격리된 환경 제공
+
+![image](https://github.com/user-attachments/assets/ca1cd109-f573-4be4-938d-02bc25ecac34)
+출처) https://speakerdeck.com/kakao/github-actions-runner-bildeu-siljeon-jeogyonggi?slide=37
 
 사용자에게 격리된 환경을 효율적으로 제공하기 위해 컨테이너 기술을 사용하고자 하였으나, Docker 컨테이너 안에서 Docker를 실행시키는 목적을 달성시키는 명확히 더 나은 해결책이 없었습니다.
 
@@ -57,6 +62,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 > 
 
 ## 악의적인 명령어 필터링
+
+![image](https://github.com/user-attachments/assets/98e86f77-b86f-4c97-854f-283ee151f72f)
 
 컨테이너 내부에서 호스트에 접근이 가능한 DinD 방식의 특성으로 인해 발생하는 보안 위험성을 막아야 합니다. `docker run -v /:/host ubuntu cat /host/etc/passwd` 와 같은 방식으로 호스트 환경에 접근이 가능합니다.
 
@@ -97,6 +104,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 
 ## 악성 docker image 다운로드 제한
 
+![image](https://github.com/user-attachments/assets/521a6c3d-20c7-4053-b640-ea83040f8995)
+
 외부에서 가져온 악의적인 실행 파일로 컨테이너를 탈출하거나 서버 리소스를 과하게 사용하는 일을 막아야 합니다. 개인이 만든 퍼블릭 레지스트리에서 이미지를 다운로드하는 것을 막지 못하고 있었습니다.
 
 컨테이너가 실행되는 샌드박스 서버를 프라이빗 서브넷에 두어 외부 네트워크와의 연결을 차단하는 방식으로 문제를 해결했습니다.
@@ -105,6 +114,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 > 
 
 ## 상호작용이 없는 사용자의 리소스 정리
+
+![image](https://github.com/user-attachments/assets/0496fc1d-58e8-4d7d-b267-73d3917fa181)
 
 각각의 사용자에게는 도커 컨테이너를 하나씩 할당합니다. 사용자가 컨테이너를 할당받고, 학습 종료버튼을 누르지 않고(세션 종료 및 컨테이너 해제) 탭을 닫아버린다면, 도커 컨테이너는 세션 만료시간이 될 때까지 서버의 리소스를 점유하게 됩니다.
 
@@ -115,6 +126,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 
 ## 만료된 세션에 대한 서버 리소스 정리
 
+![image](https://github.com/user-attachments/assets/67ba0908-7152-47aa-b9c2-602e968d0d65)
+
 세션 테이블에 저장된 사용자의 세션 정보들 중 만료된 세션을 해제하고, 세션에 해당하는 도커 컨테이너를 삭제해야 합니다. 
 
 상호작용이 없는 사용자의 리소스 정리 의 해결 방법과 동일하게 세션 청소기에 기능을 더 추가하는 방식으로 해결하였습니다. 세션 청소기는 세션 테이블을 10분 주기마다 돌면서 만료된 세션에 대해서 세션 테이블에서 삭제하며, 세션에 매핑된 도커 컨테이너 또한 해제합니다.
@@ -124,6 +137,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 
 ## 악의적 사용자의 연속 요청에 대한 리소스 관리
 
+![image](https://github.com/user-attachments/assets/a864a4c1-c783-4e4d-9ff9-9ab071ff8aca)
+
 악의적인 사용자가 서버에 짧은 시간에 많은 요청을 보내게 된다면 서버의 부하는 증가하게 됩니다.
 
 위의 문제를 방지하기 위해 세션 테이블에 저장된 마지막 요청 시간을 기준으로 0.5초 내에 발생한 요청에 대해서 Block합니다.
@@ -132,6 +147,8 @@ Docker 컨테이너 내부에서 Docker를 실행시키는 방법으로 DinD(Doc
 > 
 
 ## 다수의 컨테이너를 할당받으려는 악의적 사용자 차단
+
+![image](https://github.com/user-attachments/assets/ce6a757c-fc53-412c-b4cb-2a3c71fb76ee)
 
 악의적 사용자가 웹 브라우저 여러개를 활용해 도커 컨테이너를 할당받을 수 있는 문제가 있었습니다. 이런 악성 사용자가 많이 발생하게 되면, 서버의 리소스 점유율은 증가하게 되고, 정상적인 사용자가 사용할 수 없는 문제가 발생하리라 생각이 들었습니다.
 
