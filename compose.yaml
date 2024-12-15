@@ -5,6 +5,7 @@ services:
             - '3000:3000'
         depends_on:
             - mysql
+            - registry
     mysql:
         image: mysql
         restart: always
@@ -15,3 +16,8 @@ services:
             MYSQL_ROOT_PASSWORD: password
         ports:
             - '3306:3306'
+    registry:
+        image: kimykstar/localregistry
+        privileged: true
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
