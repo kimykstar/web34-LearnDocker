@@ -17,6 +17,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSidebar } from './hooks/useSidebar';
 import { TimerModal } from './components/modals/TimerModal';
 import { handleBeforeUnload } from './handlers/handler';
+import GoogleRedirection from './oauth/GoogleRedirection.tsx';
 
 const queryClient = new QueryClient();
 const App = () => {
@@ -62,6 +63,10 @@ const App = () => {
                             <Route
                                 path='/'
                                 element={<LandingPage startButtonRef={startButtonRef} />}
+                            />
+                            <Route
+                                path='/login/google'
+                                element={<GoogleRedirection/>}
                             />
 
                             <Route path='/what-is-docker' element={<WhatIsDockerPage />} />
