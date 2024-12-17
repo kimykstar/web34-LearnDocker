@@ -16,6 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RequestModule } from './common/request/request.module';
 import { RequestInterceptor } from './common/request/request.interceptor';
 import { CacheModule } from './common/cache/cache.module';
+import { LoginModule } from './login/login.module';
 
 @Module({
     imports: [
@@ -40,6 +41,7 @@ import { CacheModule } from './common/cache/cache.module';
         RequestModule,
         ScheduleModule.forRoot(),
         CacheModule,
+        LoginModule,
     ],
     providers: [
         {
